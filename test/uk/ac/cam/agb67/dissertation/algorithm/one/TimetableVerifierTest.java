@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(JUnit4.class)
@@ -113,4 +114,30 @@ public class TimetableVerifierTest {
         assertThat(ttv.timetabled_sessions_are_contiguous(tt, ls)).isEqualTo(false);
     }
 
+    @Test
+    public void clashes_checker_basic_examples() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        Timetable tt = new Timetable(3,8,2);
+        List<Session> ls = new ArrayList<>();
+
+        // ACT
+        ls.add(new Session(0));
+        ls.add(new Session(1, "a", 1, Arrays.asList(1, 3)));
+        ls.add(new Session(2, "b", 1, Arrays.asList(2)));
+        ls.add(new Session(3, "c", 1, Arrays.asList(2, 4)));
+        ls.add(new Session(4, "d", 1, Arrays.asList(1, 4)));
+
+        tt.set(1,2,0, 1, 0);
+        tt.set(1,2,1, 2, 0);
+        tt.set(2,6,0, 3, 0);
+
+        // ASSERT
+        assertThat(ttv.timetabled_individuals_dont_clash(tt, ls)).isEqualTo(true);
+
+        // Add a session with a clashing individual
+        tt.set(2,6,1, 4, 0);
+        assertThat(ttv.timetabled_individuals_dont_clash(tt, ls)).isEqualTo(false);
+
+    }
 }
