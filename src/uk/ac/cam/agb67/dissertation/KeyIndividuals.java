@@ -4,9 +4,11 @@ import java.util.List;
 
 public class KeyIndividuals {
 
+    public int ID;
+
     // Key Individual Preferences
-    String KeyInd_Name;
-    int KeyInd_Daily_Limit_Pref;
-    List<Integer> KeyInd_Room_Prefs;
+    public String KeyInd_Name;
+    public int KeyInd_Daily_Limit_Pref;
+    public List<Integer> KeyInd_Room_Prefs;
 
 }

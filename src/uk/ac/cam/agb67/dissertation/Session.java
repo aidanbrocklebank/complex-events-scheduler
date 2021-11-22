@@ -4,9 +4,11 @@ import java.util.List;
 
 public class Session {
 
+    public int ID;
+
     // Individual Session Details
-    String Session_Name;
-    int Session_Length;
-    List<Integer> Session_KeyInds;
+    public String Session_Name;
+    public int Session_Length;
+    public List<Integer> Session_KeyInds;
 
 }

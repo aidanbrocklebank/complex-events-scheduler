@@ -5,9 +5,9 @@ import java.util.List;
 public class SchedulingProblem {
 
     // Event-wide Constraints
-    int Maximum_Rooms;
-    int Maximum_Hours;
+    int Maximum_Days;
     int Hours_Per_Day;
+    int Maximum_Rooms;
 
     // Individual Session Details
     List<Session> Session_Details;

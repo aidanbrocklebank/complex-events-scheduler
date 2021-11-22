@@ -1,7 +1,6 @@
 package uk.ac.cam.agb67.dissertation.algorithm.one;
 
-import uk.ac.cam.agb67.dissertation.SchedulingProblem;
-import uk.ac.cam.agb67.dissertation.Timetable;
+import uk.ac.cam.agb67.dissertation.*;
 
 public class Coordinator {
 
