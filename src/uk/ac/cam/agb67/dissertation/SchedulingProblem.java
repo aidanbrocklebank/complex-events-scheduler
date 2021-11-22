@@ -10,6 +10,7 @@ public class SchedulingProblem {
     int Maximum_Rooms;
 
     // Individual Session Details
+    // The list of sessions starts with a dummy session, as they are indexed from 1
     List<Session> Session_Details;
 
     // Predetermined Session (PDS) Details

@@ -14,11 +14,15 @@ public class Session {
     public Session(int id) {
         Session_ID = id;
     }
-    public Session(int id, String sn, int sl, List<Integer> skid) {
+    public Session(int id, int len) {
         Session_ID = id;
-        Session_Name = sn;
-        Session_Length = sl;
-        Session_KeyInds = skid;
+        Session_Length = len;
+    }
+    public Session(int id, String name, int len, List<Integer> kids) {
+        Session_ID = id;
+        Session_Name = name;
+        Session_Length = len;
+        Session_KeyInds = kids;
     }
 
 }
