@@ -2,9 +2,9 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 
 import uk.ac.cam.agb67.dissertation.*;
 
-public class Coordinator {
+public class Coordinator implements SchedulingAlgorithm {
 
-    Timetable generate(SchedulingProblem a) {
+    public Timetable generate(SchedulingProblem a) {
 
         return null;
     }

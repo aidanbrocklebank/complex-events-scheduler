@@ -14,6 +14,8 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class TimetableVerifierTest {
 
+    // TODO create tests for the overall coherence checker method
+
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -140,4 +142,5 @@ public class TimetableVerifierTest {
         assertThat(ttv.timetabled_individuals_dont_clash(tt, ls)).isEqualTo(false);
 
     }
+
 }
