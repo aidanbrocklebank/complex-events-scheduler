@@ -5,11 +5,11 @@ import java.util.List;
 public class Session_Predetermined extends Session {
 
     // Additional details for a Predetermined Session (PDS)
-    int PDS_Start_Time;
-    int PDS_Day;
-    int PDS_Room;
+    public int PDS_Day;
+    public int PDS_Start_Time;
+    public int PDS_Room;
 
-
+    // Constructors
     public Session_Predetermined(int id) {
         super(id);
     }

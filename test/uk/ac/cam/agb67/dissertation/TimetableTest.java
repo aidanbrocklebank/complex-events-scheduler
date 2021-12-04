@@ -37,6 +37,7 @@ public class TimetableTest {
         // ASSERT
         assertThat(tt2.get_id(5,6,7)).isEqualTo(101);
         assertThat(tt2.get_hour(5,6,7)).isEqualTo(2);
+        assertThat(tt2.hashCode()).isNotEqualTo(tt.hashCode());
     }
 
 }

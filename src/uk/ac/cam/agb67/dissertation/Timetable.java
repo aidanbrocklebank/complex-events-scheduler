@@ -18,6 +18,16 @@ public class Timetable {
         Total_Rooms = tr;
         session_id_map = new int[Total_Days][Hours_Per_Day][Total_Rooms];
         session_hour_map = new int[Total_Days][Hours_Per_Day][Total_Rooms];
+
+        // Fill the timetable with empty sessions
+        for (int i=0; i < Total_Days; i++) {
+            for (int j=0; j < Hours_Per_Day; j++) {
+                for (int k=0; k < Total_Rooms; k++) {
+                    session_id_map[i][j][k] = -1;
+                    session_hour_map[i][j][k] = -1;
+                }
+            }
+        }
     }
 
     // Place a full session into the timetable

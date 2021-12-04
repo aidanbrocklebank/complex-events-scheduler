@@ -41,9 +41,10 @@ public class TimetableVerifierTest {
         ls.add(new Session(3));
         ls.add(new Session(4));
 
-        tt.set(0,3,0, 4, 0);
-        tt.set(1,7,0, 1, 0);
-        tt.set(1,4,1, 2, 0);
+        tt.set(0,3,0,4,0);
+        tt.set(1,7,0,1,0);
+        tt.set(1,4,1,2,0);
+        tt.set(1,3,0,0,0);
 
         // ASSERT
         assertThat(ttv.timetable_is_comprehensive(tt, ls)).isEqualTo(false);
@@ -124,7 +125,7 @@ public class TimetableVerifierTest {
         List<Session> ls = new ArrayList<>();
 
         // ACT
-        ls.add(new Session(0));
+        ls.add(new Session(0, "z", 1, Arrays.asList(3)));
         ls.add(new Session(1, "a", 1, Arrays.asList(1, 3)));
         ls.add(new Session(2, "b", 1, Arrays.asList(2)));
         ls.add(new Session(3, "c", 1, Arrays.asList(2, 4)));

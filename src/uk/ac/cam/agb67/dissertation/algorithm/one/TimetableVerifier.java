@@ -42,7 +42,7 @@ public class TimetableVerifier {
                 for (int r = 0; r < tt.Total_Rooms; r++) {
 
                     // When we find a session-hour, add one to it's count
-                    if (tt.get_id(d,h,r) != 0) {
+                    if (tt.get_id(d,h,r) != -1) {
                         occurrences[tt.get_id(d,h,r)][tt.get_hour(d,h,r)] += 1;
                     }
 
@@ -75,7 +75,7 @@ public class TimetableVerifier {
                 for (int r = 0; r < tt.Total_Rooms; r++) {
 
                     // When we find a session ID, update the appears map to say we have seen that session
-                    if (tt.get_id(d,h,r) != 0) {
+                    if (tt.get_id(d,h,r) != -1) {
                         appears.put(tt.get_id(d,h,r), true);
                     }
                 }
@@ -85,9 +85,6 @@ public class TimetableVerifier {
         // Return false if any session was not seen
         boolean ret = true;
         for (Session ses : sessions) {
-            // Skip the dummy session
-            if(ses.Session_ID == 0) continue;
-
             if(!appears.get(ses.Session_ID)) {
                 ret=false;
                 //break;
@@ -106,7 +103,7 @@ public class TimetableVerifier {
 
                     // When we find a session ID ...
                     int sid = tt.get_id(d,h,r);
-                    if (sid != 0) {
+                    if (sid != -1) {
 
                         // Find the session details for this sid
                         Session sesh = sessions.get(sid);
@@ -138,7 +135,7 @@ public class TimetableVerifier {
         // Make a set of all the keyIndividuals present in the session list
         Set<Integer> All_KeyInds = new HashSet<>();
         for (Session s : sessions) {
-            if (s.Session_ID == 0) continue;
+            if (s.Session_ID == -1) continue;
             All_KeyInds.addAll(s.Session_KeyInds);
         }
         int maxKeyInd = 0;
@@ -156,7 +153,7 @@ public class TimetableVerifier {
 
                     // When we find a session ID ...
                     int sid = tt.get_id(d,h,r);
-                    if (sid != 0) {
+                    if (sid != -1) {
 
                         // Find the session details for this sid
                         Session sesh = sessions.get(sid);
