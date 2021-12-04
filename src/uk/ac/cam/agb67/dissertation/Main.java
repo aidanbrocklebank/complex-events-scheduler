@@ -1,5 +1,7 @@
 package uk.ac.cam.agb67.dissertation;
 
+import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
+
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +18,8 @@ public class Main {
         System.out.println("Hello project.");
 
         // This method is currently just a driver for testing Algorithm One
+
+        SchedulingAlgorithm algorithm_one = new Coordinator();
 
     }
 }

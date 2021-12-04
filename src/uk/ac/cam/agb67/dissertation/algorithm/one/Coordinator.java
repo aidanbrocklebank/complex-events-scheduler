@@ -6,6 +6,10 @@ import javax.swing.*;
 
 public class Coordinator implements SchedulingAlgorithm {
 
+    public Coordinator() {
+
+    }
+
     public Timetable generate(SchedulingProblem details) {
 
         // Check that there are no sessions in the list with id != index

@@ -13,6 +13,8 @@ import java.sql.Time;
 @RunWith(JUnit4.class)
 public class TimetableTest {
 
+    // TODO create tests
+
     @Test
     public void object_can_be_created(){
         // ARRANGE
