@@ -2,8 +2,6 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 
 import uk.ac.cam.agb67.dissertation.*;
 
-import javax.swing.*;
-
 public class Coordinator implements SchedulingAlgorithm {
 
     public Coordinator() {
@@ -23,7 +21,7 @@ public class Coordinator implements SchedulingAlgorithm {
         Timetable schedule = new Timetable(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms);
 
         // Place the pre-determined sessions into the timetable
-        for (Session_Predetermined pds : details.PDS_Details) {
+        for (PredeterminedSession pds : details.PDS_Details) {
             schedule.set(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room, pds);
         }
 

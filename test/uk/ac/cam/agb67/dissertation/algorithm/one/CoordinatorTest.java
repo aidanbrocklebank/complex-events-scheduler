@@ -3,8 +3,7 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import uk.ac.cam.agb67.dissertation.MainTest;
-import uk.ac.cam.agb67.dissertation.SchedulingProblem;
+import uk.ac.cam.agb67.dissertation.*;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -28,13 +27,16 @@ public class CoordinatorTest {
     @Test
     public void algorithm_generates_schedules(){
         // ARRANGE
-
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_A();
+        TimetableVerifier ttv = new TimetableVerifier();
 
         // ACT
-
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(correct).isEqualTo(true);
     }
 
 }

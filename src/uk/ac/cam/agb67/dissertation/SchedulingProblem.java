@@ -16,7 +16,7 @@ public class SchedulingProblem {
     public List<Session> Session_Details;
 
     // Predetermined Session (PDS) Details
-    public List<Session_Predetermined> PDS_Details;
+    public List<PredeterminedSession> PDS_Details;
 
     // Key Individuals and their Preferences
     public List<KeyIndividual> KeyInd_Details;
@@ -24,5 +24,13 @@ public class SchedulingProblem {
     // Additional Event-wide Preferences
     public boolean Reduce_Overlap_Pref;
     public int Minimum_Gap_Pref;
+
+    // Confirms the validity of the given data as a potentially schedule-able set of details
+    public boolean check_validity() {
+
+        // TODO
+
+        return false;
+    }
 
 }

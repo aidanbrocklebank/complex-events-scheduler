@@ -37,7 +37,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class BruteForceTest {
 
 
         // ASSERT
-        assertThat(1).isEqualTo(1);
+        assertThat(1).isEqualTo(0);
     }
 
 }

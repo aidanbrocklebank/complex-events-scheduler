@@ -34,6 +34,7 @@ public class TimetableVerifier {
     boolean timetable_excludes_duplicates(Timetable tt, List<Session> sessions) {
 
         // Record how many times each session-hour appears
+        int fee = tt.hashCode();
         int[][] occurrences = new int[sessions.size()][tt.Hours_Per_Day];
 
         // Iterate through all timetable slots
