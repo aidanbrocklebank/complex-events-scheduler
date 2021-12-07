@@ -45,6 +45,7 @@ public class Timetable {
 
     // Getters
     public int get_id(int day, int time, int room) {
+        //if (Main.DEBUG) System.out.println("Getting Day: "+day+", Time: "+time+", Room: "+room+":");
         return session_id_map[day][time][room];
     }
     public int get_hour(int day, int time, int room) {

@@ -12,8 +12,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class BruteForceTest {
 
-    // TODO create tests
-
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -48,11 +46,24 @@ public class BruteForceTest {
     @Test
     public void insert_sessions_step_case(){
         // ARRANGE
+        SchedulingProblem details = MainTest.test_details_A();
+        Timetable tt = MainTest.test_timetable_A();
+        BruteForce bf = new BruteForce(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms, details.KeyInd_Details, details.Room_Occupancy_Limits,
+                details.Session_Details);
 
         // ACT
+        tt = bf.insert_sessions(tt, Arrays.asList(details.Session_Details.get(3)));
 
         // ASSERT
-        assertThat(1).isEqualTo(0);
+        boolean found = false;
+        for (int day = 0; day < details.Maximum_Days; day++) {
+            for (int hour = 0; hour < details.Hours_Per_Day; hour++) {
+                for (int room = 0; room < details.Maximum_Rooms; room++) {
+                    if(tt.get_id(day, hour, room) == 3) found = true;
+                }
+            }
+        }
+        assertThat(found).isEqualTo(true);
     }
 
     @Test
@@ -81,12 +92,13 @@ public class BruteForceTest {
         BruteForce bf = new BruteForce(det.Maximum_Days, det.Hours_Per_Day, det.Maximum_Rooms, det.KeyInd_Details, det.Room_Occupancy_Limits, det.Session_Details);
 
         // ACT
-        List<Integer> union = new ArrayList<>(Arrays.asList(1, 6, 7, 9));
-        bf.union_room_preferences(2, union);
+        List<Integer> union = new ArrayList<>(Arrays.asList(1, 2, 7, 9));
+        bf.union_room_preferences(3, union);
 
         // ASSERT
         Set<Integer> set = Set.copyOf(union);
-        assertThat(set.hashCode()).isEqualTo(Set.copyOf(Arrays.asList(1,4,5,6,7,9)).hashCode());
+        assertThat(union.size()).isEqualTo(5);
+        assertThat(set.hashCode()).isEqualTo(Set.copyOf(Arrays.asList(1,2,3,7,9)).hashCode());
     }
 
     @Test

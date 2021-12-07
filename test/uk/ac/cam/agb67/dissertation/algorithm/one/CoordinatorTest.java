@@ -25,10 +25,25 @@ public class CoordinatorTest {
     }
 
     @Test
-    public void algorithm_generates_schedules(){
+    public void algorithm_generates_coherent_schedule_1(){
         // ARRANGE
         Coordinator co = new Coordinator();
         SchedulingProblem details = MainTest.test_details_A();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_2(){
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_C();
         TimetableVerifier ttv = new TimetableVerifier();
 
         // ACT

@@ -10,12 +10,8 @@ public class Coordinator implements SchedulingAlgorithm {
 
     public Timetable generate(SchedulingProblem details) {
 
-        // Check that there are no sessions in the list with id != index
-        for (int i=0; i < details.Session_Details.size(); i++) {
-            if (details.Session_Details.get(i).Session_ID != i) {
-                System.err.println("A Session was added to a List<Session> with an ID which did not match it's list index.");
-            }
-        }
+        // Input validation step
+        details.check_validity();
 
         // Create an empty timetable
         Timetable schedule = new Timetable(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms);

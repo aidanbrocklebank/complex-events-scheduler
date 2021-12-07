@@ -27,10 +27,22 @@ public class SchedulingProblem {
 
     // Confirms the validity of the given data as a potentially schedule-able set of details
     public boolean check_validity() {
+        boolean valid = true;
 
-        // TODO
+        // Check that there are no sessions in the list with id != index
+        for (int i=0; i < Session_Details.size(); i++) {
+            if (Session_Details.get(i).Session_ID != i) {
+                valid = false;
+                System.err.println("A Session was added to a List<Session> with an ID which did not match it's list index.");
+            }
+        }
 
-        return false;
+        // TODO Check that all mentioned Key Individuals exist
+
+        // TODO Check that all preferred rooms exist
+
+
+        return valid;
     }
 
 }
