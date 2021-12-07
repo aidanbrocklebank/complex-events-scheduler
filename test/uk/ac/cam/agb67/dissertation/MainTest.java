@@ -15,38 +15,6 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class MainTest {
 
-    public static Timetable test_timetable_A() {
-        Timetable tt = new Timetable(3,8,2);
-
-        tt.set(0,3,0, 4, 0);
-        tt.set(0,4,0, 4, 1);
-
-        tt.set(1,2,1, 1, 0);
-        tt.set(1,3,1, 1, 1);
-        tt.set(1,4,1, 1, 2);
-
-        tt.set(2,6,0, 2, 0);
-
-        return tt;
-    }
-
-    public static List<Session> test_session_list_A() {
-        List<Session> ls = new ArrayList<>();
-
-        ls.add(new Session(0));
-        ls.add(new Session(1, 3));
-        ls.add(new Session(2, 1));
-        ls.add(new Session(3, 2));
-        ls.add(new Session(4, 2));
-        ls.add(new Session(0));
-        ls.add(new Session(1, 3));
-        ls.add(new Session(2, 1));
-        ls.add(new Session(3, 2));
-        ls.add(new Session(4, 2));
-
-        return ls;
-    }
-
     public static SchedulingProblem test_details_A() {
         SchedulingProblem details = new SchedulingProblem();
 
@@ -68,7 +36,6 @@ public class MainTest {
         ls.add(new Session(3, "Session D", 1, Arrays.asList(2, 4)));
         ls.add(new Session(4, "Session E", 1, Arrays.asList(1, 4)));
         ls.add(new Session(5, "Session F", 1, Arrays.asList(1, 4)));
-        details.Session_Details = ls;
 
         List<KeyIndividual> keyls = new ArrayList<>();
         keyls.add(new KeyIndividual("Person A", 2, Arrays.asList(0, 1, 9)));
@@ -81,10 +48,52 @@ public class MainTest {
 
         List<PredeterminedSession> pdsls = new ArrayList<>();
         pdsls.add(new PredeterminedSession(6, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
+
         ls.add(pdsls.get(0));
+        details.Session_Details = ls;
         details.PDS_Details = pdsls;
 
         return details;
     }
+
+    public static Timetable test_timetable_A() {
+        List<Session> ls = test_details_A().Session_Details;
+        Timetable tt = new Timetable(3,8,2);
+
+        tt.set(0,3,0, ls.get(0));
+        tt.set(1,2,1, ls.get(1));
+        tt.set(2,6,0, ls.get(2));
+
+        return tt;
+    }
+
+    public static Timetable test_timetable_B() {
+        Timetable tt = new Timetable(3,8,2);
+
+        tt.set(0,3,0, 4, 0);
+        tt.set(0,4,0, 4, 1);
+
+        tt.set(1,2,1, 1, 0);
+        tt.set(1,3,1, 1, 1);
+        tt.set(1,4,1, 1, 2);
+
+        tt.set(2,6,0, 2, 0);
+
+        return tt;
+    }
+
+    public static List<Session> test_session_list_B() {
+        List<Session> ls = new ArrayList<>();
+
+        ls.add(new Session(0));
+        ls.add(new Session(1, 3));
+        ls.add(new Session(2, 1));
+        ls.add(new Session(3, 2));
+        ls.add(new Session(4, 2));
+
+        return ls;
+    }
+
+
 
 }

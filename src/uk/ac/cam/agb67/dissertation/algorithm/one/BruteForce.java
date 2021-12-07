@@ -150,7 +150,8 @@ public class BruteForce {
                 for (int r=0; r < tt.Total_Rooms; r++) {
 
                     // Find the session which is happening in this parallel room, and determine if our key individual is involved
-                    int sid = tt.get_id(day,hour+offset,room);
+                    int sid = tt.get_id(day,hour+offset,r);
+                    //if (Main.DEBUG) System.out.println("KeyID: "+keyID+", Time: "+(hour+offset)+" (day "+day+"), Room: "+r+" -- Found session: "+sid+".");
                     if (sid == -1) continue;
                     Session s = Sessions.get(sid);
                     if(s.Session_KeyInds.contains(keyID)) return false;
