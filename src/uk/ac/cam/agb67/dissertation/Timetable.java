@@ -33,8 +33,8 @@ public class Timetable {
     // Place a full session into the timetable
     public void set(int day, int time, int room, Session session) {
         for (int t = 0; t < session.Session_Length; t++) {
-            session_id_map[day][time][room] = session.Session_ID;
-            session_hour_map[day][time][room] = t;
+            session_id_map[day][time+t][room] = session.Session_ID;
+            session_hour_map[day][time+t][room] = t;
         }
     }
     // Place a single session-hour into the timetable
@@ -63,6 +63,31 @@ public class Timetable {
             }
         }
         return copy;
+    }
+
+    // Pretty print
+    public String toString() {
+        String s = "";
+        for (int d=0; d<Total_Days; d++) {
+            s = s +"\nDAY "+ d +":\n";
+
+            for (int r=0; r<Total_Rooms; r++) {
+                s = s +"   Room "+ r +": [";
+
+                for (int t=0; t<Hours_Per_Day; t++) {
+                    if (session_id_map[d][t][r] == -1) {
+                        s = s + "  , ";
+                    } else if (session_id_map[d][t][r] < 10) {
+                        s = s +" "+ session_id_map[d][t][r] + ", ";
+                    } else {
+                        s = s + session_id_map[d][t][r] + ", ";
+                    }
+                }
+                s += "] \n";
+            }
+
+        }
+        return s;
     }
 
 }

@@ -85,24 +85,10 @@ public class TimetableVerifierTest {
     public void contiguity_checker_basic_examples() {
         // ARRANGE
         TimetableVerifier ttv = new TimetableVerifier();
-        Timetable tt = new Timetable(3,8,2);
-        List<Session> ls = new ArrayList<>();
 
         // ACT
-        ls.add(new Session(0));
-        ls.add(new Session(1, 3));
-        ls.add(new Session(2, 1));
-        ls.add(new Session(3, 2));
-        ls.add(new Session(4, 2));
-
-        tt.set(0,3,0, 4, 0);
-        tt.set(0,4,0, 4, 1);
-
-        tt.set(1,2,1, 1, 0);
-        tt.set(1,3,1, 1, 1);
-        tt.set(1,4,1, 1, 2);
-
-        tt.set(2,6,0, 2, 0);
+        Timetable tt = MainTest.test_timetable_A();
+        List<Session> ls = MainTest.test_session_list_A();
 
         // ASSERT
         assertThat(ttv.timetabled_sessions_are_contiguous(tt, ls)).isEqualTo(true);
@@ -115,6 +101,8 @@ public class TimetableVerifierTest {
         tt.set(2,5,1, 3, 1);
         tt.set(2,5,1, 3, 2);
         assertThat(ttv.timetabled_sessions_are_contiguous(tt, ls)).isEqualTo(false);
+
+        System.out.println(tt.toString());
     }
 
     @Test

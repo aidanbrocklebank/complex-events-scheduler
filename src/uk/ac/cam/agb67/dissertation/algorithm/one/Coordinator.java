@@ -24,6 +24,7 @@ public class Coordinator implements SchedulingAlgorithm {
         for (PredeterminedSession pds : details.PDS_Details) {
             schedule.set(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room, pds);
         }
+        if (Main.DEBUG) System.out.println(schedule.toString());
 
         // Pass it into BruteForce solver
         BruteForce solver = new BruteForce(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms, details.KeyInd_Details, details.Room_Occupancy_Limits,
@@ -34,6 +35,7 @@ public class Coordinator implements SchedulingAlgorithm {
         TimetableVerifier verifier = new TimetableVerifier();
         boolean coherent = verifier.timetable_is_coherent(schedule, details.Session_Details);
         if (!coherent) System.err.println("Timetable was not coherent after brute force approach.");
+        if (!coherent && Main.DEBUG) System.out.println(schedule.toString());
 
         // Simple/greedy Optimisation stage?
 

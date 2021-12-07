@@ -15,6 +15,38 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class MainTest {
 
+    public static Timetable test_timetable_A() {
+        Timetable tt = new Timetable(3,8,2);
+
+        tt.set(0,3,0, 4, 0);
+        tt.set(0,4,0, 4, 1);
+
+        tt.set(1,2,1, 1, 0);
+        tt.set(1,3,1, 1, 1);
+        tt.set(1,4,1, 1, 2);
+
+        tt.set(2,6,0, 2, 0);
+
+        return tt;
+    }
+
+    public static List<Session> test_session_list_A() {
+        List<Session> ls = new ArrayList<>();
+
+        ls.add(new Session(0));
+        ls.add(new Session(1, 3));
+        ls.add(new Session(2, 1));
+        ls.add(new Session(3, 2));
+        ls.add(new Session(4, 2));
+        ls.add(new Session(0));
+        ls.add(new Session(1, 3));
+        ls.add(new Session(2, 1));
+        ls.add(new Session(3, 2));
+        ls.add(new Session(4, 2));
+
+        return ls;
+    }
+
     public static SchedulingProblem test_details_A() {
         SchedulingProblem details = new SchedulingProblem();
 
@@ -48,7 +80,8 @@ public class MainTest {
         details.KeyInd_Details = keyls;
 
         List<PredeterminedSession> pdsls = new ArrayList<>();
-        pdsls.add(new PredeterminedSession(0, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
+        pdsls.add(new PredeterminedSession(6, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
+        ls.add(pdsls.get(0));
         details.PDS_Details = pdsls;
 
         return details;

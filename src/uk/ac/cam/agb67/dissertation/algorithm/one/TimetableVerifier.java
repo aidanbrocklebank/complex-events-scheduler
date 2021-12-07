@@ -9,21 +9,25 @@ public class TimetableVerifier {
     boolean timetable_is_coherent(Timetable tt, List<Session> sessions) {
         // Session-hours each have one unique slot in the schedule:
         if (!timetable_excludes_duplicates(tt, sessions)) {
+            if (Main.DEBUG) System.out.println("Timetable included duplicates.\n");
             return false;
         }
 
         // Every session is included:
         if (!timetable_is_comprehensive(tt, sessions)) {
+            if (Main.DEBUG) System.out.println("Timetable was not comprehensive.\n");
             return false;
         }
 
         // Hours of the same session run consecutively:
         if (!timetabled_sessions_are_contiguous(tt, sessions)) {
+            if (Main.DEBUG) System.out.println("Timetable included sessions which were not contiguous.\n");
             return false;
         }
 
         // Sessions at the same time in different rooms don’t share individuals
         if (!timetabled_individuals_dont_clash(tt, sessions)) {
+            if (Main.DEBUG) System.out.println("Timetable had parallel sessions sharing individuals.\n");
             return false;
         }
 

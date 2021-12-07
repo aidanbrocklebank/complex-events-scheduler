@@ -34,6 +34,13 @@ public class BruteForce {
         List<Session> RemainingSessions = copy_session_list(CurrentSessions);
         RemainingSessions.remove(0);
 
+        // Check if this is a pre-determined session
+        if (sesh.getClass() == PredeterminedSession.class) {
+            // Recursively add the rest of the sessions and if it succeeds, propagate it back up the stack
+            Timetable FinalMapping = insert_sessions(CurrentMapping, RemainingSessions);
+            if (FinalMapping != null) return FinalMapping;
+        }
+
         int sid = sesh.Session_ID;
         int len = sesh.Session_Length;
         List<Integer> KeyIDs = sesh.Session_KeyInds;
@@ -43,6 +50,16 @@ public class BruteForce {
         for (int k : KeyIDs) {
             union_room_preferences(k, PreferredRooms);
         }
+
+        // Fill a list with all the room IDs, then remove those in the preferred set
+        List<Integer> RemainingRoomIDs = new ArrayList<>();
+        for (int i=0; i<MaxRooms; i++) {
+            RemainingRoomIDs.add(i);
+        }
+        RemainingRoomIDs.removeAll(PreferredRooms);
+
+        if (Main.DEBUG) System.out.println("PreferredRooms: "+ PreferredRooms.toString());
+        if (Main.DEBUG) System.out.println("RemainingRoomIDs: "+ RemainingRoomIDs.toString());
 
         // Iterate through the hours available for the whole event
         for (int day = 0; day < MaxDays; day++) {
@@ -56,6 +73,8 @@ public class BruteForce {
                     boolean SessionDoesntClash = check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
 
+                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
+
                         // Insert this session at this point in the current schedule, as a new schedule
                         Timetable NewMapping = CurrentMapping.deep_copy();
                         NewMapping.set(day, hour, room, sesh);
@@ -68,19 +87,14 @@ public class BruteForce {
                     }
                 }
 
-                // Fill a list with all the room IDs, then remove those we have already searched
-                List<Integer> RemainingRoomIDs = new ArrayList<>();
-                for (int i=0; i<MaxRooms; i++) {
-                    RemainingRoomIDs.add(i);
-                }
-                RemainingRoomIDs.removeAll(PreferredRooms);
-
                 // Iterate through the rest of the rooms available this hour
                 for (int room : RemainingRoomIDs) {
 
                     // Check for participants having bookings in other rooms at that time, and that the room is empty at that time
                     boolean SessionDoesntClash = check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
+
+                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
 
                         // Insert this session at this point in the current schedule, as a new schedule
                         Timetable NewMapping = CurrentMapping.deep_copy();
@@ -103,8 +117,11 @@ public class BruteForce {
     }
 
     // Makes a deep copy of a list of sessions
-    private List<Session> copy_session_list(List<Session> Base) {
-        List<Session> Copy = new ArrayList<>(Base);
+    List<Session> copy_session_list(List<Session> Base) {
+        List<Session> Copy = new ArrayList<>();
+        for (Session s : Base) {
+            Copy.add(s);
+        }
         return Copy;
     }
 
@@ -117,7 +134,7 @@ public class BruteForce {
     }
 
     // Check that a specific session, at a given time, doesn't clash in a particular timetable
-    private boolean check_session_doesnt_clash(Timetable tt, int day, int hour, int room, Session sesh) {
+    boolean check_session_doesnt_clash(Timetable tt, int day, int hour, int room, Session sesh) {
 
         // First make sure that there are no sessions in that room, for the duration of the session
         for (int offset=0; offset < sesh.Session_Length; offset++) {
@@ -142,10 +159,8 @@ public class BruteForce {
 
         }
 
-        //
-
-
-        return false;
+        // If we have found no clashes, return true
+        return true;
     }
 
 }

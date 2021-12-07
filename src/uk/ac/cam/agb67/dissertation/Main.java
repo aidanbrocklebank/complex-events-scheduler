@@ -7,6 +7,8 @@ import java.util.Set;
 
 public class Main {
 
+    public static boolean DEBUG = true;
+
     // Algorithm Selection
     String Algorithm_Selection;
 

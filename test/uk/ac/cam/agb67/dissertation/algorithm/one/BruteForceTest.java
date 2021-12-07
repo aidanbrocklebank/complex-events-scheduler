@@ -5,8 +5,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -31,22 +33,27 @@ public class BruteForceTest {
     @Test
     public void insert_sessions_base_case(){
         // ARRANGE
+        SchedulingProblem details = MainTest.test_details_A();
+        BruteForce bf = new BruteForce(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms, details.KeyInd_Details, details.Room_Occupancy_Limits,
+                details.Session_Details);
+        Timetable tt = new Timetable(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms);
+
 
 
         // ACT
-
+        tt.set(2, 2, 2, 1, 0);
+        tt = bf.insert_sessions(tt, Collections.emptyList());
 
         // ASSERT
-        assertThat(1).isEqualTo(0);
+        assertThat(tt.get_id(2,2,2)).isEqualTo(1);
+        assertThat(tt.get_hour(2,2,2)).isEqualTo(0);
     }
 
     @Test
     public void insert_sessions_step_case(){
         // ARRANGE
 
-
         // ACT
-
 
         // ASSERT
         assertThat(1).isEqualTo(0);
@@ -55,13 +62,19 @@ public class BruteForceTest {
     @Test
     public void copy_session_list_works(){
         // ARRANGE
-
+        SchedulingProblem det = MainTest.test_details_A();
+        BruteForce bf = new BruteForce(det.Maximum_Days, det.Hours_Per_Day, det.Maximum_Rooms, det.KeyInd_Details, det.Room_Occupancy_Limits, det.Session_Details);
 
         // ACT
-
+        List<Session> ls = bf.copy_session_list(det.Session_Details);
 
         // ASSERT
-        assertThat(1).isEqualTo(0);
+        assertThat(ls == det.Session_Details).isNotEqualTo(true);
+        assertThat(ls.hashCode()).isEqualTo(det.Session_Details.hashCode());
+        assertThat(ls.size()).isEqualTo(det.Session_Details.size());
+        assertThat(ls.get(0)).isEqualTo(det.Session_Details.get(0));
+        assertThat(ls.get(3)).isEqualTo(det.Session_Details.get(3));
+        assertThat(ls.get(5)).isEqualTo(det.Session_Details.get(5));
     }
 
     @Test
@@ -79,6 +92,7 @@ public class BruteForceTest {
     @Test
     public void check_session_doesnt_clash_catches_A(){
         // ARRANGE
+        Timetable tt = MainTest.test_timetable_A();
 
 
         // ACT
