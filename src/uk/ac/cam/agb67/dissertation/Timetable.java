@@ -76,11 +76,13 @@ public class Timetable {
 
                 for (int t=0; t<Hours_Per_Day; t++) {
                     if (session_id_map[d][t][r] == -1) {
-                        s = s + "  , ";
+                        s = s + "   ,";
                     } else if (session_id_map[d][t][r] < 10) {
-                        s = s +" "+ session_id_map[d][t][r] + ", ";
+                        s = s +"  "+ session_id_map[d][t][r] + ",";
+                    } else if (session_id_map[d][t][r] < 100) {
+                        s = s +" "+ session_id_map[d][t][r] + ",";
                     } else {
-                        s = s + session_id_map[d][t][r] + ", ";
+                        s = s + session_id_map[d][t][r] + ",";
                     }
                 }
                 s += "] \n";

@@ -5,8 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -75,15 +74,19 @@ public class BruteForceTest {
     }
 
     @Test
-    public void union_room_preferences_basic_examples(){
+    public void union_room_preferences_works(){
         // ARRANGE
-
+        Timetable tt = MainTest.test_timetable_A();
+        SchedulingProblem det = MainTest.test_details_A();
+        BruteForce bf = new BruteForce(det.Maximum_Days, det.Hours_Per_Day, det.Maximum_Rooms, det.KeyInd_Details, det.Room_Occupancy_Limits, det.Session_Details);
 
         // ACT
-
+        List<Integer> union = new ArrayList<>(Arrays.asList(1, 6, 7, 9));
+        bf.union_room_preferences(2, union);
 
         // ASSERT
-        assertThat(1).isEqualTo(0);
+        Set<Integer> set = Set.copyOf(union);
+        assertThat(set.hashCode()).isEqualTo(Set.copyOf(Arrays.asList(1,4,5,6,7,9)).hashCode());
     }
 
     @Test

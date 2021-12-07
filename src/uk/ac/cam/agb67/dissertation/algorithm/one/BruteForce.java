@@ -112,7 +112,7 @@ public class BruteForce {
         }
 
         // If there is no way for us to insert the current session, this recursive call has failed
-        System.err.println("No way to schedule sessions.");
+        System.err.println("No way to schedule session.");
         return null;
     }
 
@@ -126,7 +126,7 @@ public class BruteForce {
     }
 
     // Takes a list of room ids and a key individual id, and adds all of the key individual's preferred rooms to the list
-    private /*List<Integer>*/ void union_room_preferences(int KeyID, List<Integer> ExistingPrefs) {
+    /*List<Integer>*/ void union_room_preferences(int KeyID, List<Integer> ExistingPrefs) {
         for (int rid : KeyIndividuals.get(KeyID).KeyInd_Room_Prefs) {
             if (!ExistingPrefs.contains(rid)) ExistingPrefs.add(rid);
         }
