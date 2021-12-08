@@ -10,7 +10,7 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTest {
 
-    // TODO create tests
+    // TODO create more tests
 
     @Test
     public void object_can_be_created(){
