@@ -1,9 +1,6 @@
 package uk.ac.cam.agb67.dissertation;
 
-import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
-
-import java.util.List;
-import java.util.Set;
+import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 
 public class Main {
 
@@ -19,9 +16,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello project.");
 
-        // This method is currently just a driver for testing Algorithm One
+        // This method is currently just a driver for testing Algorithm Two
 
-        SchedulingAlgorithm algorithm_one = new Coordinator();
+        SchedulingAlgorithm algorithm_two = new CoordinatorTwo();
 
     }
 }

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class TimetableVerifier {
 
-    boolean timetable_is_coherent(Timetable tt, List<Session> sessions) {
+    public boolean timetable_is_coherent(Timetable tt, List<Session> sessions) {
         // Session-hours each have one unique slot in the schedule:
         if (!timetable_excludes_duplicates(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable included duplicates.\n");
