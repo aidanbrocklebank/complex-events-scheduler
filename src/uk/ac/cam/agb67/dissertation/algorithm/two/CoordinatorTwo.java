@@ -124,12 +124,10 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                         // TODO figure out why this hack works/is necessary?
                         // The above implementation is the correct one, as afar as I can tell
                         // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
-                        // Hack: So here is a modification which includes a pointless addition, and two pointless multiplications, and this version works
+                        // Hack: So here is a modification which includes a (pointless?) constant addition, and this version works
+                        IntVar hack_constant = event.intVar("hack constant for session #" + sesh.Session_ID, 1);
 
-                        int s = sesh.Session_ID;
-                        // SAMPLE FROM ABOVE:
-                         IntVar temp = room_assignments[0].add((start_time_assignments[s].add(offset)).mul(details.Maximum_Rooms),
-                                                day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
+                        IntVar temp = hack_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         relevant_timeslot_hash.add(temp);
                     }
                 }
