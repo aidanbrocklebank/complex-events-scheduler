@@ -12,7 +12,7 @@ public class TimetableVerifier {
         // Timetable exists
         if (tt == null) {
             if (Main.DEBUG) System.err.println("Timetable variable was null.\n");
-            coherent = false;
+            return false;
         }
 
         // Session-hours each have one unique slot in the schedule:

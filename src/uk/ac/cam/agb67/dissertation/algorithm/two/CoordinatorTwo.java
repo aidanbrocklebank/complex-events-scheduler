@@ -28,7 +28,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Use Choco-solver to model this scheduling problem, solve it, and then translate the solution back into a timetable
         Timetable schedule = represent_and_solve(details);
 
-        if (Main.DEBUG) System.out.println(schedule.toString());
+        if (Main.DEBUG && schedule != null) System.out.println(schedule.toString());
 
         return schedule;
     }
@@ -46,13 +46,13 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Give the variables there appropriate domains, or for predetermined sessions set them to their given values
         for (int s=0; s<num_sessions; s++) {
             if (details.Session_Details.get(s).getClass() != PredeterminedSession.class) {
-                if (Main.DEBUG) System.out.println("Adding normal session #"+s+" .");
+                //if (Main.DEBUG) System.out.println("Adding normal session #"+s+" .");
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, 0, details.Maximum_Days - 1, false);
                 start_time_assignments[s] = event.intVar("Start Time Assignment for session #" + s, 0, details.Hours_Per_Day - 1, false);
                 room_assignments[s] = event.intVar("Room Assignment for session #" + s, 0, details.Maximum_Rooms - 1, false);
             } else {
                 // The session is predetermined, so lock the IntVars to the correct values
-                if (Main.DEBUG) System.out.println("Adding predetermined session #"+s+" .");
+                //if (Main.DEBUG) System.out.println("Adding predetermined session #"+s+" .");
                 PredeterminedSession session = (PredeterminedSession) details.Session_Details.get(s);
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, session.PDS_Day);
                 start_time_assignments[s] = event.intVar("Start Time Assignment for session #" + s, session.PDS_Start_Time);
@@ -120,13 +120,24 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     for (int offset = 0; offset < sesh.Session_Length; offset++) {
                         // TODO IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         // TODO relevant_timeslot_hash.add(temp);
+
+                        // TODO figure out why this hack works/is necessary?
+                        // The above implementation is the correct one, as afar as I can tell
+                        // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
+                        // Hack: So here is a modification which includes a pointless addition, and two pointless multiplications, and this version works
+
+                        int s = sesh.Session_ID;
+                        // SAMPLE FROM ABOVE:
+                         IntVar temp = room_assignments[0].add((start_time_assignments[s].add(offset)).mul(details.Maximum_Rooms),
+                                                day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
+                        relevant_timeslot_hash.add(temp);
                     }
                 }
             }
 
             // Then force all the timeslot hours that this individual is present in to be unique
             IntVar[] relevant_timeslot_hash_array = intvar_list_to_array(relevant_timeslot_hash);
-            // TODO event.allDifferent(relevant_timeslot_hash_array).post();
+            event.allDifferent(relevant_timeslot_hash_array).post();
         }
 
 
