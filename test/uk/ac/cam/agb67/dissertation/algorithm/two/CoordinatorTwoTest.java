@@ -35,6 +35,7 @@ public class CoordinatorTwoTest {
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+        correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
@@ -50,6 +51,7 @@ public class CoordinatorTwoTest {
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+        correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
@@ -65,6 +67,7 @@ public class CoordinatorTwoTest {
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+        correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);

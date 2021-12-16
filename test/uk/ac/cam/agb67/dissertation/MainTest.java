@@ -103,7 +103,7 @@ public class MainTest {
         details.Hours_Per_Day = 8;
         details.Maximum_Rooms = 5;
 
-        details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30, 4);
+        details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30, 2);
 
         details.Reduce_Overlap_Pref = false;
         details.Minimum_Gap_Pref = 0;

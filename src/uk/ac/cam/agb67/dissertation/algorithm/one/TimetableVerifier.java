@@ -131,7 +131,7 @@ public class TimetableVerifier {
                                 return false;
                             }
                         }
-                        // Forcibly iterate h
+                        // Forcibly iterate h to skip over the rest of this session's hours
                         h = h + sesh.Session_Length - 1;
 
                     }
@@ -195,5 +195,29 @@ public class TimetableVerifier {
         return ret;
     }
 
-    // TODO check that sessions are in rooms with enough capacity
+    // Returns true if every session is scheduled in a room with enough capacity for it's key individuals
+    public boolean sessions_are_scheduled_in_large_enough_rooms(Timetable tt, List<Session> sessions, List<Integer> capacities) {
+
+        // Iterate through all timetable slots
+        for (int d = 0; d < tt.Total_Days; d++) {
+            for (int r = 0; r < tt.Total_Rooms; r++) {
+                for (int h = 0; h < tt.Hours_Per_Day; h++) {
+
+                    // When we find a session, check it's room and it's capacity
+                    if (tt.get_id(d,h,r) != -1) {
+                        if (sessions.get(tt.get_id(d,h,r)).Session_KeyInds.size() > capacities.get(r)) {
+                            System.err.println("Timetable included sessions scheduled in rooms which did not have capacity for the participants.");
+                            return false;
+                        }
+
+                        // Forcibly iterate h to skip over the rest of this session's hours
+                        h = h + sessions.get(tt.get_id(d,h,r)).Session_Length - 1;
+                    }
+
+                }
+            }
+        }
+
+        return true;
+    }
 }

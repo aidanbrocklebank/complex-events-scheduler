@@ -84,7 +84,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         // We then force these start-timeslot hashcodes to be unique among sessions
         // event.allDifferent(start_timeslot_hash).post();
-        // TODO the above line may be redundant with the following portion
+        // TODO I believe the above line is redundant due to it's purpose being covered by the following
 
         // And the same for all timeslot hashcodes
         IntVar[] timeslot_hash_array = intvar_list_to_array(timeslot_hash);
