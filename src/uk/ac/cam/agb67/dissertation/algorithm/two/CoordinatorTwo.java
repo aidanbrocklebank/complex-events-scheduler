@@ -7,12 +7,10 @@ import org.chocosolver.solver.constraints.extension.*;
 
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CoordinatorTwo implements SchedulingAlgorithm {
+// In the following comments, timeslot refers to an assigned day/time/room combination
 
     public CoordinatorTwo() {
 
@@ -20,16 +18,22 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
     @Override
     public Timetable generate(SchedulingProblem details) {
-        // In the following comments, timeslot refers to an assigned day/time/room combination
 
-        Model solvedEvent = represent_and_solve(details);
+        // Input validation step
+        if (!details.check_validity()) {
+            System.err.println("The given scheduling problem details were invalid.");
+            return null;
+        }
 
-        Timetable schedule = decode_model(solvedEvent);
+        // Use Choco-solver to model this scheduling problem, solve it, and then translate the solution back into a timetable
+        Timetable schedule = represent_and_solve(details);
+
+        if (Main.DEBUG) System.out.println(schedule.toString());
 
         return schedule;
     }
 
-    private Model represent_and_solve(SchedulingProblem details) {
+    private Timetable represent_and_solve(SchedulingProblem details) {
 
         Model event = new Model();
         int num_sessions = details.Session_Details.size();
@@ -41,13 +45,14 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         // Give the variables there appropriate domains, or for predetermined sessions set them to their given values
         for (int s=0; s<num_sessions; s++) {
-            // TODO make sure that this check is working
             if (details.Session_Details.get(s).getClass() != PredeterminedSession.class) {
+                if (Main.DEBUG) System.out.println("Adding normal session #"+s+" .");
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, 0, details.Maximum_Days - 1, false);
                 start_time_assignments[s] = event.intVar("Start Time Assignment for session #" + s, 0, details.Hours_Per_Day - 1, false);
                 room_assignments[s] = event.intVar("Room Assignment for session #" + s, 0, details.Maximum_Rooms - 1, false);
             } else {
                 // The session is predetermined, so lock the IntVars to the correct values
+                if (Main.DEBUG) System.out.println("Adding predetermined session #"+s+" .");
                 PredeterminedSession session = (PredeterminedSession) details.Session_Details.get(s);
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, session.PDS_Day);
                 start_time_assignments[s] = event.intVar("Start Time Assignment for session #" + s, session.PDS_Start_Time);
@@ -61,7 +66,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         IntVar[] start_timeslot_hash = new IntVar[num_sessions];
         List<IntVar> timeslot_hash = new ArrayList<>();
         for (int s=0; s<num_sessions; s++) {
-            start_timeslot_hash[s] = room_assignments[s].add(start_time_assignments[s].mul(details.Maximum_Rooms), day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
+            //start_timeslot_hash[s] = room_assignments[s].add(start_time_assignments[s].mul(details.Maximum_Rooms), day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
 
             // We also define a unique hash for every timeslot which is included in the length of the session
             // room + (time+offset)(MaxRooms) + day(MaxHours)(MaxRooms)
@@ -78,12 +83,12 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         }
 
         // We then force these start-timeslot hashcodes to be unique among sessions
-        event.allDifferent(start_timeslot_hash);
+        // event.allDifferent(start_timeslot_hash).post();
         // TODO the above line may be redundant with the following portion
 
         // And the same for all timeslot hashcodes
         IntVar[] timeslot_hash_array = intvar_list_to_array(timeslot_hash);
-        event.allDifferent(timeslot_hash_array);
+        event.allDifferent(timeslot_hash_array).post();
 
 
         // We will use the integer constraint factory to impose the requirement that assigned rooms have enough capacity
@@ -93,10 +98,10 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         for (int s=0; s<num_sessions; s++) {
             // For each session create an IntVar which tracks how large the room assigned to the session is
             IntVar room_limit = event.intVar(("Room Capacity for session #" + s), 0, greatest_limit);
-            event.element(room_limit, room_occupancy_limits, room_assignments[s]);
+            event.element(room_limit, room_occupancy_limits, room_assignments[s]).post();
 
             // Ensure that the room size available to this session is greater than the number of people involved
-            event.arithm(room_limit, ">=", details.Session_Details.get(s).Session_KeyInds.size());
+            event.arithm(room_limit, ">=", details.Session_Details.get(s).Session_KeyInds.size()).post();
         }
 
 
@@ -113,30 +118,50 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     // We take a hash of the day and time (but NOT the room) of each session which includes this individual
                     // So if they are in two parallel sessions with the same room, they will have the same hash
                     for (int offset = 0; offset < sesh.Session_Length; offset++) {
-                        IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
-                        relevant_timeslot_hash.add(temp);
+                        // TODO IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
+                        // TODO relevant_timeslot_hash.add(temp);
                     }
                 }
             }
 
             // Then force all the timeslot hours that this individual is present in to be unique
             IntVar[] relevant_timeslot_hash_array = intvar_list_to_array(relevant_timeslot_hash);
-            event.allDifferent(relevant_timeslot_hash_array);
+            // TODO event.allDifferent(relevant_timeslot_hash_array).post();
         }
 
 
-
-        // TODO use the solver to solve the problem
+        // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
-        solver.solve();
 
-        return event;
+        if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
+        if (Main.DEBUG) System.out.println(event.toString());
+
+        solver.getSearchState();
+
+        if(solver.solve()){
+            // Turn the instantiated values into a timetable to return
+            Timetable schedule = decode_model(details, day_assignments, start_time_assignments, room_assignments);
+            return schedule;
+
+        }else if(solver.isStopCriterionMet()){
+            System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
+            if (Main.DEBUG) System.err.println(solver.getSearchState());
+            return null;
+        }else {
+            System.err.println("No solution exists which satisfies the constraints.");
+            if (Main.DEBUG) System.err.println(solver.getSearchState());
+            return null;
+        }
     }
 
-    private Timetable decode_model(Model event) {
-
-
-        return null;
+    private Timetable decode_model(SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
+        // Create a new schedule, then iterate through the sessions in the event
+        // For every session retrieve the instantiated value of the IntVars for the day, time and room
+        Timetable schedule = new Timetable(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms);
+        for (int s=0; s<details.Session_Details.size(); s++) {
+            schedule.set(day_assignments[s].getValue(), start_time_assignments[s].getValue(), room_assignments[s].getValue(), details.Session_Details.get(s));
+        }
+        return schedule;
     }
 
     private int[] int_list_to_array(List<Integer> list) {

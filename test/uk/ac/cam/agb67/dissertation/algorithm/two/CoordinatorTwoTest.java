@@ -26,6 +26,21 @@ public class CoordinatorTwoTest {
     }
 
     @Test
+    public void algorithm_generates_coherent_schedule_0(){
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo();
+        SchedulingProblem details = MainTest.test_details_D();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
     public void algorithm_generates_coherent_schedule_1(){
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();

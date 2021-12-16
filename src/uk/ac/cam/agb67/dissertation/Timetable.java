@@ -33,8 +33,11 @@ public class Timetable {
     // Place a full session into the timetable
     public void set(int day, int time, int room, Session session) {
         for (int t = 0; t < session.Session_Length; t++) {
-            session_id_map[day][time+t][room] = session.Session_ID;
-            session_hour_map[day][time+t][room] = t;
+            if (time+t >= session_id_map[0].length) {System.err.println("Tried to set a session in a timetable which extends over the number of hours.");}
+            else {
+                session_id_map[day][time + t][room] = session.Session_ID;
+                session_hour_map[day][time + t][room] = t;
+            }
         }
     }
     // Place a single session-hour into the timetable

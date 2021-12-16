@@ -7,31 +7,39 @@ import java.util.*;
 public class TimetableVerifier {
 
     public boolean timetable_is_coherent(Timetable tt, List<Session> sessions) {
+        boolean coherent = true;
+
+        // Timetable exists
+        if (tt == null) {
+            if (Main.DEBUG) System.err.println("Timetable variable was null.\n");
+            coherent = false;
+        }
+
         // Session-hours each have one unique slot in the schedule:
         if (!timetable_excludes_duplicates(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable included duplicates.\n");
-            return false;
+            coherent = false;
         }
 
         // Every session is included:
         if (!timetable_is_comprehensive(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable was not comprehensive.\n");
-            return false;
+            coherent = false;
         }
 
         // Hours of the same session run consecutively:
         if (!timetabled_sessions_are_contiguous(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable included sessions which were not contiguous.\n");
-            return false;
+            coherent = false;
         }
 
         // Sessions at the same time in different rooms don’t share individuals
         if (!timetabled_individuals_dont_clash(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable had parallel sessions sharing individuals.\n");
-            return false;
+            coherent = false;
         }
 
-        return true;
+        return coherent;
     }
 
     // Returns true if every session-hour appears only once
@@ -186,4 +194,6 @@ public class TimetableVerifier {
         }
         return ret;
     }
+
+    // TODO check that sessions are in rooms with enough capacity
 }

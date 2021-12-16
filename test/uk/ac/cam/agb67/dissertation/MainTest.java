@@ -141,6 +141,39 @@ public class MainTest {
         return details;
     }
 
+    public static SchedulingProblem test_details_D() {
+        SchedulingProblem details = new SchedulingProblem();
 
+        // Create fake details for testing
+
+        details.Maximum_Days = 2;
+        details.Hours_Per_Day = 4;
+        details.Maximum_Rooms = 2;
+
+        details.Room_Occupancy_Limits = Arrays.asList(2, 50);
+
+        details.Reduce_Overlap_Pref = false;
+        details.Minimum_Gap_Pref = 0;
+
+        List<Session> ls = new ArrayList<>();
+        ls.add(new Session(0, "Session A", 1, Arrays.asList(1)));
+        ls.add(new Session(1, "Session B", 3, Arrays.asList(1, 3)));
+        ls.add(new Session(2, "Session C", 2, Arrays.asList(2, 3)));
+
+        List<KeyIndividual> keyls = new ArrayList<>();
+        keyls.add(new KeyIndividual("Person A", 2, Arrays.asList(0)));
+        keyls.add(new KeyIndividual("Person B", 2, Arrays.asList(1)));
+        keyls.add(new KeyIndividual("Person C", 2, Arrays.asList(0)));
+        details.KeyInd_Details = keyls;
+
+        List<PredeterminedSession> pdsls = new ArrayList<>();
+        //pdsls.add(new PredeterminedSession(6, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
+        //ls.add(pdsls.get(0));
+
+        details.Session_Details = ls;
+        details.PDS_Details = pdsls;
+
+        return details;
+    }
 
 }
