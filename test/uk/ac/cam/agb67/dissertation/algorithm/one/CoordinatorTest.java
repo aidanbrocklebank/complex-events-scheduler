@@ -33,7 +33,7 @@ public class CoordinatorTest {
 
         // ACT
         Timetable tt = co.generate(details);
-        boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
@@ -48,7 +48,7 @@ public class CoordinatorTest {
 
         // ACT
         Timetable tt = co.generate(details);
-        boolean correct = ttv.timetable_is_coherent(tt, details.Session_Details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);

@@ -6,8 +6,11 @@ import java.util.*;
 
 public class TimetableVerifier {
 
-    public boolean timetable_is_coherent(Timetable tt, List<Session> sessions) {
-        boolean coherent = true;
+    // Returns true if a timetable is valid, that is if the timetable is coherent, comprehensive and usable
+    public boolean timetable_is_valid(Timetable tt, SchedulingProblem details) {
+        boolean valid = true;
+        List<Session> sessions = details.Session_Details;
+        List<Integer> capacities = details.Room_Occupancy_Limits;
 
         // Timetable exists
         if (tt == null) {
@@ -15,31 +18,37 @@ public class TimetableVerifier {
             return false;
         }
 
-        // Session-hours each have one unique slot in the schedule:
+        // (Coherency) Session-hours each have one unique slot in the schedule:
         if (!timetable_excludes_duplicates(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable included duplicates.\n");
-            coherent = false;
+            valid = false;
         }
 
-        // Every session is included:
+        // (Comprehensiveness) Every session is included:
         if (!timetable_is_comprehensive(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable was not comprehensive.\n");
-            coherent = false;
+            valid = false;
         }
 
-        // Hours of the same session run consecutively:
+        // (Coherency) Hours of the same session run consecutively:
         if (!timetabled_sessions_are_contiguous(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable included sessions which were not contiguous.\n");
-            coherent = false;
+            valid = false;
         }
 
-        // Sessions at the same time in different rooms don’t share individuals
+        // (Coherency) Sessions at the same time in different rooms don’t share individuals
         if (!timetabled_individuals_dont_clash(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable had parallel sessions sharing individuals.\n");
-            coherent = false;
+            valid = false;
         }
 
-        return coherent;
+        // (Usability) Each session occurs in a room with a large enough capacity limit
+        if (!sessions_are_scheduled_in_large_enough_rooms(tt, sessions, capacities)) {
+            if (Main.DEBUG) System.err.println("Timetable had sessions booked in rooms without a great enough capacity limit.\n");
+            valid = false;
+        }
+
+        return valid;
     }
 
     // Returns true if every session-hour appears only once
@@ -146,6 +155,7 @@ public class TimetableVerifier {
     // Returns true if no individuals are booked into two sessions at once
     boolean timetabled_individuals_dont_clash(Timetable tt, List<Session> sessions) {
 
+        // TODO replace this with direct access to the session details?
         // Make a set of all the keyIndividuals present in the session list
         Set<Integer> All_KeyInds = new HashSet<>();
         for (Session s : sessions) {

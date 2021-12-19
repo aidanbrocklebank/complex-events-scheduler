@@ -14,7 +14,7 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class TimetableVerifierTest {
 
-    // TODO create tests for the overall coherence checker method
+    // TODO create tests for the overall validity checker method
 
     @Test
     public void object_can_be_created(){
@@ -78,7 +78,7 @@ public class TimetableVerifierTest {
 
         // Add a duplicate
         tt.set(0,5,1, 2, 0);
-        assertThat(ttv.timetable_excludes_duplicates(tt, ls)).isEqualTo(false);;
+        assertThat(ttv.timetable_excludes_duplicates(tt, ls)).isEqualTo(false);
     }
 
     @Test
@@ -132,6 +132,36 @@ public class TimetableVerifierTest {
 
     }
 
-    // TODO public void capacity_checker_basic_examples()
+    @Test
+    public void capacity_checker_basic_examples() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        Timetable tt = new Timetable(3,8,2);
+        List<Session> ls = new ArrayList<>();
+        List<Integer> cap = new ArrayList<>();
+
+        // ACT
+        ls.add(new Session(0, "Session A", 1, Arrays.asList(3)));
+        ls.add(new Session(1, "Session B", 1, Arrays.asList(1, 3)));
+        ls.add(new Session(2, "Session C", 1, Arrays.asList(2)));
+        ls.add(new Session(3, "Session D", 1, Arrays.asList(2, 4)));
+        ls.add(new Session(4, "Session E", 1, Arrays.asList(0, 1, 2, 3, 4)));
+
+        tt.set(0, 5, 1, 0, 0);
+        tt.set(1, 2, 0, 1, 0);
+        tt.set(1, 2, 1, 2, 0);
+        tt.set(2, 6, 0, 3, 0);
+
+        cap = Arrays.asList(2, 2);
+
+        // ASSERT
+        assertThat(ttv.sessions_are_scheduled_in_large_enough_rooms(tt, ls, cap)).isEqualTo(true);
+
+        // Add a session with more individuals than the room has capacity
+        tt.set(2, 4, 1, 4, 0);
+        assertThat(ttv.sessions_are_scheduled_in_large_enough_rooms(tt, ls, cap)).isEqualTo(false);
+
+
+    }
 
 }
