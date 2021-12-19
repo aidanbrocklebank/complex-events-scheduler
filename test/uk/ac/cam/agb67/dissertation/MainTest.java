@@ -176,4 +176,44 @@ public class MainTest {
         return details;
     }
 
+    public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
+        SchedulingProblem details = new SchedulingProblem();
+
+        // Lock in the defined parameters
+        details.Maximum_Days = days;
+        details.Hours_Per_Day = 8;
+        details.Maximum_Rooms = rooms;
+
+        details.Reduce_Overlap_Pref = overlap_pref;
+        details.Minimum_Gap_Pref = gap_pref;
+
+        // TODO generate a room occupancy for every room, some can be max integer
+        details.Room_Occupancy_Limits = null;
+
+        // TODO generate a list of sessions, length: num_sessions
+        details.Session_Details = null;
+
+        // TODO generate a list of key individuals, length: num_individuals
+        details.KeyInd_Details = null;
+
+        return details;
+    }
+
+    public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
+
+        int gap_pref = (int)(Math.random()*4);
+        double overlap_rand = Math.random();
+
+        System.out.println("desired gap: " +gap_pref+ ",    desire overlap?: "+ (overlap_rand >= 0.5));
+
+        return randomized_test_details(days, rooms, num_sessions, num_individuals, (overlap_rand >= 0.5), gap_pref);
+    }
+
+    @Test
+    public void randomizer_sanity_check() {
+        for (int i=0; i<100; i++) {
+            randomized_test_details(10, 5, 20, 15);
+        }
+    }
+
 }

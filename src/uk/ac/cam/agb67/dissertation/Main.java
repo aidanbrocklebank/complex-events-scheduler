@@ -16,9 +16,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello project.");
 
-        // This method is currently just a driver for testing Algorithm Two
-
-        SchedulingAlgorithm algorithm_two = new CoordinatorTwo();
+        // empty
 
     }
 }
