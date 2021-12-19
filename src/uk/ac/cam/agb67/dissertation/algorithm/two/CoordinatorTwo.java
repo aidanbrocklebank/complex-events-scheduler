@@ -4,8 +4,10 @@ import uk.ac.cam.agb67.dissertation.*;
 import org.chocosolver.solver.*;
 import org.chocosolver.solver.variables.*;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
@@ -23,8 +25,23 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             return null;
         }
 
-        // Use Choco-solver to model this scheduling problem, solve it, and then translate the solution back into a timetable
-        Timetable schedule = represent_and_solve(details);
+        // Create the variable arrays which Choco-Solver will use in it's model
+        IntVar[] day_assignments = new IntVar[details.Session_Details.size()];
+        IntVar[] start_time_assignments = new IntVar[details.Session_Details.size()];
+        IntVar[] room_assignments = new IntVar[details.Session_Details.size()];
+
+        // Use Choco-solver to model this scheduling problem,
+        Model event_model = represent(details, day_assignments, start_time_assignments, room_assignments);
+
+        // Use Choco-solver to solve the model, taking the first acceptable solution
+        boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
+        if (!solved) {
+            System.err.println("The model was not solved.");
+            return null;
+        }
+
+        // Finally decode the solved model into a schedule
+        Timetable schedule = decode_model(details, day_assignments, start_time_assignments, room_assignments);
 
         // Inform the user if this algorithm has failed
         if (schedule == null) {
@@ -38,18 +55,18 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return schedule;
     }
 
-    private Timetable represent_and_solve(SchedulingProblem details) {
+    private Model represent(SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
 
         Model event = new Model();
         int num_sessions = details.Session_Details.size();
 
-        // Variables declaration
-        IntVar[] day_assignments = new IntVar[num_sessions];
-        IntVar[] start_time_assignments = new IntVar[num_sessions];
-        IntVar[] room_assignments = new IntVar[num_sessions];
+        // Variables initialisation
+        //day_assignments = new IntVar[num_sessions];
+        //start_time_assignments = new IntVar[num_sessions];
+        //room_assignments = new IntVar[num_sessions];
 
-        // Give the variables there appropriate domains, or for predetermined sessions set them to their given values
-        for (int s=0; s<num_sessions; s++) {
+        // Give the variables their appropriate domains, or for predetermined sessions set them to their given values
+        for (int s = 0; s < num_sessions; s++) {
             if (details.Session_Details.get(s).getClass() != PredeterminedSession.class) {
                 //if (Main.DEBUG) System.out.println("Adding normal session #"+s+" .");
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, 0, details.Maximum_Days - 1, false);
@@ -70,12 +87,12 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // room + time(MaxRooms) + day(MaxHours)(MaxRooms)
         IntVar[] start_timeslot_hash = new IntVar[num_sessions];
         List<IntVar> timeslot_hash = new ArrayList<>();
-        for (int s=0; s<num_sessions; s++) {
+        for (int s = 0; s < num_sessions; s++) {
             //start_timeslot_hash[s] = room_assignments[s].add(start_time_assignments[s].mul(details.Maximum_Rooms), day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
 
             // We also define a unique hash for every timeslot which is included in the length of the session
             // room + (time+offset)(MaxRooms) + day(MaxHours)(MaxRooms)
-            for (int offset=0; offset<details.Session_Details.get(s).Session_Length; offset++) {
+            for (int offset = 0; offset < details.Session_Details.get(s).Session_Length; offset++) {
                 IntVar temp = room_assignments[s].add((start_time_assignments[s].add(offset)).mul(details.Maximum_Rooms),
                         day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
                 timeslot_hash.add(temp);
@@ -98,9 +115,12 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         // We will use the integer constraint factory to impose the requirement that assigned rooms have enough capacity
         int[] room_occupancy_limits = int_list_to_array(details.Room_Occupancy_Limits);
-        int greatest_limit = 0; for (int lim : details.Room_Occupancy_Limits) {greatest_limit = Math.max(greatest_limit, lim);}
+        int greatest_limit = 0;
+        for (int lim : details.Room_Occupancy_Limits) {
+            greatest_limit = Math.max(greatest_limit, lim);
+        }
 
-        for (int s=0; s<num_sessions; s++) {
+        for (int s = 0; s < num_sessions; s++) {
             // For each session create an IntVar which tracks how large the room assigned to the session is
             IntVar room_limit = event.intVar(("Room Capacity for session #" + s), 0, greatest_limit);
             event.element(room_limit, room_occupancy_limits, room_assignments[s]).post();
@@ -111,7 +131,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
 
         // Ensure that key individuals are only assigned to one session at a time
-        for (int keyID=0; keyID<details.KeyInd_Details.size(); keyID++) {
+        for (int keyID = 0; keyID < details.KeyInd_Details.size(); keyID++) {
 
             // Prepare a list of all timeslot-hour hashcodes for this individual
             List<IntVar> relevant_timeslot_hash = new ArrayList<>();
@@ -123,8 +143,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     // We take a hash of the day and time (but NOT the room) of each session which includes this individual
                     // So if they are in two parallel sessions with the same room, they will have the same hash
                     for (int offset = 0; offset < sesh.Session_Length; offset++) {
-                        // TODO IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
-                        // TODO relevant_timeslot_hash.add(temp);
+                        // IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
+                        // relevant_timeslot_hash.add(temp);
 
                         // TODO figure out why this hack works/is necessary?
                         // The above implementation is the correct one, as afar as I can tell
@@ -143,28 +163,30 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             event.allDifferent(relevant_timeslot_hash_array).post();
         }
 
+        return event;
+    }
 
+    private boolean solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
         // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
 
         if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
         if (Main.DEBUG) System.out.println(event.toString());
 
-        solver.getSearchState();
+        //solver.getSearchState();
 
         if(solver.solve()){
             // Turn the instantiated values into a timetable to return
-            Timetable schedule = decode_model(details, day_assignments, start_time_assignments, room_assignments);
-            return schedule;
+            return true;
 
         }else if(solver.isStopCriterionMet()){
             System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
-            if (Main.DEBUG) System.err.println(solver.getSearchState());
-            return null;
+            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            return false;
         }else {
             System.err.println("No solution exists which satisfies the constraints.");
-            if (Main.DEBUG) System.err.println(solver.getSearchState());
-            return null;
+            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            return false;
         }
     }
 
