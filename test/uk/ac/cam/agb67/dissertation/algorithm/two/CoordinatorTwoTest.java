@@ -32,10 +32,12 @@ public class CoordinatorTwoTest {
         SchedulingProblem details = MainTest.test_details_D();
         TimetableVerifier ttv = new TimetableVerifier();
 
+        // TODO remove
+        details = Main.randomized_test_details(20, 16, 30, 40);
+
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);
-        //correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);

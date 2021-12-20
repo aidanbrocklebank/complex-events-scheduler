@@ -46,6 +46,9 @@ public class CoordinatorTest {
         SchedulingProblem details = MainTest.test_details_C();
         TimetableVerifier ttv = new TimetableVerifier();
 
+        // TODO remove
+        details = Main.randomized_test_details(10, 20, 10, 25);
+
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);

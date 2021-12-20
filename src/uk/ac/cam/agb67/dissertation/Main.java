@@ -2,6 +2,11 @@ package uk.ac.cam.agb67.dissertation;
 
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Main {
 
     public static boolean DEBUG = true;
@@ -19,4 +24,87 @@ public class Main {
         // empty
 
     }
+
+    // Randomly generates a scheduling problem to use as test data, given certain parameters
+    public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
+        SchedulingProblem details = new SchedulingProblem();
+
+        // Lock in the defined parameters
+        details.Maximum_Days = days;
+        details.Hours_Per_Day = 8;
+        details.Maximum_Rooms = rooms;
+
+        details.Reduce_Overlap_Pref = overlap_pref;
+        details.Minimum_Gap_Pref = gap_pref;
+
+        // TODO randomise some Predetermined sessions
+        details.PDS_Details = new ArrayList<>();
+
+        if (DEBUG) System.out.println("Generating a test data set, with "+days+" days and "+rooms+" rooms.");
+
+        // Generate a room occupancy for every room, from 10% of the total individuals to double the total individuals
+        details.Room_Occupancy_Limits = new ArrayList<>();
+        for (int r=0; r<rooms; r++) {
+            int limit = generate_number(num_individuals * 2, (int)(num_individuals * 0.1));
+            details.Room_Occupancy_Limits.add(limit);
+        }
+        if (DEBUG) System.out.println("Room occupancy limits: "+details.Room_Occupancy_Limits.toString()+".");
+
+        // Generate a list of key individuals, of length num_individuals
+        details.KeyInd_Details = new ArrayList<>();
+        for (int k=0; k<num_individuals; k++) {
+            // Generate a preference for max sessions in one day
+            int daily_limit_pref = generate_number(8, 1);
+
+            // Then generate a set of room preferences
+            int num_room_prefs = generate_number((int)((rooms * 0.1) + 1), 0);
+            List<Integer> room_prefs = generate_numbers((rooms-1), 0, num_room_prefs);
+
+            // Then create and add the key individual
+            KeyIndividual KeyInd = new KeyIndividual("Person #"+k, daily_limit_pref, room_prefs);
+            details.KeyInd_Details.add(KeyInd);
+            if (DEBUG) System.out.println("Adding an individual with daily limit: "+daily_limit_pref+", and ("+num_room_prefs+") room prefs: "+room_prefs.toString()+".");
+        }
+
+        // Generate a list of sessions, of length num_sessions
+        details.Session_Details = new ArrayList<>();
+        for (int s=0; s<num_sessions; s++) {
+            // Generate the number of key individuals to be in the session, and their IDs
+            int num_participating_individuals = generate_number((int)(num_individuals * 0.25), 1);
+            List<Integer> participating_individual_IDs = generate_numbers((num_individuals-1), 0, num_participating_individuals);
+
+            // Then create and add the session
+            Session sesh = new Session(s, "Session #"+s, generate_number(6,1), participating_individual_IDs);
+            details.Session_Details.add(sesh);
+            if (DEBUG) System.out.println("Adding a session of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
+        }
+
+        return details;
+    }
+
+    // Randomly generates test data with randomized gap preference and overlap preference
+    public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
+        int gap_pref = generate_number(3, 0);
+        double overlap_rand = Math.random();
+
+        if (DEBUG) System.out.println("desired gap: " +gap_pref+ ",    desire overlap?: "+ (overlap_rand >= 0.5));
+
+        return randomized_test_details(days, rooms, num_sessions, num_individuals, (overlap_rand >= 0.5), gap_pref);
+    }
+
+    // Randomly generates a number between minimum and maximum
+    public static int generate_number(int maximum, int minimum) {
+        return (int) (minimum + (Math.random() * (maximum - minimum + 1)));
+    }
+
+    // Randomly generates a list, length count, of numbers between minimum and maximum
+    public static List<Integer> generate_numbers(int maximum, int minimum, int count) {
+        List<Integer> list = new ArrayList<>();
+        for (int i=0; i<count; i++) {
+            int gen = generate_number(maximum, minimum);
+            if (!list.contains(gen)) list.add(gen);
+        }
+        return list;
+    }
+
 }
