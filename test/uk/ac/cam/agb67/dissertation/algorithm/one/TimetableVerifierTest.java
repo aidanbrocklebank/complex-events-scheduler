@@ -147,7 +147,7 @@ public class TimetableVerifierTest {
         ls.add(new Session(3, "Session D", 1, Arrays.asList(2, 4)));
         ls.add(new Session(4, "Session E", 1, Arrays.asList(0, 1, 2, 3, 4)));
 
-        tt.set(0, 5, 1, 0, 0);
+        tt.set(0, 5, 0, 0, 0);
         tt.set(1, 2, 0, 1, 0);
         tt.set(1, 2, 1, 2, 0);
         tt.set(2, 6, 0, 3, 0);

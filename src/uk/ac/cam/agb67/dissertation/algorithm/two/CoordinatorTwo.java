@@ -4,10 +4,8 @@ import uk.ac.cam.agb67.dissertation.*;
 import org.chocosolver.solver.*;
 import org.chocosolver.solver.variables.*;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
@@ -34,7 +32,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         Model event_model = represent(details, day_assignments, start_time_assignments, room_assignments);
 
         // Use Choco-solver to solve the model, taking the first acceptable solution
+        //boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
         boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
+
         if (!solved) {
             System.err.println("The model was not solved.");
             return null;
@@ -83,14 +83,11 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         }
 
 
-        // Define a unique hash for each timeslot assignment with the formula:
-        // room + time(MaxRooms) + day(MaxHours)(MaxRooms)
-        IntVar[] start_timeslot_hash = new IntVar[num_sessions];
+        // The following code creates the constraint which enforces each session having a unique combination of day, room, and set of hours.
         List<IntVar> timeslot_hash = new ArrayList<>();
         for (int s = 0; s < num_sessions; s++) {
-            //start_timeslot_hash[s] = room_assignments[s].add(start_time_assignments[s].mul(details.Maximum_Rooms), day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
 
-            // We also define a unique hash for every timeslot which is included in the length of the session
+            // We define a unique hash for every timeslot which is included in the length of the session
             // room + (time+offset)(MaxRooms) + day(MaxHours)(MaxRooms)
             for (int offset = 0; offset < details.Session_Details.get(s).Session_Length; offset++) {
                 IntVar temp = room_assignments[s].add((start_time_assignments[s].add(offset)).mul(details.Maximum_Rooms),
@@ -104,11 +101,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // Condition: [start + length <= MaxHours] for session s
         }
 
-        // We then force these start-timeslot hashcodes to be unique among sessions
-        // event.allDifferent(start_timeslot_hash).post();
-        // TODO I believe the above line is redundant due to it's purpose being covered by the following
-
-        // And the same for all timeslot hashcodes
+        // We then require that time-slot hashcodes are all unique in the model
         IntVar[] timeslot_hash_array = intvar_list_to_array(timeslot_hash);
         event.allDifferent(timeslot_hash_array).post();
 
@@ -173,7 +166,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
         if (Main.DEBUG) System.out.println(event.toString());
 
-        //solver.getSearchState();
+        // TODO design an efficient search strategy
 
         if(solver.solve()){
             // Turn the instantiated values into a timetable to return
@@ -181,6 +174,31 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         }else if(solver.isStopCriterionMet()){
             System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
+            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            return false;
+        }else {
+            System.err.println("No solution exists which satisfies the constraints.");
+            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            return false;
+        }
+    }
+
+    private boolean optimise_and_solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
+        // Use the solver to find an acceptable solution to the problem, which also maximises a new variable
+        Solver solver = event.getSolver();
+        IntVar satisfaction = event.intVar(0);
+
+        //TODO implement the satisfaction intvar
+
+        Solution sol = solver.findOptimalSolution(satisfaction, true);
+        if (sol != null) {
+            // TODO figure out how to decode solutions, as opposed to directly from the model
+            if (Main.DEBUG) System.out.println("Solution: " + sol.toString());
+            if (Main.DEBUG) System.out.println("Day Assigmnent 0: " + day_assignments[0].getValue());
+            return true;
+
+        }else if(solver.isStopCriterionMet()){
+            System.err.println("The Choco-Solver could not determine whether or not an (optimal) solution existed.");
             if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
             return false;
         }else {

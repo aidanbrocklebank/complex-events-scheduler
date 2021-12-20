@@ -155,15 +155,14 @@ public class TimetableVerifier {
     // Returns true if no individuals are booked into two sessions at once
     boolean timetabled_individuals_dont_clash(Timetable tt, List<Session> sessions) {
 
-        // TODO replace this with direct access to the session details?
         // Make a set of all the keyIndividuals present in the session list
-        Set<Integer> All_KeyInds = new HashSet<>();
+        Set<Integer> All_KeyIDs = new HashSet<>();
         for (Session s : sessions) {
             if (s.Session_ID == -1) continue;
-            All_KeyInds.addAll(s.Session_KeyInds);
+            All_KeyIDs.addAll(s.Session_KeyInds);
         }
         int maxKeyInd = 0;
-        for (Integer i : All_KeyInds) {
+        for (Integer i : All_KeyIDs) {
             maxKeyInd = Math.max(i, maxKeyInd);
         }
 
@@ -181,10 +180,10 @@ public class TimetableVerifier {
 
                         // Find the session details for this sid
                         Session sesh = sessions.get(sid);
-                        List<Integer> KeyInds = sesh.Session_KeyInds;
+                        List<Integer> Session_KeyIDs = sesh.Session_KeyInds;
 
                         // Increment occurrences (for this day/time) for every key individual included
-                        for (Integer ki : KeyInds) {
+                        for (Integer ki : Session_KeyIDs) {
                             occurrences[d][h][ki] += 1;
                         }
                     }
@@ -230,4 +229,7 @@ public class TimetableVerifier {
 
         return true;
     }
+
+    // TODO a method which checks that all pre-determined sessions are at the right times
+
 }
