@@ -55,7 +55,7 @@ public class SchedulingProblem {
         // Check that all mentioned Key Individuals exist
         for (Session sesh : Session_Details) {
             for (int keyID : sesh.Session_KeyInds) {
-                if (keyID > KeyInd_Details.size()) {
+                if (keyID >= KeyInd_Details.size()) {
                     valid = false;
                     System.err.println("A Session was included with Key Individual IDs which were not indices in KeyInd_Details.");
                     break;

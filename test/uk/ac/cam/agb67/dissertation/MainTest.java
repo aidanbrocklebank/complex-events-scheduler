@@ -156,9 +156,9 @@ public class MainTest {
         details.Minimum_Gap_Pref = 0;
 
         List<Session> ls = new ArrayList<>();
-        ls.add(new Session(0, "Session A", 1, Arrays.asList(1)));
-        ls.add(new Session(1, "Session B", 3, Arrays.asList(1, 3)));
-        ls.add(new Session(2, "Session C", 2, Arrays.asList(2, 3)));
+        ls.add(new Session(0, "Session A", 1, Arrays.asList(0)));
+        ls.add(new Session(1, "Session B", 3, Arrays.asList(0, 2)));
+        ls.add(new Session(2, "Session C", 2, Arrays.asList(1, 2)));
 
         List<KeyIndividual> keyls = new ArrayList<>();
         keyls.add(new KeyIndividual("Person A", 2, Arrays.asList(0)));
@@ -178,7 +178,7 @@ public class MainTest {
 
     @Test
     public void randomizer_sanity_check() {
-        Main.randomized_test_details(21, 50, 10, 25);
+        Main.randomized_test_details(21, 50, 40, 25);
         for (int i=0; i<100; i++) {
             //Main.randomized_test_details(10, 5, 20, 15);
         }

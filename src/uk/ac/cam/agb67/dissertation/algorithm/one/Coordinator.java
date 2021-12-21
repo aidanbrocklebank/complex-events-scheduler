@@ -39,9 +39,6 @@ public class Coordinator implements SchedulingAlgorithm {
             return null;
         }
 
-        // Simple/greedy Optimisation stage?
-        // TODO Simple/greedy Optimisation stage?
-
         // Inform the user if this algorithm has failed
         if (schedule == null) {
             System.err.println("Algorithm one failed to generate a schedule.");

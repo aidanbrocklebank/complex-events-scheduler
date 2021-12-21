@@ -11,8 +11,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTwoTest {
 
-    // TODO create more tests
-
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -31,9 +29,6 @@ public class CoordinatorTwoTest {
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_D();
         TimetableVerifier ttv = new TimetableVerifier();
-
-        // TODO remove
-        details = Main.randomized_test_details(20, 16, 30, 40);
 
         // ACT
         Timetable tt = co.generate(details);
@@ -74,5 +69,7 @@ public class CoordinatorTwoTest {
         // ASSERT
         assertThat(correct).isEqualTo(true);
     }
+
+    // TODO create comprehensive tests
 
 }

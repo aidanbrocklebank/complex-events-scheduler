@@ -1,5 +1,6 @@
 package uk.ac.cam.agb67.dissertation;
 
+import org.chocosolver.solver.constraints.nary.nvalue.amnv.differences.D;
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 
 import java.security.Key;
@@ -28,6 +29,7 @@ public class Main {
     // Randomly generates a scheduling problem to use as test data, given certain parameters
     public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
         SchedulingProblem details = new SchedulingProblem();
+        if (DEBUG) System.out.println("Generating a test data set, with "+days+" days and "+rooms+" rooms.");
 
         // Lock in the defined parameters
         details.Maximum_Days = days;
@@ -36,11 +38,6 @@ public class Main {
 
         details.Reduce_Overlap_Pref = overlap_pref;
         details.Minimum_Gap_Pref = gap_pref;
-
-        // TODO randomise some Predetermined sessions
-        details.PDS_Details = new ArrayList<>();
-
-        if (DEBUG) System.out.println("Generating a test data set, with "+days+" days and "+rooms+" rooms.");
 
         // Generate a room occupancy for every room, from 10% of the total individuals to double the total individuals
         details.Room_Occupancy_Limits = new ArrayList<>();
@@ -70,13 +67,31 @@ public class Main {
         details.Session_Details = new ArrayList<>();
         for (int s=0; s<num_sessions; s++) {
             // Generate the number of key individuals to be in the session, and their IDs
-            int num_participating_individuals = generate_number((int)(num_individuals * 0.25), 1);
+            int num_participating_individuals = generate_number((int)(num_individuals * 0.15), 1);
             List<Integer> participating_individual_IDs = generate_numbers((num_individuals-1), 0, num_participating_individuals);
 
             // Then create and add the session
             Session sesh = new Session(s, "Session #"+s, generate_number(6,1), participating_individual_IDs);
             details.Session_Details.add(sesh);
-            if (DEBUG) System.out.println("Adding a session of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
+            if (DEBUG) System.out.println("Adding session #"+s+" of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
+        }
+
+        // Generate a number of predetermined sessions, replacing the last chunk of the session list
+        details.PDS_Details = new ArrayList<>();
+        int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 0);
+        if (DEBUG) System.out.println("Generating "+num_predetermined+" PDS sessions.");
+        for (int s=(num_sessions-num_predetermined); s<num_sessions; s++) {
+            Session remove = details.Session_Details.get(s);
+
+            // Take the details of the existing session and create a new PredeterminedSession
+            // Generate it a predetermined day, time and room
+            PredeterminedSession replace = new PredeterminedSession(remove.Session_ID, remove.Session_Name+"(PDS)", remove.Session_Length, remove.Session_KeyInds,
+                    generate_number(days-1, 0), generate_number(8-remove.Session_Length, 0), generate_number(rooms-1, 0));
+
+            // Then replace the
+            details.Session_Details.remove(s);
+            details.Session_Details.add(s, replace);
+            if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time: "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
         }
 
         return details;

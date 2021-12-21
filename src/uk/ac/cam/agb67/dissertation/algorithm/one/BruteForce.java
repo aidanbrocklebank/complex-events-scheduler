@@ -48,6 +48,7 @@ public class BruteForce {
         // Determine the full set of preferred rooms for this session
         List<Integer> PreferredRooms = new ArrayList<>();
         for (int k : KeyIDs) {
+            if (Main.DEBUG) System.out.println("Unioning room preferences for particpant "+k+", with existing preferred rooms: "+PreferredRooms.toString());
             union_room_preferences(k, PreferredRooms);
         }
 
@@ -126,11 +127,10 @@ public class BruteForce {
     }
 
     // Takes a list of room ids and a key individual id, and adds all of the key individual's preferred rooms to the list
-    /*List<Integer>*/ void union_room_preferences(int KeyID, List<Integer> ExistingPrefs) {
+    void union_room_preferences(int KeyID, List<Integer> ExistingPrefs) {
         for (int rid : KeyIndividuals.get(KeyID).KeyInd_Room_Prefs) {
             if (!ExistingPrefs.contains(rid)) ExistingPrefs.add(rid);
         }
-        //return ExistingPrefs;
     }
 
     // Check that a specific session, at a given time, doesn't clash in a particular timetable

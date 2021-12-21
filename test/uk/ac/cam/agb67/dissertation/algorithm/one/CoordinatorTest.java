@@ -10,8 +10,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTest {
 
-    // TODO create more tests
-
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -22,6 +20,21 @@ public class CoordinatorTest {
         // ASSERT
         System.out.println(co.hashCode());
         assertThat(true);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_0(){
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_D();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
     }
 
     @Test
@@ -46,9 +59,6 @@ public class CoordinatorTest {
         SchedulingProblem details = MainTest.test_details_C();
         TimetableVerifier ttv = new TimetableVerifier();
 
-        // TODO remove
-        details = Main.randomized_test_details(10, 20, 10, 25);
-
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);
@@ -56,5 +66,7 @@ public class CoordinatorTest {
         // ASSERT
         assertThat(correct).isEqualTo(true);
     }
+
+    // TODO copmprehensive tests
 
 }
