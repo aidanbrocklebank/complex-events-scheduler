@@ -34,7 +34,7 @@ public class Coordinator implements SchedulingAlgorithm {
         TimetableVerifier verifier = new TimetableVerifier();
         boolean coherent = verifier.timetable_is_valid(schedule, details);
         if (!coherent) {
-            System.err.println("Timetable was not coherent after brute force approach.");
+            System.err.println("Timetable was not valid after brute force approach.");
             if (Main.DEBUG) System.out.println(schedule.toString());
             return null;
         }

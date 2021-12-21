@@ -1,6 +1,7 @@
 package uk.ac.cam.agb67.dissertation;
 
 import org.chocosolver.solver.constraints.nary.nvalue.amnv.differences.D;
+import uk.ac.cam.agb67.dissertation.algorithm.one.*;
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 
 import java.security.Key;
@@ -22,9 +23,32 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello project.");
 
-        // empty
+        Coordinator algo_one = new Coordinator();
+        CoordinatorTwo algo_two = new CoordinatorTwo();
+        test_algorithm(algo_one);
+        test_algorithm(algo_two);
 
     }
+
+    // TODO finish the full randomised test for the algorithms
+    public static void test_algorithm(SchedulingAlgorithm algo) {
+
+        // Generate random data
+        SchedulingProblem details = randomized_test_details(10, 5, 50, 25);
+
+        // Use the given algorithm to generate a schedule
+        Timetable tt = algo.generate(details);
+
+        // Print the schedule
+        System.out.println("The produced schedule: \n"+tt.toString());
+
+        // Check it's accuracy
+        TimetableVerifier ttv = new TimetableVerifier();
+        boolean valid = ttv.timetable_is_valid(tt, details);
+        System.out.println("Schedule was valid? "+ valid+"!");
+
+    }
+
 
     // Randomly generates a scheduling problem to use as test data, given certain parameters
     public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
@@ -88,10 +112,11 @@ public class Main {
             PredeterminedSession replace = new PredeterminedSession(remove.Session_ID, remove.Session_Name+"(PDS)", remove.Session_Length, remove.Session_KeyInds,
                     generate_number(days-1, 0), generate_number(8-remove.Session_Length, 0), generate_number(rooms-1, 0));
 
-            // Then replace the
-            details.Session_Details.remove(s);
-            details.Session_Details.add(s, replace);
-            if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time: "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
+            // TODO Then replace the session
+            //details.Session_Details.remove(s);
+            //details.Session_Details.add(s, replace);
+            //if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time:
+            // "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
         }
 
         return details;
@@ -112,12 +137,22 @@ public class Main {
         return (int) (minimum + (Math.random() * (maximum - minimum + 1)));
     }
 
-    // Randomly generates a list, length count, of numbers between minimum and maximum
+    // Randomly generates a (duplicate-free) list, length count, of numbers between minimum and maximum
     public static List<Integer> generate_numbers(int maximum, int minimum, int count) {
+        if (count > (maximum - minimum)) {
+            System.err.println("Tried to generate a duplicate free list which was too long for the given range.");
+            return null;
+        }
+
         List<Integer> list = new ArrayList<>();
         for (int i=0; i<count; i++) {
             int gen = generate_number(maximum, minimum);
-            if (!list.contains(gen)) list.add(gen);
+            if (!list.contains(gen)) {
+                list.add(gen);
+            } else {
+                // Decrement because we did not find a new number
+                i--;
+            }
         }
         return list;
     }
