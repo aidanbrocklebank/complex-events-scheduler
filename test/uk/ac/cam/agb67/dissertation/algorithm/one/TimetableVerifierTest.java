@@ -164,4 +164,28 @@ public class TimetableVerifierTest {
 
     }
 
+    @Test
+    public void predtermined_checker_basic_examples() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        Timetable tt = new Timetable(4,6,4);
+        List<PredeterminedSession> pds_ls = new ArrayList<>();
+
+        // ACT
+        pds_ls.add(new PredeterminedSession(0, "PDS #0", 1, Arrays.asList(0), 3, 3, 3));
+        pds_ls.add(new PredeterminedSession(1, "PDS #1", 1, Arrays.asList(0), 2, 2, 2));
+
+        tt.set(3, 3, 3, pds_ls.get(0));
+        tt.set(2, 4, 2, pds_ls.get(1));
+
+        // ASSERT
+        assertThat(ttv.predetermined_sessions_are_scheduled_correctly(tt, pds_ls)).isEqualTo(false);
+
+        tt = new Timetable(4,6,4);
+        tt.set(3, 3, 3, pds_ls.get(0));
+        tt.set(2, 2, 2, pds_ls.get(1));
+
+        assertThat(ttv.predetermined_sessions_are_scheduled_correctly(tt, pds_ls)).isEqualTo(true);
+    }
+
 }

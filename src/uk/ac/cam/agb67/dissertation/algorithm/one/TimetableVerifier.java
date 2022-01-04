@@ -36,15 +36,21 @@ public class TimetableVerifier {
             valid = false;
         }
 
-        // (Coherency) Sessions at the same time in different rooms don’t share individuals
+        // (Coherency) Sessions at the same time in different rooms don’t share individuals:
         if (!timetabled_individuals_dont_clash(tt, sessions)) {
             if (Main.DEBUG) System.err.println("Timetable had parallel sessions sharing individuals.\n");
             valid = false;
         }
 
-        // (Usability) Each session occurs in a room with a large enough capacity limit
+        // (Usability) Each session occurs in a room with a large enough capacity limit:
         if (!sessions_are_scheduled_in_large_enough_rooms(tt, sessions, capacities)) {
             if (Main.DEBUG) System.err.println("Timetable had sessions booked in rooms without a great enough capacity limit.\n");
+            valid = false;
+        }
+
+        // (Usability) Every predetermined session is scheduled for the day, time and room which it requires:
+        if (!predetermined_sessions_are_scheduled_correctly(tt, details.PDS_Details)) {
+            if (Main.DEBUG) System.err.println("Timetable did not include the predtermined sessions in their assigned slots.\n");
             valid = false;
         }
 
@@ -205,7 +211,7 @@ public class TimetableVerifier {
     }
 
     // Returns true if every session is scheduled in a room with enough capacity for it's key individuals
-    public boolean sessions_are_scheduled_in_large_enough_rooms(Timetable tt, List<Session> sessions, List<Integer> capacities) {
+    boolean sessions_are_scheduled_in_large_enough_rooms(Timetable tt, List<Session> sessions, List<Integer> capacities) {
 
         // Iterate through all timetable slots
         for (int d = 0; d < tt.Total_Days; d++) {
@@ -230,6 +236,23 @@ public class TimetableVerifier {
         return true;
     }
 
-    // TODO a method which checks that all pre-determined sessions are at the right times
+    // Returns true if every predetermined session is scheduled (to start) in the correct slot
+    boolean predetermined_sessions_are_scheduled_correctly(Timetable tt, List<PredeterminedSession> pds_list) {
+
+        // Iterate through all predetermined sessions
+        for (PredeterminedSession pds : pds_list) {
+
+            // Find the session which has been scheduled into the slot where this PDS was meant to be
+            int scheduled_id = tt.get_id(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room);
+            if (scheduled_id != pds.Session_ID) {
+                // Return false if we don't find this PDS
+                System.err.println("Timetable did not include a predetermined session in the correct assigned slot.");
+                return false;
+            }
+        }
+
+        // If they were all found then return true
+        return true;
+    }
 
 }
