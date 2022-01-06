@@ -136,13 +136,13 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     // We take a hash of the day and time (but NOT the room) of each session which includes this individual
                     // So if they are in two parallel sessions with the same room, they will have the same hash
                     for (int offset = 0; offset < sesh.Session_Length; offset++) {
+
                         // IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         // relevant_timeslot_hash.add(temp);
 
-                        // TODO figure out why this hack works/is necessary?
                         // The above implementation is the correct one, as afar as I can tell
                         // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
-                        // Hack: So here is a modification which includes a (pointless?) constant addition, and this version works
+                        // Fix: So here is a modification which includes a constant addition, and this version works
                         IntVar hack_constant = event.intVar("hack constant for session #" + sesh.Session_ID, 1);
 
                         IntVar temp = hack_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();

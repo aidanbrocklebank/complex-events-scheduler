@@ -25,13 +25,14 @@ public class Main {
         test_algorithm(algo_one);
         test_algorithm(algo_two);
 
+        System.out.println("Done.");
     }
 
     // Test out a given algorithm on some randomly generated data
     public static void test_algorithm(SchedulingAlgorithm algo) {
 
         // Generate random data
-        SchedulingProblem details = randomized_test_details(10, 5, 50, 25);
+        SchedulingProblem details = randomized_test_details(8, 5, 20, 25);
 
         // Use the given algorithm to generate a schedule
         Timetable tt = algo.generate(details);

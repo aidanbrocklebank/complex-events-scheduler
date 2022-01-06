@@ -70,6 +70,6 @@ public class CoordinatorTwoTest {
         assertThat(correct).isEqualTo(true);
     }
 
-    // TODO create comprehensive tests
+    // TODO create edge-case tests
 
 }

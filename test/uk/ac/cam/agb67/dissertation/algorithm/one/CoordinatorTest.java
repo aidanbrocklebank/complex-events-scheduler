@@ -67,6 +67,6 @@ public class CoordinatorTest {
         assertThat(correct).isEqualTo(true);
     }
 
-    // TODO copmprehensive tests
+    // TODO edge-case tests
 
 }

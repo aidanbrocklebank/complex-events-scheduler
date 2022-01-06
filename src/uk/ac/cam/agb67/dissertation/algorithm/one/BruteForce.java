@@ -22,6 +22,8 @@ public class BruteForce {
         Sessions = ses;
     }
 
+    // Inserts a single session into the timetable in a place which looks acceptable, then recursively calls itself to add the rest
+    // If inserting the session did not result in recursively generating a full schedule, it tries other slots until it runs out
     Timetable insert_sessions(Timetable CurrentMapping, List<Session> CurrentSessions) {
 
         // We have already succeeded if the list of sessions to add is empty
