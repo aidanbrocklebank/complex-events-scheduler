@@ -43,6 +43,7 @@ public class BruteForce {
             if (FinalMapping != null) return FinalMapping;
         }
 
+        // Retrieve the details for clean use
         int sid = sesh.Session_ID;
         int len = sesh.Session_Length;
         List<Integer> KeyIDs = sesh.Session_KeyInds;
@@ -73,7 +74,7 @@ public class BruteForce {
                 for (int room : PreferredRooms) {
 
                     // Check for participants having bookings in other rooms at that time, and that the room is empty at that time
-                    boolean SessionDoesntClash = check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh);
+                    boolean SessionDoesntClash = Coordinator.check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh, Sessions);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
 
                         if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
@@ -94,7 +95,7 @@ public class BruteForce {
                 for (int room : RemainingRoomIDs) {
 
                     // Check for participants having bookings in other rooms at that time, and that the room is empty at that time
-                    boolean SessionDoesntClash = check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh);
+                    boolean SessionDoesntClash = Coordinator.check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh, Sessions);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
 
                         if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
@@ -119,7 +120,7 @@ public class BruteForce {
         return null;
     }
 
-    // Makes a deep copy of a list of sessions
+    // Returns a deep copy of a list of sessions
     List<Session> copy_session_list(List<Session> Base) {
         List<Session> Copy = new ArrayList<>();
         for (Session s : Base) {
@@ -128,42 +129,11 @@ public class BruteForce {
         return Copy;
     }
 
-    // Takes a list of room ids and a key individual id, and adds all of the key individual's preferred rooms to the list
+    // Takes a list of room ids and a key individual id, and returns that list with all of the key individual's preferred rooms included
     void union_room_preferences(int KeyID, List<Integer> ExistingPrefs) {
         for (int rid : KeyIndividuals.get(KeyID).KeyInd_Room_Prefs) {
             if (!ExistingPrefs.contains(rid)) ExistingPrefs.add(rid);
         }
-    }
-
-    // Check that a specific session, at a given time, doesn't clash in a particular timetable
-    boolean check_session_doesnt_clash(Timetable tt, int day, int hour, int room, Session sesh) {
-
-        // First make sure that there are no sessions in that room, for the duration of the session
-        for (int offset=0; offset < sesh.Session_Length; offset++) {
-            int sid = tt.get_id(day, hour+offset, room);
-            if (sid != -1) return false;
-        }
-
-        // Then ensure that all participating individuals have no other sessions at the same time
-        for (int keyID : sesh.Session_KeyInds) {
-
-            // Iterate through all parallel rooms, for all hours of this session
-            for (int offset=0; offset < sesh.Session_Length; offset++) {
-                for (int r=0; r < tt.Total_Rooms; r++) {
-
-                    // Find the session which is happening in this parallel room, and determine if our key individual is involved
-                    int sid = tt.get_id(day,hour+offset,r);
-                    //if (Main.DEBUG) System.out.println("KeyID: "+keyID+", Time: "+(hour+offset)+" (day "+day+"), Room: "+r+" -- Found session: "+sid+".");
-                    if (sid == -1) continue;
-                    Session s = Sessions.get(sid);
-                    if(s.Session_KeyInds.contains(keyID)) return false;
-                }
-            }
-
-        }
-
-        // If we have found no clashes, return true
-        return true;
     }
 
 }
