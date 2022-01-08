@@ -19,8 +19,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Coordinator algo_one = new Coordinator(true);
-        CoordinatorTwo algo_two = new CoordinatorTwo(true);
+        Coordinator algo_one = new Coordinator(false);
+        CoordinatorTwo algo_two = new CoordinatorTwo(false);
 
         test_algorithm(algo_one);
         test_algorithm(algo_two);
@@ -32,7 +32,7 @@ public class Main {
     public static void test_algorithm(SchedulingAlgorithm algo) {
 
         // Generate random data
-        SchedulingProblem details = randomized_test_details(8, 5, 20, 25);
+        SchedulingProblem details = randomized_test_details(8, 5, 15, 25);
 
         // Use the given algorithm to generate a schedule
         Timetable tt = algo.generate(details);
@@ -100,7 +100,7 @@ public class Main {
 
         // Generate a number of predetermined sessions, replacing the last chunk of the session list
         details.PDS_Details = new ArrayList<>();
-        int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 0);
+        int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 1);
         if (DEBUG) System.out.println("Generating "+num_predetermined+" PDS sessions.");
         for (int s=(num_sessions-num_predetermined); s<num_sessions; s++) {
             Session remove = details.Session_Details.get(s);
@@ -110,11 +110,11 @@ public class Main {
             PredeterminedSession replace = new PredeterminedSession(remove.Session_ID, remove.Session_Name+"(PDS)", remove.Session_Length, remove.Session_KeyInds,
                     generate_number(days-1, 0), generate_number(8-remove.Session_Length, 0), generate_number(rooms-1, 0));
 
-            // TODO Then replace the session - Make this work without breaking the algos!
-            //details.Session_Details.remove(s);
-            //details.Session_Details.add(s, replace);
-            //if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time:
-            // "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
+            // Then replace the session
+            details.Session_Details.remove(s);
+            details.Session_Details.add(s, replace);
+            details.PDS_Details.add(replace);
+            if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time: "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
         }
 
         return details;

@@ -31,6 +31,7 @@ public class Coordinator implements SchedulingAlgorithm {
 
         // Place the pre-determined sessions into the timetable
         for (PredeterminedSession pds : details.PDS_Details) {
+            if (Main.DEBUG) System.out.println("Adding predetermined session #"+pds.Session_ID +"at day: "+pds.PDS_Day+", time: "+pds.PDS_Start_Time+", room: "+ pds.PDS_Room);
             schedule.set(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room, pds);
         }
 
