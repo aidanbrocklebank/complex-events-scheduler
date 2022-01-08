@@ -177,14 +177,6 @@ public class MainTest {
     }
 
     @Test
-    public void randomizer_sanity_check() {
-        Main.randomized_test_details(21, 50, 40, 25);
-        for (int i=0; i<100; i++) {
-            //Main.randomized_test_details(10, 5, 20, 15);
-        }
-    }
-
-    @Test
     public void generate_number_returns_int_within_range() {
         // ARRANGE
         int max = 105; int min = 7;
@@ -219,7 +211,7 @@ public class MainTest {
     public void generate_numbers_returns_no_duplicates() {
         // ARRANGE
         int max = 1205; int min = 78;
-        int[] occurrences = new int[max-min];
+        int[] occurrences = new int[max-min+1];
 
         // ACT
         List<Integer> random = Main.generate_numbers(max, min, 100);
@@ -233,4 +225,8 @@ public class MainTest {
         }
     }
 
+    @Test
+    public void run_main() {
+        Main.main(null);
+    }
 }

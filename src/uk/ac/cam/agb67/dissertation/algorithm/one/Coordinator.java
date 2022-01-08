@@ -1,6 +1,5 @@
 package uk.ac.cam.agb67.dissertation.algorithm.one;
 
-import org.chocosolver.solver.constraints.nary.nvalue.amnv.graph.G;
 import uk.ac.cam.agb67.dissertation.*;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
-import uk.ac.cam.agb67.dissertation.algorithm.one.TimetableVerifier;
+import uk.ac.cam.agb67.dissertation.TimetableVerifier;
 
 import static com.google.common.truth.Truth.assertThat;
 

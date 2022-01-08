@@ -5,10 +5,7 @@ import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import uk.ac.cam.agb67.dissertation.*;
-import uk.ac.cam.agb67.dissertation.algorithm.one.TimetableVerifier;
 
-import java.sql.Time;
 import java.util.Arrays;
 
 @RunWith(JUnit4.class)

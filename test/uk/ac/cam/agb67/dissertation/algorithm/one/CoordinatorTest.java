@@ -10,7 +10,7 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTest {
 
-    // TODO edge-case tests
+    // TODO create edge-case tests
     // TODO differentiate tests for the greedy variant
 
     @Test

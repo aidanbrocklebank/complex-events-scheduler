@@ -22,23 +22,23 @@ public class Main {
         Coordinator algo_one = new Coordinator(false);
         CoordinatorTwo algo_two = new CoordinatorTwo(false);
 
-        test_algorithm(algo_one);
-        test_algorithm(algo_two);
+        // Generate random data
+        SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+
+        test_algorithm(algo_one, details);
+        test_algorithm(algo_two, details);
 
         System.out.println("Done.");
     }
 
     // Test out a given algorithm on some randomly generated data
-    public static void test_algorithm(SchedulingAlgorithm algo) {
-
-        // Generate random data
-        SchedulingProblem details = randomized_test_details(8, 5, 15, 25);
+    public static void test_algorithm(SchedulingAlgorithm algo, SchedulingProblem details) {
 
         // Use the given algorithm to generate a schedule
         Timetable tt = algo.generate(details);
 
         // Print the schedule
-        System.out.println("The produced schedule: \n"+tt.toString());
+        if (!DEBUG) System.out.println("The produced schedule: \n"+tt.toString());
 
         // Check it's accuracy
         TimetableVerifier ttv = new TimetableVerifier();
@@ -46,7 +46,6 @@ public class Main {
         System.out.println("Schedule was valid? "+ valid+"!\n\n");
 
     }
-
 
     // Randomly generates a scheduling problem to use as test data, given certain parameters
     public static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
