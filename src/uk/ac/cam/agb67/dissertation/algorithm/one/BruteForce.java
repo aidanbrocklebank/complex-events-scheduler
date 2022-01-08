@@ -51,7 +51,7 @@ public class BruteForce {
         // Determine the full set of preferred rooms for this session
         List<Integer> PreferredRooms = new ArrayList<>();
         for (int k : KeyIDs) {
-            if (Main.DEBUG) System.out.println("Unioning room preferences for particpant "+k+", with existing preferred rooms: "+PreferredRooms.toString());
+            //if (Main.DEBUG) System.out.println("Unioning room preferences for particpant "+k+", with existing preferred rooms: "+PreferredRooms.toString());
             union_room_preferences(k, PreferredRooms);
         }
 
@@ -62,8 +62,8 @@ public class BruteForce {
         }
         RemainingRoomIDs.removeAll(PreferredRooms);
 
-        if (Main.DEBUG) System.out.println("PreferredRooms: "+ PreferredRooms.toString());
-        if (Main.DEBUG) System.out.println("RemainingRoomIDs: "+ RemainingRoomIDs.toString());
+        //if (Main.DEBUG) System.out.println("PreferredRooms: "+ PreferredRooms.toString());
+        //if (Main.DEBUG) System.out.println("RemainingRoomIDs: "+ RemainingRoomIDs.toString());
 
         // Iterate through the hours available for the whole event
         for (int day = 0; day < MaxDays; day++) {
@@ -77,7 +77,7 @@ public class BruteForce {
                     boolean SessionDoesntClash = Coordinator.check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh, Sessions);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
 
-                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
+                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".");
 
                         // Insert this session at this point in the current schedule, as a new schedule
                         Timetable NewMapping = CurrentMapping.deep_copy();

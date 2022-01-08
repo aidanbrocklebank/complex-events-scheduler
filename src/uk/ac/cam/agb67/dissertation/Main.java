@@ -19,8 +19,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Coordinator algo_one = new Coordinator();
-        CoordinatorTwo algo_two = new CoordinatorTwo();
+        Coordinator algo_one = new Coordinator(true);
+        CoordinatorTwo algo_two = new CoordinatorTwo(true);
 
         test_algorithm(algo_one);
         test_algorithm(algo_two);
@@ -43,7 +43,7 @@ public class Main {
         // Check it's accuracy
         TimetableVerifier ttv = new TimetableVerifier();
         boolean valid = ttv.timetable_is_valid(tt, details);
-        System.out.println("Schedule was valid? "+ valid+"!");
+        System.out.println("Schedule was valid? "+ valid+"!\n\n");
 
     }
 

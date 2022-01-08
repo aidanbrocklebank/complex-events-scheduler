@@ -24,7 +24,6 @@ public class GreedyMethod {
     // Inserts a single session into the timetable in an acceptable slot, then recursively calls itself
     // ALTERNATIVELY: Loops through the list of sessions adding them each in a slot which looks acceptable
     Timetable insert_sessions(Timetable CurrentMapping, List<Session> AllSessions) {
-        if (Main.DEBUG) System.out.println("Using the greedy variant of the brute force algorithm.");
 
         sessionLoop:
         for (Session sesh : AllSessions) {
@@ -39,23 +38,6 @@ public class GreedyMethod {
             int sid = sesh.Session_ID;
             int len = sesh.Session_Length;
             List<Integer> KeyIDs = sesh.Session_KeyInds;
-
-            /*
-            // Determine the full set of preferred rooms for this session
-            List<Integer> PreferredRooms = new ArrayList<>();
-            for (int k : KeyIDs) {
-                if (Main.DEBUG) System.out.println("Unioning room preferences for particpant "+k+", with existing preferred rooms: "+PreferredRooms.toString());
-                union_room_preferences(k, PreferredRooms);
-            }
-
-            // Fill a list with all the room IDs, then remove those in the preferred set
-            List<Integer> RemainingRoomIDs = new ArrayList<>();
-            for (int i=0; i<MaxRooms; i++) {
-                RemainingRoomIDs.add(i);
-            }
-            RemainingRoomIDs.removeAll(PreferredRooms);
-
-             */
 
             // Iterate through the hours available for the whole event
             for (int day = 0; day < MaxDays; day++) {
