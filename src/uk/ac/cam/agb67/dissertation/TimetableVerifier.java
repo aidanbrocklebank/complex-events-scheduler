@@ -6,8 +6,6 @@ import java.util.*;
 
 public class TimetableVerifier {
 
-    // TODO consider moving TimetableVerifier (which is used across the program) into the main package
-
     // Returns true if a timetable is valid, that is if the timetable is coherent, comprehensive and usable
     public boolean timetable_is_valid(Timetable tt, SchedulingProblem details) {
         boolean valid = true;

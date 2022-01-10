@@ -207,6 +207,16 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         //TODO implement the satisfaction intvar
 
+        int minimum_gap = details.Minimum_Gap_Pref;
+        boolean reduce_overlap = details.Reduce_Overlap_Pref;
+
+        IntVar gap_satisfaction = event.intVar("Gap Satisfaction Metric", 0, 100, true);
+        IntVar overlap_satisfaction = event.intVar("Overlap Satisfaction Metric", 0, 100, true);
+
+
+
+
+
         Solution sol = solver.findOptimalSolution(satisfaction, true);
         if (sol != null) {
 
