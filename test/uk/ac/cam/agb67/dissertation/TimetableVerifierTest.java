@@ -14,8 +14,6 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class TimetableVerifierTest {
 
-    // TODO create tests for the overall validity checker method
-
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -186,6 +184,52 @@ public class TimetableVerifierTest {
         tt.set(2, 2, 2, pds_ls.get(1));
 
         assertThat(ttv.predetermined_sessions_are_scheduled_correctly(tt, pds_ls)).isEqualTo(true);
+    }
+
+    @Test
+    public void verifier_accepts_correct_schedule() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        Timetable tt = new Timetable(5,8,4);
+        SchedulingProblem details = MainTest.test_details_A();
+
+        // ACT
+        tt.set(0,3,0, details.Session_Details.get(0));
+        tt.set(1,0,0, details.Session_Details.get(1));
+        tt.set(0,0,1, details.Session_Details.get(2));
+        tt.set(0,2,1, details.Session_Details.get(3));
+        tt.set(2,0,0, details.Session_Details.get(4));
+        tt.set(2,1,0, details.Session_Details.get(5));
+
+        tt.set(0,0,0, details.Session_Details.get(6));
+
+        System.out.println(tt.toString());
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
+    }
+
+    @Test
+    public void verifier_rejects_incorrect_schedule() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        Timetable tt = new Timetable(5,8,4);
+        SchedulingProblem details = MainTest.test_details_A();
+
+        // ACT
+        tt.set(0,3,0, details.Session_Details.get(0));
+        tt.set(1,0,0, details.Session_Details.get(1));
+        tt.set(0,0,1, details.Session_Details.get(2));
+        tt.set(2,0,3, details.Session_Details.get(3));
+        tt.set(2,0,0, details.Session_Details.get(4));
+        tt.set(2,1,0, details.Session_Details.get(5));
+
+        tt.set(0,0,0, details.Session_Details.get(6));
+
+        System.out.println(tt.toString());
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);
     }
 
 }
