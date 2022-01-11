@@ -68,6 +68,10 @@ public class CoordinatorTwoTest {
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        System.out.println("Overall Score: " + pref_score);
     }
 
     // TODO create edge-case tests

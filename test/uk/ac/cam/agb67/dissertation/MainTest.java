@@ -106,7 +106,7 @@ public class MainTest {
         details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30, 2);
 
         details.Reduce_Overlap_Pref = false;
-        details.Minimum_Gap_Pref = 0;
+        details.Minimum_Gap_Pref = 10;
 
         List<Session> ls = new ArrayList<>();
         ls.add(new Session(0, "Session A", 2, Arrays.asList(0, 3)));
