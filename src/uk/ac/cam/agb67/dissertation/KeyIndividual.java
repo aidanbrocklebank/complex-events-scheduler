@@ -17,4 +17,9 @@ public class KeyIndividual {
         KeyInd_Room_Prefs = rp;
     }
 
+    @Override
+    public String toString() {
+        return "<Individual: Name:'"+KeyInd_Name+"', Daily Limit:"+KeyInd_Daily_Limit_Pref+", Preferred Rooms:"+KeyInd_Room_Prefs.toString()+">";
+    }
+
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2022-01-12T18:17:20.986Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" version="16.0.0" etag="H0Ula96i_A2wRCnG_BjM" type="google">
+  <diagram id="oP3Fg7uwz3xk4-dfVh4t">
+    <mxGraphModel dx="1038" dy="547" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Aidan Brocklebank" DailyLimitPreference="3" RoomPreferences="1,2,4,5,9" id="2">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Basket Weaving" length="4" participants="0,6,15" id="3">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Panel Three" length="5" participants="1,2,7,19" id="4">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="5" value="Event Details" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <object label="Pred Panel" length="5" participants="1,2,7,19" day="2" hour="4" room="7" id="6">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="80" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

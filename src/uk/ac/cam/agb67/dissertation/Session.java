@@ -25,4 +25,8 @@ public class Session {
         Session_KeyInds = kids;
     }
 
+    @Override
+    public String toString() {
+        return "<Session #"+Session_ID+": Name:'"+Session_Name+"', Length:"+Session_Length+", Participants:"+Session_KeyInds.toString()+">";
+    }
 }
