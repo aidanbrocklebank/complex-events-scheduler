@@ -13,8 +13,6 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class InterfaceXMLTest {
 
-    // TODO create some proper tests
-
     @Test
     public void object_can_be_created() {
         // ARRANGE
@@ -59,10 +57,9 @@ public class InterfaceXMLTest {
     @Test
     public void XML_decoder_works() {
         // ARRANGE
-        InterfaceXML ui;
+        InterfaceXML ui = new InterfaceXML();
 
         // ACT
-        ui = new InterfaceXML();
         SchedulingProblem details = ui.XML_to_Problem("samples\\FullInput.xml");
 
         if (Main.DEBUG) {
@@ -99,6 +96,26 @@ public class InterfaceXMLTest {
 
         // ASSERT
         assertThat(details).isEqualTo(null);
+    }
+
+    @Test
+    public void XML_encoder_manual_test() {
+        // ARRANGE
+        SchedulingProblem details = MainTest.test_details_A();
+
+        Timetable tt = new Timetable(5,8,4);
+        tt.set(0,3,0, details.Session_Details.get(0));
+        tt.set(1,0,0, details.Session_Details.get(1));
+        tt.set(0,0,1, details.Session_Details.get(2));
+        tt.set(0,2,1, details.Session_Details.get(3));
+        tt.set(2,0,0, details.Session_Details.get(4));
+        tt.set(2,1,0, details.Session_Details.get(5));
+        tt.set(0,0,0, details.Session_Details.get(6));
+
+        // ACT
+        InterfaceXML ui = new InterfaceXML();
+        String filename = ui.Schedule_to_XML(tt, details, "example1");
+        assertThat(filename).isNotEqualTo(null);
     }
 
 }

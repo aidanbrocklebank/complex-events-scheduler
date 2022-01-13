@@ -7,6 +7,9 @@ import part.norfolk.xml.ReadXmlDomParser;
 
 import uk.ac.cam.agb67.dissertation.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,10 +119,102 @@ public class InterfaceXML {
     }
 
     // Takes a finished Timetable and returns the location a an XML file which now contains a visual representation of the schedule
-    public String Schedule_to_XML(Timetable tt, SchedulingProblem details) {
-        // TODO implement this method
+    public String Schedule_to_XML(Timetable tt, SchedulingProblem details, String name) {
 
-        return null;
+        // Prepare the header and the footer for the file
+        String header =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<mxfile host=\"app.diagrams.net\" modified=\"2022-01-13T17:24:35.419Z\" agent=\"5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36\" version=\"16.0.0\" etag=\"OqdQl5cTmx5Hxo7dFLoE\" type=\"google\">\n" +
+                "  <diagram id=\"S1rT-Umi_qtr9FfrOm0y\">\n" +
+                "    <mxGraphModel dx=\"1093\" dy=\"515\" grid=\"1\" gridSize=\"10\" guides=\"1\" tooltips=\"1\" connect=\"1\" arrows=\"1\" fold=\"1\" page=\"1\" pageScale=\"1\" pageWidth=\"827\" pageHeight=\"1169\" math=\"0\" shadow=\"0\">\n" +
+                "      <root>\n" +
+                "        <mxCell id=\"0\" />\n" +
+                "        <mxCell id=\"1\" parent=\"0\" />\n";
+
+        String footer =
+                "      </root>\n" +
+                "    </mxGraphModel>\n" +
+                "  </diagram>\n" +
+                "</mxfile>\n";
+
+
+        // Create the geometric objects which lay out the information
+        int mxCellID = 2;
+        StringBuilder layout_data = new StringBuilder();
+
+        // Iterate through the days
+        for (int day=0; day<tt.Total_Days; day++) {
+            int y_offset = day * (tt.Total_Rooms + 2) * 40;
+
+            // Create the day label
+            layout_data.append(create_mxCell(mxCellID++, "DAY: "+day, 40, y_offset, 80, 40,
+                    "text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontStyle=1;fontSize=18;"));
+
+            // Create the room text
+            layout_data.append(create_mxCell(mxCellID++, "ROOMS", -20, y_offset+60, 80, 40,
+                    "text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontStyle=1;fontSize=18;rotation=-90;"));
+
+            // Create the room labels
+            for (int r=0; r<tt.Total_Rooms; r++){
+                layout_data.append(create_mxCell(mxCellID++, "R"+r+":", 40, y_offset+40+(r*40), 40, 40,
+                        "text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontStyle=1;fontSize=18;"));
+            }
+
+            // Create the background
+            layout_data.append(create_mxCell(mxCellID++, "", 80, y_offset+40, tt.Hours_Per_Day*40, tt.Total_Rooms*40,
+                    "rounded=0;whiteSpace=wrap;html=1;shadow=0;glass=0;sketch=0;fontSize=18;strokeWidth=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;"));
+
+            // Create the room line
+            layout_data.append(
+                    "        <mxCell id=\""+(mxCellID++)+"\" value=\"\" style=\"endArrow=none;html=1;rounded=0;fontSize=18;\" edge=\"1\" parent=\"1\">\n" +
+                    "          <mxGeometry width=\"50\" height=\"50\" relative=\"1\" as=\"geometry\">\n" +
+                    "            <mxPoint x=\"40\" y=\""+(y_offset+40)+"\" as=\"sourcePoint\" />\n" +
+                    "            <mxPoint x=\"40\" y=\""+(y_offset+40+(tt.Total_Rooms*40))+"\" as=\"targetPoint\" />\n" +
+                    "          </mxGeometry>\n" +
+                    "        </mxCell>\n"
+            );
+
+        }
+
+
+        // Create the geometric objects for the timetabled sessions
+        StringBuilder timetable_data = new StringBuilder();
+
+        // Iterate through the days
+        for (int day=0; day<tt.Total_Days; day++) {
+            int y_offset = day * (tt.Total_Rooms + 2) * 40;
+
+            // Iterate through rooms
+            for (int room=0; room<tt.Total_Rooms; room++) {
+                int room_y_offset = y_offset+(40*room)+40;
+
+                // Iterate through hours
+                for (int time=0; time<tt.Hours_Per_Day; time++) {
+                    int sid = tt.get_id(day, time, room);
+                    if (sid == -1) continue;
+
+                    int seshLength = details.Session_Details.get(sid).Session_Length;
+                    String seshName = details.Session_Details.get(sid).Session_Name;
+
+                    timetable_data.append(create_mxCell(mxCellID++, seshName, 80+(time*40), room_y_offset, seshLength*40, 40,
+                            "rounded=0;whiteSpace=wrap;html=1;shadow=0;glass=0;sketch=0;strokeWidth=1;"));
+
+                    time += seshLength - 1;
+                }
+
+            }
+
+        }
+
+
+        String complete_file_data = header + layout_data + timetable_data + footer;
+
+        String filename = create_file(complete_file_data, name);
+        if (filename == null) {
+            System.err.println("Failed to save the XML file.");
+        }
+
+        return filename;
     }
 
     // Takes a string of digits separated by commas and returns a list of numbers
@@ -153,6 +248,36 @@ public class InterfaceXML {
         }
 
         return list;
+    }
+
+    // Takes a string and a filename, and creates a new file with the string as the contents
+    String create_file(String contents, String name) {
+        String filename = "samples\\"+name+".xml";
+        try {
+            File newFile = new File(filename);
+            if (newFile.createNewFile()) {
+                System.out.println("File created: " + newFile.getName());
+            } else {
+                System.err.println("An XML file with this name already existed here. (Overwriting it.)");
+            }
+
+            FileWriter writer = new FileWriter(filename);
+            writer.write(contents);
+            writer.close();
+
+        } catch (IOException e) {
+            System.err.println("Couldn't write to the file.");
+            return null;
+        }
+        return filename;
+    }
+
+    // Creates a string representing an mxCell from certain values
+    String create_mxCell(int id, String text, int x, int y, int width, int height, String style) {
+        return
+        "        <mxCell id=\""+id+"\" value=\""+text+"\" style=\""+style+"\" vertex=\"1\" parent=\"1\">\n" +
+        "          <mxGeometry x=\""+x+"\" y=\""+y+"\" width=\""+width+"\" height=\""+height+"\" as=\"geometry\" />\n" +
+        "        </mxCell>\n";
     }
 
 }

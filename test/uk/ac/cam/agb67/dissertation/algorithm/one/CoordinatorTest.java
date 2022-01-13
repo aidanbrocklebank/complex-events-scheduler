@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
+import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -68,6 +69,9 @@ public class CoordinatorTest {
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
+
+        InterfaceXML ui = new InterfaceXML();
+        ui.Schedule_to_XML(tt, details, "example2");
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
