@@ -5,17 +5,17 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <object label="Aidan Brocklebank" DailyLimitPreference="3" RoomPreferences="1,2,4,5,9" id="2">
+        <object label="Aidan Brocklebank" DailyLimitPreference="3" RoomPreferences="1, 2, 4, 5, 9" id="2">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
             <mxGeometry x="240" y="40" width="120" height="60" as="geometry" />
           </mxCell>
         </object>
-        <object label="Group Learning" length="4" participants="0,6,15" id="3">
+        <object label="Basket Weaving" length="four" participants="0,6,15" id="3">
           <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
             <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
           </mxCell>
         </object>
-        <object label="Panel Three" length="5" participants="1,2,7,19" id="4">
+        <object label="Panel Three" length="5" participant="1,2,7,19" id="4">
           <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
             <mxGeometry x="80" y="120" width="120" height="60" as="geometry" />
           </mxCell>
