@@ -7,11 +7,11 @@ import java.util.List;
 public class Coordinator implements SchedulingAlgorithm {
 
     private boolean GreedyVariant = false;
+    private boolean Optimise = false;
 
     public Coordinator() {}
-    public Coordinator(boolean greedy) {
-        GreedyVariant = greedy;
-    }
+    public Coordinator(boolean greedy) { GreedyVariant = greedy; }
+    public Coordinator(boolean greedy, boolean opt) {GreedyVariant = greedy; Optimise = opt; }
 
     @Override
     public Timetable generate(SchedulingProblem details) {
@@ -44,6 +44,17 @@ public class Coordinator implements SchedulingAlgorithm {
                     details.Room_Occupancy_Limits, details.Session_Details);
             schedule = solver.insert_sessions(schedule, details.Session_Details);
         }
+
+
+        // Optional Greedy Optimisation Step
+        if (Optimise) {
+
+            GreedyOptimiser optimiser = new GreedyOptimiser();
+            Timetable optimisedSchedule = optimiser.optimise(schedule, details);
+            schedule = optimisedSchedule;
+
+        }
+
 
         // Check it with the TimetableVerifier
         TimetableVerifier verifier = new TimetableVerifier();
