@@ -11,7 +11,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTest {
 
-    // TODO create edge-case tests
     // TODO differentiate tests for the greedy variant
 
     @Test
@@ -76,6 +75,36 @@ public class CoordinatorTest {
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
         System.out.println("Overall Score: " + pref_score);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case(){
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_E();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case_2(){
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_F();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(false);
     }
 
     @Test

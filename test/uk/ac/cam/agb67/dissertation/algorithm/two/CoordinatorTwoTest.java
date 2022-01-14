@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
 import uk.ac.cam.agb67.dissertation.TimetableVerifier;
+import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -74,6 +75,34 @@ public class CoordinatorTwoTest {
         System.out.println("Overall Score: " + pref_score);
     }
 
-    // TODO create edge-case tests
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case(){
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo();
+        SchedulingProblem details = MainTest.test_details_E();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case_2(){
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo();
+        SchedulingProblem details = MainTest.test_details_F();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(false);
+    }
 
 }
