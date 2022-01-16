@@ -50,7 +50,7 @@ public class Coordinator implements SchedulingAlgorithm {
         if (Optimise) {
 
             GreedyOptimiser optimiser = new GreedyOptimiser();
-            Timetable optimisedSchedule = optimiser.optimise(schedule, details);
+            Timetable optimisedSchedule = optimiser.optimisation_pass(schedule, details);
             schedule = optimisedSchedule;
 
         }

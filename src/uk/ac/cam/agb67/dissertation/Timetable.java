@@ -69,6 +69,25 @@ public class Timetable {
         return copy;
     }
 
+    // Deep copy which also excludes one sessions based on its session ID
+    public Timetable deep_copy_excluding(int exclude) {
+        Timetable copy = new Timetable(this.Total_Days, this.Hours_Per_Day, this.Total_Rooms);
+        for (int i=0; i<this.Total_Days; i++) {
+            for (int j=0; j<this.Hours_Per_Day; j++) {
+                for (int k=0; k<this.Total_Rooms; k++) {
+                    if (this.session_id_map[i][j][k] != exclude) {
+                        copy.session_id_map[i][j][k] = this.session_id_map[i][j][k];
+                        copy.session_hour_map[i][j][k] = this.session_hour_map[i][j][k];
+                    } else {
+                        copy.session_id_map[i][j][k] = -1;
+                        copy.session_hour_map[i][j][k] = -1;
+                    }
+                }
+            }
+        }
+        return copy;
+    }
+
     // Pretty print
     public String toString() {
         String s = "";

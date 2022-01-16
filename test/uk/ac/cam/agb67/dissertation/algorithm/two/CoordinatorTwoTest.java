@@ -13,7 +13,7 @@ import static com.google.common.truth.Truth.assertThat;
 public class CoordinatorTwoTest {
 
     @Test
-    public void object_can_be_created(){
+    public void object_can_be_created() {
         // ARRANGE
         CoordinatorTwo co;
         SchedulingProblem det = MainTest.test_details_A();
@@ -25,7 +25,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_0(){
+    public void algorithm_generates_coherent_schedule_0() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_D();
@@ -40,7 +40,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_1(){
+    public void algorithm_generates_coherent_schedule_1() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_A();
@@ -56,7 +56,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_2(){
+    public void algorithm_generates_coherent_schedule_2() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_C();
@@ -76,7 +76,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_edge_case(){
+    public void algorithm_generates_coherent_schedule_edge_case() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_E();
@@ -91,7 +91,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_edge_case_2(){
+    public void algorithm_generates_coherent_schedule_edge_case_2() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_F();
