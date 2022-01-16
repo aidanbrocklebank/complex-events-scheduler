@@ -113,7 +113,7 @@ public class CoordinatorTest {
         assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
 
 
-        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
         if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
 
@@ -139,7 +139,7 @@ public class CoordinatorTest {
         assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
 
 
-        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
         if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
 

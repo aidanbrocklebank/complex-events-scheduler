@@ -1,17 +1,13 @@
 package uk.ac.cam.agb67.dissertation.algorithm.one;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import org.junit.Test;
-import uk.ac.cam.agb67.dissertation.MainTest;
-import uk.ac.cam.agb67.dissertation.SchedulingProblem;
-import uk.ac.cam.agb67.dissertation.Timetable;
+import uk.ac.cam.agb67.dissertation.*;
 
 import java.util.Arrays;
 
-import static com.google.common.truth.Truth.assertThat;
-
 public class GreedyMethodTest {
-
-    // TODO create tests
 
     @Test
     public void object_can_be_created() {

@@ -77,7 +77,7 @@ public class BruteForce {
                     boolean SessionDoesntClash = Coordinator.check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh, Sessions);
                     if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
 
-                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".");
+                        //if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".");
 
                         // Insert this session at this point in the current schedule, as a new schedule
                         Timetable NewMapping = CurrentMapping.deep_copy();

@@ -27,7 +27,7 @@ public class MainTest {
         details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30);
 
         details.Reduce_Overlap_Pref = false;
-        details.Minimum_Gap_Pref = 0;
+        details.Minimum_Gap_Pref = 1;
 
         List<Session> ls = new ArrayList<>();
         ls.add(new Session(0, "Session A", 1, Arrays.asList(3)));
@@ -82,6 +82,25 @@ public class MainTest {
         return tt;
     }
 
+    public static Timetable test_timetable_C() {
+        Timetable tt = new Timetable(5,8,5);
+        SchedulingProblem details = test_details_C();
+        List<Session> ls = details.Session_Details;
+
+        tt.set(0,0,2, ls.get(0));
+        tt.set(0,2,0, ls.get(1));
+        tt.set(0,4,2, ls.get(2));
+        tt.set(1,7,1, ls.get(3));
+        tt.set(0,6,3, ls.get(4));
+        tt.set(0,0,3, ls.get(5));
+        tt.set(1,0,1, ls.get(6));
+        tt.set(1,0,2, ls.get(7));
+        tt.set(0,7,2, ls.get(8));
+        tt.set(1,0,0, ls.get(9));
+
+        return tt;
+    }
+
     public static List<Session> test_session_list_B() {
         List<Session> ls = new ArrayList<>();
 
@@ -106,7 +125,7 @@ public class MainTest {
         details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30, 2);
 
         details.Reduce_Overlap_Pref = false;
-        details.Minimum_Gap_Pref = 10;
+        details.Minimum_Gap_Pref = 2;
 
         List<Session> ls = new ArrayList<>();
         ls.add(new Session(0, "Session A", 2, Arrays.asList(0, 3)));

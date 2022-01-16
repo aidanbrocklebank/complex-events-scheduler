@@ -1,5 +1,7 @@
 package uk.ac.cam.agb67.dissertation;
 
+import org.chocosolver.solver.constraints.nary.nvalue.amnv.differences.D;
+
 import java.util.List;
 
 public class TimetableSatisfactionMeasurer {
@@ -13,13 +15,15 @@ public class TimetableSatisfactionMeasurer {
     public int timetable_preference_satisfaction(Timetable tt, SchedulingProblem details) {
         // Note: This class assumes all provided timetables are valid for the given scheduling problems
 
+        if (DEBUG) System.out.println("Global Preferences: Min_Gap="+details.Minimum_Gap_Pref+" Overlap?="+details.Reduce_Overlap_Pref+".");
+
         // Obtain the individuals scores
         int gap_score = gap_preference_satisfaction(tt, details);
         int overlap_score = overlap_preference_satisfaction(tt, details);
         int room_score = room_preference_satisfaction(tt, details);
         int limit_score = limit_preference_satisfaction(tt, details);
 
-        if (DEBUG) System.out.println("The preference satisfaction metrics for the given timetable:\n(Overall) Gap Pref: "+ gap_score+"\n(Overall) Overlap Pref:" +
+        if (DEBUG) System.out.println("\nThe preference satisfaction metrics for the given timetable:\n(Overall) Gap Pref: "+ gap_score+"\n(Overall) Overlap Pref:" +
                 " "+ overlap_score+" \n(Individuals') Room Pref: "+ room_score+" \n(Individuals') Daily Limit Pref: "+ limit_score+"\n");
 
         // Combine the scores
@@ -32,7 +36,7 @@ public class TimetableSatisfactionMeasurer {
     int gap_preference_satisfaction(Timetable tt, SchedulingProblem details) {
         // (#"gaps shorter than pref" / #"sessions") * 100
         int minimum = details.Minimum_Gap_Pref;
-        int gaps_within_min = 0;
+        int gaps_over_min = 0;
 
         // Iterate through all timetable slots
         for (int r = 0; r < tt.Total_Rooms; r++) {
@@ -47,11 +51,11 @@ public class TimetableSatisfactionMeasurer {
                         gap += 1;
                     } else if (tt.get_id(d, h, r) != -1 && previous_sid == -1) {
                         // We reach the end of a gap
-                        if (gap <= minimum) gaps_within_min += 1;
+                        if (gap >= minimum) gaps_over_min += 1;
                         gap = 0;
                     } else if (tt.get_id(d, h, r) != -1 && previous_sid != tt.get_id(d, h, r)) {
                         // There are two sessions back to back with no gap
-                        if (minimum == 0) gaps_within_min += 1;
+                        if (minimum == 0) gaps_over_min += 1;
                         gap = 0;
                     } else if (tt.get_id(d, h, r) != -1 && previous_sid == tt.get_id(d, h, r)) {
                         // A session continues (no effect)
@@ -65,7 +69,8 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Calculate and return the score
-        return ((100 * gaps_within_min) / details.Session_Details.size());
+        if (DEBUG) System.out.println("Calculating Gap Score: #gaps_longer_than_pref="+gaps_over_min+" / #sessions="+details.Session_Details.size());
+        return ((100 * gaps_over_min) / details.Session_Details.size());
     }
 
     // Returns a score between 0 and 100 indicating how well the overlap preference has been met
@@ -89,9 +94,11 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Calculate and return the score
+        if (DEBUG) System.out.println("Calculating Overlap Score: (#total_booked="+total_booked+" / #timeslots_with_one_booking="+timeslots_with_booking+") / #rooms="+tt.Total_Rooms);
         int overlap_score = ((100 * total_booked / timeslots_with_booking) / tt.Total_Rooms);
 
         if (details.Reduce_Overlap_Pref) {
+            if (DEBUG) System.out.println("Recalculating Overlap Score: 100 - "+overlap_score);
             return 100 - overlap_score;
         } else {
             return overlap_score;
@@ -131,10 +138,13 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Calculate the score by averaging the ratios
+        if (DEBUG) System.out.print("Calculating Room Pref Score: #satisfied_participants / #participants per session: [");
         double total = 0;
         for (double ratio : session_ratios) {
+            if (DEBUG) System.out.print(" "+ratio+",");
             total += ratio;
         }
+        if (DEBUG) System.out.println("]\n Then (#total_ratios="+total+" / #sessions="+details.Session_Details.size()+")");
         return (int) (100 * (total / details.Session_Details.size()));
     }
 
@@ -171,6 +181,7 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Find each individuals total potential overspill (their overall hours - their daily limit)
+        // TODO fix this!
         int[] potential_overspill = new int[details.KeyInd_Details.size()];
         for (int KeyID=0; KeyID < details.KeyInd_Details.size(); KeyID++) {
             int overall_hours = 0;
@@ -181,11 +192,19 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Then calculate the score by averaging these ratios
+        if (DEBUG) System.out.print("Calculating Daily Limit Pref Score: #hours_over_limit / #possible_hours_over_limit per individual: \n [");
         double total = 0;
+        int excemptions = 0;
         for (int KeyID=0; KeyID < details.KeyInd_Details.size(); KeyID++) {
-            total += (double)hours_over_limit[KeyID] / (double)potential_overspill[KeyID];
+            if (DEBUG) System.out.print(" "+((double)hours_over_limit[KeyID] / (double)potential_overspill[KeyID])+" <"+(double)hours_over_limit[KeyID]+"/"+(double)potential_overspill[KeyID]+">,");
+            if (potential_overspill[KeyID] == 0) {
+                excemptions += 1;
+            } else {
+                total += (double) hours_over_limit[KeyID] / (double) potential_overspill[KeyID];
+            }
         }
-        return (int) (100 * (total / details.KeyInd_Details.size()));
+        if (DEBUG) System.out.println("]\n Then (#total_ratios="+total+" / #individuals="+(details.KeyInd_Details.size() - excemptions)+")");
+        return (int) (100 * (total / (details.KeyInd_Details.size() - excemptions)));
     }
 
 
