@@ -4,6 +4,11 @@ import java.util.List;
 
 public class TimetableSatisfactionMeasurer {
 
+    boolean DEBUG = false;
+
+    public TimetableSatisfactionMeasurer() {}
+    public TimetableSatisfactionMeasurer(boolean debug) { DEBUG = debug; }
+
     // Returns a score between 0 and 100 indicating how well the preferences for a scheduling problem are satisfied by the given timetable
     public int timetable_preference_satisfaction(Timetable tt, SchedulingProblem details) {
         // Note: This class assumes all provided timetables are valid for the given scheduling problems
@@ -14,7 +19,7 @@ public class TimetableSatisfactionMeasurer {
         int room_score = room_preference_satisfaction(tt, details);
         int limit_score = limit_preference_satisfaction(tt, details);
 
-        if (Main.DEBUG) System.out.println("The preference satisfaction metrics for the given timetable:\n(Overall) Gap Pref: "+ gap_score+"\n(Overall) Overlap Pref:" +
+        if (DEBUG) System.out.println("The preference satisfaction metrics for the given timetable:\n(Overall) Gap Pref: "+ gap_score+"\n(Overall) Overlap Pref:" +
                 " "+ overlap_score+" \n(Individuals') Room Pref: "+ room_score+" \n(Individuals') Daily Limit Pref: "+ limit_score+"\n");
 
         // Combine the scores

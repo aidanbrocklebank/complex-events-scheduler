@@ -6,6 +6,8 @@ import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.*;
 import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
+import java.sql.Time;
+
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(JUnit4.class)
@@ -68,17 +70,86 @@ public class CoordinatorTest {
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
-
-        InterfaceXML ui = new InterfaceXML();
-        ui.Schedule_to_XML(tt, details, "example2");
-
-        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
-        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
-        System.out.println("Overall Score: " + pref_score);
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_edge_case(){
+    public void greedy_optimiser_maintains_validity_0() {
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        Coordinator opt = new Coordinator(false, true);
+        SchedulingProblem details = MainTest.test_details_D();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        Timetable ott = opt.generate(details);
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
+        assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
+
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+
+        int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
+        assertThat(new_pref_score).isAtLeast(pref_score);
+    }
+
+    @Test
+    public void greedy_optimiser_maintains_validity_1() {
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        Coordinator opt = new Coordinator(false, true);
+        SchedulingProblem details = MainTest.test_details_A();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        Timetable ott = opt.generate(details);
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
+        assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
+
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
+
+        int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
+        if (Main.DEBUG) System.out.println("Optimised Score: " + new_pref_score);
+        assertThat(new_pref_score).isAtLeast(pref_score);
+    }
+
+    @Test
+    public void greedy_optimiser_maintains_validity_2() {
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        Coordinator opt = new Coordinator(false, true);
+        SchedulingProblem details = MainTest.test_details_C();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        Timetable ott = opt.generate(details);
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
+        assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
+
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
+
+        int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
+        if (Main.DEBUG) System.out.println("Optimised Score: " + new_pref_score);
+        assertThat(new_pref_score).isAtLeast(pref_score);
+    }
+
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case_1(){
         // ARRANGE
         Coordinator co = new Coordinator();
         SchedulingProblem details = MainTest.test_details_E();

@@ -12,6 +12,8 @@ public class GreedyOptimiser {
 
         // look through the current timetable, select a session to move
         for (Session sesh : details.Session_Details) {
+            // Don't move predetermined sessions.
+            if (sesh.getClass() == PredeterminedSession.class) continue;
 
             // Take the current satisfaction value of the timetable
             int current_score = TSM.timetable_preference_satisfaction(current, details);
@@ -26,6 +28,7 @@ public class GreedyOptimiser {
             for (int r = 0; r < current.Total_Rooms; r++) {
                 for (int d = 0; d < current.Total_Days; d++) {
                     for (int h = 0; h < current.Hours_Per_Day; h++) {
+                        if (h + sesh.Session_Length > current.Hours_Per_Day) continue;
 
                         // Find empty spaces
                         int sid = improvable.get_id(d, h, r);
