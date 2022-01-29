@@ -13,8 +13,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(JUnit4.class)
 public class CoordinatorTest {
 
-    // TODO differentiate tests for the greedy variant
-
     @Test
     public void object_can_be_created(){
         // ARRANGE
@@ -30,7 +28,7 @@ public class CoordinatorTest {
     @Test
     public void algorithm_generates_coherent_schedule_0(){
         // ARRANGE
-        Coordinator co = new Coordinator();
+        Coordinator co = new Coordinator(false);
         SchedulingProblem details = MainTest.test_details_D();
         TimetableVerifier ttv = new TimetableVerifier();
 
@@ -45,7 +43,7 @@ public class CoordinatorTest {
     @Test
     public void algorithm_generates_coherent_schedule_1(){
         // ARRANGE
-        Coordinator co = new Coordinator();
+        Coordinator co = new Coordinator(false);
         SchedulingProblem details = MainTest.test_details_A();
         TimetableVerifier ttv = new TimetableVerifier();
 
@@ -60,7 +58,52 @@ public class CoordinatorTest {
     @Test
     public void algorithm_generates_coherent_schedule_2(){
         // ARRANGE
-        Coordinator co = new Coordinator();
+        Coordinator co = new Coordinator(false);
+        SchedulingProblem details = MainTest.test_details_C();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void greedy_variant_generates_coherent_schedule_0(){
+        // ARRANGE
+        Coordinator co = new Coordinator(true);
+        SchedulingProblem details = MainTest.test_details_D();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void greedy_variant_generates_coherent_schedule_1(){
+        // ARRANGE
+        Coordinator co = new Coordinator(true);
+        SchedulingProblem details = MainTest.test_details_A();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void greedy_variant_generates_coherent_schedule_2(){
+        // ARRANGE
+        Coordinator co = new Coordinator(true);
         SchedulingProblem details = MainTest.test_details_C();
         TimetableVerifier ttv = new TimetableVerifier();
 
@@ -91,8 +134,10 @@ public class CoordinatorTest {
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
 
         int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
+        if (Main.DEBUG) System.out.println("Optimised Score: " + new_pref_score);
         assertThat(new_pref_score).isAtLeast(pref_score);
     }
 

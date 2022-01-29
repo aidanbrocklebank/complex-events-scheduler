@@ -34,7 +34,7 @@ public class TimetableSatisfactionMeasurer {
 
     // Returns a score between 0 and 100 indicating how well the gap preference has been met
     int gap_preference_satisfaction(Timetable tt, SchedulingProblem details) {
-        // (#"gaps shorter than pref" / #"sessions") * 100
+        // (#"gaps longer than or eqto pref" / #"sessions") * 100
         int minimum = details.Minimum_Gap_Pref;
         int gaps_over_min = 0;
 
@@ -65,6 +65,12 @@ public class TimetableSatisfactionMeasurer {
                     // Update previous session id
                     previous_sid = tt.get_id(d, h, r);
                 }
+
+                // Add a gap over min for any session which was not followed by another session, e.g. last session before the end of the day
+                if (gap > 0 || previous_sid != -1) {
+                    gaps_over_min += 1;
+                }
+
             }
         }
 
@@ -94,7 +100,8 @@ public class TimetableSatisfactionMeasurer {
         }
 
         // Calculate and return the score
-        if (DEBUG) System.out.println("Calculating Overlap Score: (#total_booked="+total_booked+" / #timeslots_with_one_booking="+timeslots_with_booking+") / #rooms="+tt.Total_Rooms);
+        if (DEBUG) System.out.println("Calculating Overlap Score: (#total_hours_booked="+total_booked+" / #timeslots_with_one_booking="+timeslots_with_booking+") / " +
+                "#rooms="+tt.Total_Rooms);
         int overlap_score = ((100 * total_booked / timeslots_with_booking) / tt.Total_Rooms);
 
         if (details.Reduce_Overlap_Pref) {
@@ -176,12 +183,11 @@ public class TimetableSatisfactionMeasurer {
 
             // Iterate through all individuals and add their over-limit hours from this day
             for (int KeyID=0; KeyID < details.KeyInd_Details.size(); KeyID++) {
-                hours_over_limit[KeyID] += Math.max(0, details.KeyInd_Details.get(KeyID).KeyInd_Daily_Limit_Pref - hours_today[KeyID]);
+                hours_over_limit[KeyID] += Math.max(0, hours_today[KeyID] - details.KeyInd_Details.get(KeyID).KeyInd_Daily_Limit_Pref);
             }
         }
 
         // Find each individuals total potential overspill (their overall hours - their daily limit)
-        // TODO fix this!
         int[] potential_overspill = new int[details.KeyInd_Details.size()];
         for (int KeyID=0; KeyID < details.KeyInd_Details.size(); KeyID++) {
             int overall_hours = 0;
@@ -196,7 +202,8 @@ public class TimetableSatisfactionMeasurer {
         double total = 0;
         int excemptions = 0;
         for (int KeyID=0; KeyID < details.KeyInd_Details.size(); KeyID++) {
-            if (DEBUG) System.out.print(" "+((double)hours_over_limit[KeyID] / (double)potential_overspill[KeyID])+" <"+(double)hours_over_limit[KeyID]+"/"+(double)potential_overspill[KeyID]+">,");
+            if (DEBUG) System.out.print(" "+details.KeyInd_Details.get(KeyID).KeyInd_Name+" "+((double)hours_over_limit[KeyID] / (double)potential_overspill[KeyID])+" <"+(double)hours_over_limit[KeyID]+
+                    "/"+(double)potential_overspill[KeyID]+">,");
             if (potential_overspill[KeyID] == 0) {
                 excemptions += 1;
             } else {

@@ -20,6 +20,7 @@ public class TimetableSatisfactionMeasurerTest {
         assertThat(true);
     }
 
+    /*
     @Test
     public void temp_unoptimised_score_test() {
         // ARRANGE
@@ -55,6 +56,7 @@ public class TimetableSatisfactionMeasurerTest {
         int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
         if (Main.DEBUG) System.out.println("Optimised Score: " + new_pref_score);
     }
+    */
 
     @Test
     public void calculates_correct_gap_pref_score() {
@@ -68,10 +70,17 @@ public class TimetableSatisfactionMeasurerTest {
         System.out.println("Calculated Gap Score: " + gap_score + "%");
 
         // ASSERT
-        // TODO calculate the real score on paper
-        assertThat(gap_score).isAtLeast(0);
-        assertThat(gap_score).isAtMost(100);
-        assertThat(false).isTrue();
+        assertThat(gap_score).isAtLeast(90);
+        assertThat(gap_score).isAtMost(90);
+
+        // ACT
+        details.Minimum_Gap_Pref = 3;
+        int harsher_gap_score = tsm.gap_preference_satisfaction(tt, details);
+        System.out.println("Calculated Harsher Gap Score: " + harsher_gap_score + "%");
+
+        // ASSERT
+        assertThat(harsher_gap_score).isAtLeast(70);
+        assertThat(harsher_gap_score).isAtMost(70);
     }
 
     @Test
@@ -86,10 +95,8 @@ public class TimetableSatisfactionMeasurerTest {
         System.out.println("Calculated Overlap Score: " + overlap_score + "%");
 
         // ASSERT
-        // TODO calculate the real score on paper
-        assertThat(overlap_score).isAtLeast(0);
-        assertThat(overlap_score).isAtMost(100);
-        assertThat(false).isTrue();
+        assertThat(overlap_score).isAtLeast(100 - 36);
+        assertThat(overlap_score).isAtMost(100 - 36);
     }
 
     @Test
@@ -97,6 +104,7 @@ public class TimetableSatisfactionMeasurerTest {
         // ARRANGE
         SchedulingProblem details = MainTest.test_details_C();
         Timetable tt = MainTest.test_timetable_C();
+        //System.err.println(tt.toString());
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(true);
 
         // ACT
@@ -104,10 +112,8 @@ public class TimetableSatisfactionMeasurerTest {
         System.out.println("Calculated Overlap Score: " + room_score + "%");
 
         // ASSERT
-        // TODO calculate the real score on paper
-        assertThat(room_score).isAtLeast(0);
-        assertThat(room_score).isAtMost(100);
-        assertThat(false).isTrue();
+        assertThat(room_score).isAtLeast(53);
+        assertThat(room_score).isAtMost(54);
     }
 
     @Test
@@ -122,10 +128,30 @@ public class TimetableSatisfactionMeasurerTest {
         System.out.println("Calculated Overlap Score: " + limit_score + "%");
 
         // ASSERT
-        // TODO calculate the real score on paper
-        assertThat(limit_score).isAtLeast(0);
-        assertThat(limit_score).isAtMost(100);
-        assertThat(false).isTrue();
+        assertThat(limit_score).isAtLeast(70);
+        assertThat(limit_score).isAtMost(71);
     }
 
+    @Test
+    public void fully_calculates_pref_score() {
+        // ARRANGE
+        SchedulingProblem details = MainTest.test_details_C();
+        Timetable tt = MainTest.test_timetable_C();
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(true);
+
+        // ACT
+        int score = tsm.timetable_preference_satisfaction(tt, details);
+
+        // ASSERT
+        assertThat(score).isAtLeast(69);
+        assertThat(score).isAtMost(70);
+
+        // ACT
+        details.Minimum_Gap_Pref = 3;
+        int harsher_score = tsm.timetable_preference_satisfaction(tt, details);
+
+        // ASSERT
+        assertThat(harsher_score).isAtLeast(64);
+        assertThat(harsher_score).isAtMost(65);
+    }
 }

@@ -205,7 +205,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         Solver solver = event.getSolver();
         IntVar satisfaction = event.intVar(0);
 
-        //TODO implement the satisfaction intvar - IF this is going nowhere then implement a greedy stepwise optimiser using the satisfaction measurer
+        //TODO implement the satisfaction intvar - IF this is going nowhere then put a cap on it
 
         int minimum_gap = details.Minimum_Gap_Pref;
         boolean reduce_overlap = details.Reduce_Overlap_Pref;

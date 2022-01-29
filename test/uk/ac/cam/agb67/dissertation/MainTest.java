@@ -124,7 +124,7 @@ public class MainTest {
 
         details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30, 2);
 
-        details.Reduce_Overlap_Pref = false;
+        details.Reduce_Overlap_Pref = true;
         details.Minimum_Gap_Pref = 2;
 
         List<Session> ls = new ArrayList<>();
@@ -145,9 +145,9 @@ public class MainTest {
         keyls.add(new KeyIndividual("Person C", 2, Arrays.asList(1, 2, 4)));
         keyls.add(new KeyIndividual("Person D", 3, Arrays.asList(2, 3)));
         keyls.add(new KeyIndividual("Person E", 1, Arrays.asList(0, 2)));
-        keyls.add(new KeyIndividual("Person F", 1, Arrays.asList(1, 4)));
+        keyls.add(new KeyIndividual("Person F", 3, Arrays.asList(1, 4)));
         keyls.add(new KeyIndividual("Person G", 1, Arrays.asList(1)));
-        keyls.add(new KeyIndividual("Person H", 1, Arrays.asList(4)));
+        keyls.add(new KeyIndividual("Person H", 6, Arrays.asList(4)));
         details.KeyInd_Details = keyls;
 
         List<PredeterminedSession> pdsls = new ArrayList<>();
