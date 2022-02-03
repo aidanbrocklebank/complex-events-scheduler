@@ -22,29 +22,54 @@ public class Main {
         Coordinator algo_one = new Coordinator(false);
         CoordinatorTwo algo_two = new CoordinatorTwo(false);
 
-        // Generate random data
-        SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+        DEBUG = false;
 
-        test_algorithm(algo_one, details);
-        test_algorithm(algo_two, details);
+        int tests= 100;
+        boolean[] algo_one_results = new boolean[tests];
+        boolean[] algo_two_results = new boolean[tests];
+        boolean all_passed = true;
+
+        for (int i = 0; i < tests; i++) {
+            // Generate random data
+            SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+
+            // Test both algorithms with the generated data
+            algo_one_results[i] = test_algorithm(algo_one, details);
+            algo_two_results[i] = test_algorithm(algo_two, details);
+            if (!algo_one_results[i] || !algo_two_results[i]) all_passed = false;
+        }
+
+        if (!all_passed) {
+            int algo_one_passes = 0;
+            int algo_two_passes = 0;
+            int mutual_failures = 0;
+            for (int i = 0; i < tests; i++) {
+                if (algo_one_results[i]) algo_one_passes++;
+                if (algo_two_results[i]) algo_two_passes++;
+                if (!algo_one_results[i] && !algo_two_results[i]) mutual_failures++;
+            }
+            System.out.println("Algorithm One passed "+algo_one_passes+" tests. Algorithm two passed "+algo_two_passes+" tests. There were "+mutual_failures+" mutual " +
+                    "failures.");
+        }
 
         System.out.println("Done.");
+        System.out.println("Did all tests pass? "+all_passed);
     }
 
     // Test out a given algorithm on some randomly generated data
-    public static void test_algorithm(SchedulingAlgorithm algo, SchedulingProblem details) {
+    public static boolean test_algorithm(SchedulingAlgorithm algo, SchedulingProblem details) {
 
         // Use the given algorithm to generate a schedule
         Timetable tt = algo.generate(details);
 
         // Print the schedule
-        if (!DEBUG) System.out.println("The produced schedule: \n"+tt.toString());
+        if (DEBUG) System.out.println("The produced schedule: \n"+tt.toString());
 
         // Check it's accuracy
         TimetableVerifier ttv = new TimetableVerifier();
         boolean valid = ttv.timetable_is_valid(tt, details);
         System.out.println("Schedule was valid? "+ valid+"!\n\n");
-
+        return valid;
     }
 
     // Randomly generates a scheduling problem to use as test data, given certain parameters

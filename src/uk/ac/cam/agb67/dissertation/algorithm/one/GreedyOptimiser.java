@@ -42,7 +42,6 @@ public class GreedyOptimiser {
                                 potential.set(d, h, r, sesh);
                                 int potential_score = TSM.timetable_preference_satisfaction(potential, details);
                                 if (potential_score > current_score) {
-                                    // TODO try out a maximiser here instead
                                     improvable = potential;
                                     improvable_contains_sesh = true;
                                     break outer_loop;
