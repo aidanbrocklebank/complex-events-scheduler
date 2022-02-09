@@ -83,6 +83,9 @@ public class InterfaceXMLTest {
         assertThat(details.KeyInd_Details.get(1).KeyInd_Name).isEqualTo("Jim Baxter");
         assertThat(details.KeyInd_Details.get(1).KeyInd_Daily_Limit_Pref).isEqualTo(2);
         assertThat(details.Session_Details.get(3).getClass()).isEqualTo(PredeterminedSession.class);
+
+        //boolean valid = details.check_validity();
+        //assertThat(valid).isTrue();
     }
 
     @Test

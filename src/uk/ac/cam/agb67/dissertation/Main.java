@@ -2,6 +2,7 @@ package uk.ac.cam.agb67.dissertation;
 
 import uk.ac.cam.agb67.dissertation.algorithm.one.*;
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
+import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,39 @@ public class Main {
     // The Full Details of the Event to Schedule
     SchedulingProblem Our_Event;
 
-
+    // Takes use input in the form of the name of an XML file, selects an algorithm from their parameters,
+    // schedules the input details with that algorithm and saves it to a file.
     public static void main(String[] args) {
+
+        // Get the name of the input file, and the params for the algorithm
+        String location = args[0];
+        int algorithm_choice = Integer.parseInt(args[1]);
+        boolean optimise_choice = Boolean.parseBoolean(args[2]);
+
+        // Retrieve the input details from the file
+        InterfaceXML ui = new InterfaceXML();
+        SchedulingProblem details = ui.XML_to_Problem("samples\\" + location);
+
+        // Put together the algorithm to use from the parameters
+        SchedulingAlgorithm algorithm;
+        switch (algorithm_choice) {
+            case 0: algorithm = new Coordinator(true, optimise_choice);
+            case 1: algorithm = new Coordinator(false, optimise_choice);
+            case 2: algorithm = new CoordinatorTwo(optimise_choice);
+            default: algorithm = new Coordinator(false, optimise_choice);
+        }
+
+        // Generate a schedule for the details and save it to a file
+        Timetable schedule = algorithm.generate(details);
+        if (schedule != null) {
+            ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule");
+        } else {
+            System.err.println("Failed to create schedule.");
+        }
+    }
+
+    // A method for testing the two algorithms in bulk
+    public static void test() {
 
         Coordinator algo_one = new Coordinator(false);
         CoordinatorTwo algo_two = new CoordinatorTwo(false);
