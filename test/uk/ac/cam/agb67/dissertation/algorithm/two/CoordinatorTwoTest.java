@@ -58,8 +58,10 @@ public class CoordinatorTwoTest {
     @Test
     public void algorithm_generates_coherent_schedule_2() {
         // ARRANGE
-        CoordinatorTwo co = new CoordinatorTwo();
+        CoordinatorTwo co = new CoordinatorTwo(true);
         SchedulingProblem details = MainTest.test_details_C();
+        details.Hours_Per_Day -= 2;
+        details.Maximum_Days = 3;
         TimetableVerifier ttv = new TimetableVerifier();
 
         // ACT
@@ -77,6 +79,8 @@ public class CoordinatorTwoTest {
 
     @Test
     public void algorithm_generates_coherent_schedule_edge_case() {
+        // TODO fix this edge case!
+
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_E();

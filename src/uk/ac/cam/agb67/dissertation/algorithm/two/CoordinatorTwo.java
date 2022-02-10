@@ -1,10 +1,15 @@
 package uk.ac.cam.agb67.dissertation.algorithm.two;
 
 import uk.ac.cam.agb67.dissertation.*;
+
 import org.chocosolver.solver.*;
 import org.chocosolver.solver.variables.*;
+import org.chocosolver.solver.search.strategy.Search;
+import org.chocosolver.solver.search.strategy.assignments.DecisionOperator;
+import org.chocosolver.solver.search.strategy.selectors.variables.*;
+import org.chocosolver.solver.search.strategy.selectors.values.*;
 
-import java.sql.Time;
+import javax.swing.text.DefaultEditorKit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +48,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // Use Choco-solver to solve the model, finding the solution which maximises a metric for preference satisfaction
             Solution sol = optimise_and_solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
             if (sol == null) {
-                System.err.println("The model was not solved."); return null;
+                System.err.println("The optimising variant failed to solve the model. Deffering to the standard variant.");
+                this.optimise_for_prefs = false;
+                return this.generate(details);
             }
 
             // Finally decode the solution into a schedule
@@ -85,7 +92,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Give the variables their appropriate domains, or for predetermined sessions set them to their given values
         for (int s = 0; s < num_sessions; s++) {
             if (details.Session_Details.get(s).getClass() != PredeterminedSession.class) {
-                //if (Main.DEBUG) System.out.println("Adding normal session #"+s+" .");
+                //if (Main.DEBUG) System.out.println("The number of days is "+details.Maximum_Days+" .");
                 day_assignments[s] = event.intVar("Day Assignment for session #" + s, 0, details.Maximum_Days - 1, false);
                 start_time_assignments[s] = event.intVar("Start Time Assignment for session #" + s, 0, details.Hours_Per_Day - 1, false);
                 room_assignments[s] = event.intVar("Room Assignment for session #" + s, 0, details.Maximum_Rooms - 1, false);
@@ -114,6 +121,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // The timeslot_hash list is not perfect however as offsets could spill over into other hashcodes if time+offset > MaxHours
 
             // So we include an additional constraint to ensure no session starts too close to the end of the day
+            // if (Main.DEBUG) System.out.println("Creating close-to-end-of-day limit for session "+s+". This limit is "+start_time_assignments[s]+" + "+details
+            // .Session_Details.get(s).Session_Length+" <= "+details.Hours_Per_Day+" .");
             event.arithm(event.intScaleView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
             // Condition: [start + length <= MaxHours] for session s
         }
@@ -160,9 +169,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                         // The above implementation is the correct one, as afar as I can tell
                         // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
                         // Fix: So here is a modification which includes a constant addition, and this version works
-                        IntVar hack_constant = event.intVar("hack constant for session #" + sesh.Session_ID, 1);
+                        IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
 
-                        IntVar temp = hack_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
+                        IntVar temp = extra_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         relevant_timeslot_hash.add(temp);
                     }
                 }
@@ -180,10 +189,17 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
 
-        if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
-        if (Main.DEBUG) System.out.println(event.toString());
+        //if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
+        //if (Main.DEBUG) System.out.println(event.toString());
 
-        // TODO design an efficient search strategy
+        long seed = (long) (Math.random() * Long.MAX_VALUE);
+        // Search Strategy
+        // Choose an uninstantiated variable with the smallest domain, and select values from the beginning of its domain
+        solver.setSearch(Search.intVarSearch(
+                new FirstFail(event),
+                new IntDomainMin(),
+                event.retrieveIntVars(true)
+        ));
 
         if(solver.solve()){
             // Turn the instantiated values into a timetable to return
@@ -201,35 +217,72 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
     }
 
     private Solution optimise_and_solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
-        // Use the solver to find an acceptable solution to the problem, which also maximises a new variable
+        // Use the solver to find an acceptable solution to the problem, and iterate to improve the satisfaction score
         Solver solver = event.getSolver();
-        IntVar satisfaction = event.intVar(0);
+        Solution best_solution = null;
+        int max_score = 0;
 
-        //TODO implement the satisfaction intvar - IF this is going nowhere then put a cap on it
+        TimetableVerifier ttv = new TimetableVerifier();
+        TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
 
-        int minimum_gap = details.Minimum_Gap_Pref;
-        boolean reduce_overlap = details.Reduce_Overlap_Pref;
+        for (int i=0; i<10; i++) {
 
-        IntVar gap_satisfaction = event.intVar("Gap Satisfaction Metric", 0, 100, true);
-        IntVar overlap_satisfaction = event.intVar("Overlap Satisfaction Metric", 0, 100, true);
+            // Search Strategy:
+            // Choose an uninstantiated variable with a random domain, and select random values from within that domain to try
+            long seedA = (long) (Math.random() * Long.MAX_VALUE);
+            long seedB = (long) (Math.random() * Long.MAX_VALUE);
+            if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + " \n Seed B: "+ seedB);
 
+            solver.setSearch(Search.intVarSearch(
+                    new Random<>(seedA),  //new FirstFail(event),
+                    new IntDomainRandom(seedB),
+                    event.retrieveIntVars(true)
+            ));
 
+            /* ABANDONED IDEA
+            //IntVar satisfaction = event.intVar(0);
 
+            int minimum_gap = details.Minimum_Gap_Pref;
+            boolean reduce_overlap = details.Reduce_Overlap_Pref;
+            IntVar gap_satisfaction = event.intVar("Gap Satisfaction Metric", 0, 100, true);
+            IntVar overlap_satisfaction = event.intVar("Overlap Satisfaction Metric", 0, 100, true);
+            //implement the satisfaction intvar - IF this is going nowhere then put a cap on it
 
+            //Solution sol = solver.findOptimalSolution(satisfaction, true);
+            */
 
-        Solution sol = solver.findOptimalSolution(satisfaction, true);
-        if (sol != null) {
+            // Find and decode a solution based on this search strategy
+            Solution sol = solver.findSolution();
+            Timetable prospect = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
+            boolean prospect_valid; int prospect_score;
 
-            if (Main.DEBUG) System.out.println("Solution: " + sol.toString());
-            if (Main.DEBUG) System.out.println("Day Assigmnent 0: " + sol.getIntVal(day_assignments[0]));
-            return sol;
+            // Check that is it is valid and record it's score
+            try {
+                prospect_valid = ttv.timetable_is_valid(prospect, details);
+                prospect_score = ttsm.timetable_preference_satisfaction(prospect, details);
+                if (Main.DEBUG) System.out.println("Found a valid timetable with score "+prospect_score+".");
+            } catch (Exception e) {
+                if (Main.DEBUG) System.out.println("Found an invalidity.");
+                break;
+            }
 
-        }else if(solver.isStopCriterionMet()){
-            System.err.println("The Choco-Solver could not determine whether or not an (optimal) solution existed.");
-            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
-            return null;
+            // If it creates a valid timetable and gives a better score, then replace the solution we will return
+            if (prospect_valid && prospect_score > max_score) {
+                if (Main.DEBUG) System.out.println("Updating best solution due to new score of "+prospect_score+".");
+                max_score = prospect_score;
+                best_solution = sol;
+            }
+
+        }
+
+        if (best_solution != null) {
+
+            //if (Main.DEBUG) System.out.println("Solution: " + sol.toString());
+            //if (Main.DEBUG) System.out.println("Day Assigmnent 0: " + sol.getIntVal(day_assignments[0]));
+            return best_solution;
+
         }else {
-            System.err.println("No solution exists which satisfies the constraints.");
+            System.err.println("Optimising version of algorithm 2 failed to find a result.");
             if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
             return null;
         }

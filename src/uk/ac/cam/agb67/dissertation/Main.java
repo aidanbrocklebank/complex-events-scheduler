@@ -30,6 +30,12 @@ public class Main {
         InterfaceXML ui = new InterfaceXML();
         SchedulingProblem details = ui.XML_to_Problem("samples\\" + location);
 
+        // Check that they are a usable set of input details
+        if (!details.check_validity()) {
+            System.err.println("The given event details are not a valid input.");
+            return;
+        }
+
         // Put together the algorithm to use from the parameters
         SchedulingAlgorithm algorithm;
         switch (algorithm_choice) {
@@ -44,7 +50,7 @@ public class Main {
         if (schedule != null) {
             ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule");
         } else {
-            System.err.println("Failed to create schedule.");
+            System.err.println("Failed to create a schedule with the given input and desired algorithm.");
         }
     }
 
