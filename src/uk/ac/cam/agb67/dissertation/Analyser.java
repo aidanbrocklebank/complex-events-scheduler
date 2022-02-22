@@ -10,63 +10,78 @@ public class Analyser {
 
     static boolean DEBUG = true;
 
-    // A method for testing the two algorithms in bulk
-    public static void test() {
+    public static void main(String[] args) {
 
-        Coordinator algo_one = new Coordinator(false);
-        CoordinatorTwo algo_two = new CoordinatorTwo(true);
+        // Get the number of times to test, and the name for the output file
+        int repetitions = Integer.parseInt(args[0]);
+        String location = args[1];
 
-        DEBUG = false;
+        // Establish the five algorithms we will be testing
+        SchedulingAlgorithm alg_greedy = new Coordinator(true, false);
+        SchedulingAlgorithm alg_brute_force = new Coordinator(false, false);
+        SchedulingAlgorithm alg_brute_force_greedy_optimised = new Coordinator(false,true);
+        SchedulingAlgorithm alg_CSP = new CoordinatorTwo(false);
+        SchedulingAlgorithm alg_CSP_random_optimised = new CoordinatorTwo(true);
 
-        int tests= 100;
-        boolean[] algo_one_results = new boolean[tests];
-        boolean[] algo_two_results = new boolean[tests];
-        boolean all_passed = true;
+        // Create the arrays we will store the results into
+        boolean[][] VALID = new boolean[5][repetitions];
+        int[][] SCORE = new int[5][repetitions];
+        long[][] RAM = new long[5][repetitions];
+        long[][] TIME = new long[5][repetitions];
 
-        for (int i = 0; i < tests; i++) {
+        // Loop N times
+        // TODO
             // Generate random data
-            SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+            //SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
 
-            // Test both algorithms with the generated data
-            algo_one_results[i] = test_algorithm(algo_one, details);
-            algo_two_results[i] = test_algorithm(algo_two, details);
-            if (!algo_one_results[i] || !algo_two_results[i]) all_passed = false;
-        }
+        // Store the data to a spreadsheet
+        boolean stored = save_to_spreadsheet(VALID, SCORE, RAM, TIME);
 
-        if (!all_passed) {
-            int algo_one_passes = 0;
-            int algo_two_passes = 0;
-            int mutual_failures = 0;
-            for (int i = 0; i < tests; i++) {
-                if (algo_one_results[i]) algo_one_passes++;
-                if (algo_two_results[i]) algo_two_passes++;
-                if (!algo_one_results[i] && !algo_two_results[i]) mutual_failures++;
-            }
-            System.out.println("Algorithm One passed "+algo_one_passes+" tests. Algorithm two passed "+algo_two_passes+" tests. There were "+mutual_failures+" mutual " +
-                    "failures.");
-        }
+        // Comparisons?
+        // TODO
 
-        System.out.println("Done.");
-        System.out.println("Did all tests pass? "+all_passed);
-    }
-
-    // Test out a given algorithm on some randomly generated data
-    public static boolean test_algorithm(SchedulingAlgorithm algo, SchedulingProblem details) {
-
-        // Use the given algorithm to generate a schedule
-        Timetable tt = algo.generate(details);
-
-        // Print the schedule
-        if (DEBUG) System.out.println("The produced schedule: \n"+tt.toString());
-
-        // Check it's accuracy
-        TimetableVerifier ttv = new TimetableVerifier();
-        boolean valid = ttv.timetable_is_valid(tt, details);
-        System.out.println("Schedule was valid? "+ valid+"!\n\n");
-        return valid;
     }
 
 
+    // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
+    public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
+                                                   long[][] RAM, long[][] TIME) {
+
+        // Use the given algorithm to generate a schedule, wrapped in system time checks and runtime environment checks
+        Runtime environment_before = Runtime.getRuntime();
+        long start_time = System.nanoTime();
+
+        Timetable tt = algorithm.generate(details);
+
+        long end_time = System.nanoTime();
+        Runtime environment_after = Runtime.getRuntime();
+
+        // Calculate the memory which was added to the program, and the execution time of the algorithm
+        long memory_added = environment_before.freeMemory() - environment_after.freeMemory();
+        long execution_time = end_time - start_time;
+
+        boolean valid = false;
+        int score = -1;
+
+        // Check the accuracy and score of the generated schedule
+        if (tt != null) {
+            TimetableVerifier ttv = new TimetableVerifier();
+            TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
+
+            valid = ttv.timetable_is_valid(tt, details);
+            score = ttsm.timetable_preference_satisfaction(tt, details);
+        }
+
+        VALID[alg][i] = valid;
+        SCORE[alg][i] = score;
+        RAM[alg][i] = memory_added;
+        TIME[alg][i] = execution_time;
+    }
+
+    static boolean save_to_spreadsheet(boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) {
+        //TODO implement
+        return false;
+    }
 
     // Randomly generates a scheduling problem to use as test data, given certain parameters
     static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
