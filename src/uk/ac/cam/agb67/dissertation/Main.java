@@ -52,13 +52,15 @@ public class Main {
         } else {
             System.err.println("Failed to create a schedule with the given input and desired algorithm.");
         }
+
+        test();
     }
 
     // A method for testing the two algorithms in bulk
     public static void test() {
 
         Coordinator algo_one = new Coordinator(false);
-        CoordinatorTwo algo_two = new CoordinatorTwo(false);
+        CoordinatorTwo algo_two = new CoordinatorTwo(true);
 
         DEBUG = false;
 

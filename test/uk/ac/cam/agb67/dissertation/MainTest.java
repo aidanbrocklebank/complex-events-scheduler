@@ -218,7 +218,7 @@ public class MainTest {
         List<KeyIndividual> keyls = new ArrayList<>();
         keyls.add(new KeyIndividual("Person A", 2, Arrays.asList()));
         keyls.add(new KeyIndividual("Person B", 2, Arrays.asList()));
-        keyls.add(new KeyIndividual("Person C", 2, Arrays.asList(0))); // Person 2 prefers room 0 to encourage the pathalogical case
+        keyls.add(new KeyIndividual("Person C", 2, Arrays.asList(0))); // Person 2 prefers room 0 to encourage the pathological case
         keyls.add(new KeyIndividual("Person D", 2, Arrays.asList()));
         keyls.add(new KeyIndividual("Person E", 2, Arrays.asList()));
         keyls.add(new KeyIndividual("Person F", 2, Arrays.asList()));
@@ -257,6 +257,38 @@ public class MainTest {
         keyls.add(new KeyIndividual("Person C", 2, Arrays.asList()));
         keyls.add(new KeyIndividual("Person D", 2, Arrays.asList()));
         keyls.add(new KeyIndividual("Person E", 2, Arrays.asList()));
+        details.KeyInd_Details = keyls;
+
+        details.PDS_Details = new ArrayList<>();
+
+        return details;
+    }
+
+    public static SchedulingProblem test_details_G() {
+        // Edge case details for the purposes of testing
+        // Placing session 0 in timeslot 0/0/0 gives no valid solutions
+
+        SchedulingProblem details = new SchedulingProblem();
+
+        details.Maximum_Days = 1;
+        details.Hours_Per_Day = 3;
+        details.Maximum_Rooms = 2;
+        details.Room_Occupancy_Limits = Arrays.asList(3, 1);
+
+        details.Reduce_Overlap_Pref = false;
+        details.Minimum_Gap_Pref = 0;
+
+        List<Session> ls = new ArrayList<>();
+        ls.add(new Session(0, "Session A", 3, Arrays.asList(0)));
+        ls.add(new Session(1, "Session B", 1, Arrays.asList(1,2,3)));
+
+        details.Session_Details = ls;
+
+        List<KeyIndividual> keyls = new ArrayList<>();
+        keyls.add(new KeyIndividual("Person A", 2, Arrays.asList(0))); // Person 2 prefers room 0 to encourage the pathological case
+        keyls.add(new KeyIndividual("Person B", 2, Arrays.asList()));
+        keyls.add(new KeyIndividual("Person C", 2, Arrays.asList()));
+        keyls.add(new KeyIndividual("Person D", 2, Arrays.asList()));
         details.KeyInd_Details = keyls;
 
         details.PDS_Details = new ArrayList<>();

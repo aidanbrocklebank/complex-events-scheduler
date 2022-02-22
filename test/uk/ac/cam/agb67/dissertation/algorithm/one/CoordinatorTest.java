@@ -224,6 +224,21 @@ public class CoordinatorTest {
     }
 
     @Test
+    public void algorithm_generates_coherent_schedule_edge_case_3(){
+        // ARRANGE
+        Coordinator co = new Coordinator();
+        SchedulingProblem details = MainTest.test_details_G();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
     public void check_session_doesnt_clash_catches_parallel_individuals(){
         // ARRANGE
         Timetable tt = MainTest.test_timetable_A();

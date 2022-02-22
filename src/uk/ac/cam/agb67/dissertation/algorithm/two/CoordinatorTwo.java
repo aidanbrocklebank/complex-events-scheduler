@@ -169,8 +169,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                         // The above implementation is the correct one, as afar as I can tell
                         // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
                         // Fix: So here is a modification which includes a constant addition, and this version works
-                        IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
+                        IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID +" at offset: " + offset, 1);
 
+                        // 1 + (time+offset) + (day)(MaxHours)
                         IntVar temp = extra_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         relevant_timeslot_hash.add(temp);
                     }
@@ -189,10 +190,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
 
-        //if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
-        //if (Main.DEBUG) System.out.println(event.toString());
+        if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
+        if (Main.DEBUG) System.out.println(event.toString());
 
-        long seed = (long) (Math.random() * Long.MAX_VALUE);
         // Search Strategy
         // Choose an uninstantiated variable with the smallest domain, and select values from the beginning of its domain
         solver.setSearch(Search.intVarSearch(
@@ -201,8 +201,10 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 event.retrieveIntVars(true)
         ));
 
+        // Now use the solver to actually find a set of variable mappings which work
+        //solver.showDecisions();
         if(solver.solve()){
-            // Turn the instantiated values into a timetable to return
+
             return true;
 
         }else if(solver.isStopCriterionMet()){
@@ -211,7 +213,10 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             return false;
         }else {
             System.err.println("No solution exists which satisfies the constraints.");
-            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            if (Main.DEBUG) {
+                System.err.println("Search status: " + solver.getSearchState());
+                System.out.println("Here are some choco stats: ");
+                solver.printStatistics();}
             return false;
         }
     }
@@ -231,7 +236,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // Choose an uninstantiated variable with a random domain, and select random values from within that domain to try
             long seedA = (long) (Math.random() * Long.MAX_VALUE);
             long seedB = (long) (Math.random() * Long.MAX_VALUE);
-            if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + " \n Seed B: "+ seedB);
+            if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + ", Seed B: "+ seedB);
 
             solver.setSearch(Search.intVarSearch(
                     new Random<>(seedA),  //new FirstFail(event),
@@ -239,20 +244,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     event.retrieveIntVars(true)
             ));
 
-            /* ABANDONED IDEA
-            //IntVar satisfaction = event.intVar(0);
-
-            int minimum_gap = details.Minimum_Gap_Pref;
-            boolean reduce_overlap = details.Reduce_Overlap_Pref;
-            IntVar gap_satisfaction = event.intVar("Gap Satisfaction Metric", 0, 100, true);
-            IntVar overlap_satisfaction = event.intVar("Overlap Satisfaction Metric", 0, 100, true);
-            //implement the satisfaction intvar - IF this is going nowhere then put a cap on it
-
-            //Solution sol = solver.findOptimalSolution(satisfaction, true);
-            */
-
             // Find and decode a solution based on this search strategy
             Solution sol = solver.findSolution();
+            if (sol == null) break;
             Timetable prospect = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
             boolean prospect_valid; int prospect_score;
 

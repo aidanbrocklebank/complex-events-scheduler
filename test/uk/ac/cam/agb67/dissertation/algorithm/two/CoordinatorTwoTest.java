@@ -57,6 +57,7 @@ public class CoordinatorTwoTest {
 
     @Test
     public void algorithm_generates_coherent_schedule_2() {
+        // TODO clean up the tests a bit and seperate out some tests for the optimising version
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(true);
         SchedulingProblem details = MainTest.test_details_C();
@@ -78,8 +79,7 @@ public class CoordinatorTwoTest {
     }
 
     @Test
-    public void algorithm_generates_coherent_schedule_edge_case() {
-        // TODO fix this edge case!
+    public void algorithm_generates_coherent_schedule_edge_case_1() {
 
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
@@ -109,4 +109,19 @@ public class CoordinatorTwoTest {
         assertThat(correct).isEqualTo(false);
     }
 
+    @Test
+    public void algorithm_generates_coherent_schedule_edge_case_3() {
+
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo();
+        SchedulingProblem details = MainTest.test_details_G();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
 }
