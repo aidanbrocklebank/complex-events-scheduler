@@ -33,12 +33,16 @@ public class Analyser {
         long[][] RAM = new long[5][repetitions];
         long[][] TIME = new long[5][repetitions];
 
+        DEBUG = false;
+        Main.DEBUG = false;
+
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
             // Generate the random event data
             // TODO adjust these parameters
-            SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+            // TODO Make sure these are actually generating preferences, maybe read out some of the generated details
+            SchedulingProblem details = randomized_test_details(4, 5, 10, 25);
 
             // Loop through the algorithms and tell them to generate a schedule with these details
             for (int alg=0; alg<5; alg++) {
@@ -46,16 +50,24 @@ public class Analyser {
             }
         }
 
-        // Store the data to a spreadsheet
+        // Determine the correct file location and then store the data to a spreadsheet
+        boolean stored = false;
+        String path = "results\\" + location + ".csv";
+
         try {
-            boolean stored = save_to_spreadsheet(location, repetitions, VALID, SCORE, RAM, TIME);
+            stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
         } catch (IOException e) {
             System.err.println("Was not able to save the results to a file. Will try again with a different name.");
-            try { boolean stored = save_to_spreadsheet(location+"_fix", repetitions, VALID, SCORE, RAM, TIME);
+            try {
+                path = "results\\" + location + "_fix.csv";
+                stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
             } catch (IOException e2) {
                 System.err.println("Altering the name of the file did not resolve the issue.");
             }
         }
+
+        if (stored) System.out.println("Saved the results to a file: " + path);
+
 
         // Comparisons?
         // TODO possibly add some automatic comparisons?
@@ -67,11 +79,15 @@ public class Analyser {
     public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
 
+        // TODO Fix this to actually record RAM usage.
         // Use the given algorithm to generate a schedule, wrapped in system time checks and runtime environment checks
         Runtime environment_before = Runtime.getRuntime();
         long start_time = System.nanoTime();
 
+        //System.out.println("Generating new timetable.");
         Timetable tt = algorithm.generate(details);
+        //if (i==0) System.out.println("Full TT for algorithm "+ alg + ":");
+        //System.out.println(tt.toString());
 
         long end_time = System.nanoTime();
         Runtime environment_after = Runtime.getRuntime();
@@ -99,10 +115,8 @@ public class Analyser {
     }
 
     static boolean save_to_spreadsheet(String path, int rows, boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) throws IOException {
-
-        // Fix the path if necessary and create a new file
-        if (!path.substring(path.length()-4).equals(".csv")) path += ".csv";
-        File csv = new File("results\\" + path);
+        // Create a new file
+        File csv = new File(path);
         FileWriter csvWriter = new FileWriter(csv);
 
         // Add header row here
@@ -115,7 +129,8 @@ public class Analyser {
             StringBuilder row = new StringBuilder();
 
             for (int alg=0; alg<5; alg++) {
-                row.append(VALID[alg][r]).append(",").append(SCORE[alg][r]).append(",").append(RAM[alg][r]).append(",").append(TIME[alg][r]).append(", ,");
+                String time = String.valueOf((((double) TIME[alg][r]) / 1000000));
+                row.append(VALID[alg][r]).append(",").append(SCORE[alg][r]).append(",").append(RAM[alg][r]).append(",").append(time).append(", ,");
             }
 
             // Place the row into the file
