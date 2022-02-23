@@ -20,7 +20,7 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class MainTest {
 
-    // TODO clean these up?
+    // TODO clean these MainTest tests up?
 
     public static SchedulingProblem test_details_A() {
         SchedulingProblem details = new SchedulingProblem();

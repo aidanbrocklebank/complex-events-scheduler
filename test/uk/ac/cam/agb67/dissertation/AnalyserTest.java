@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,36 @@ import java.util.List;
 
 @RunWith(JUnit4.class)
 public class AnalyserTest {
+
+    @Test
+    public void writes_correctly_to_CSV_file() {
+        // ARRANGE
+        int len = 10;
+        boolean[][] VALID = new boolean[5][len];
+        int[][] SCORE = new int[5][len];
+        long[][] RAM = new long[5][len];
+        long[][] TIME = new long[5][len];
+
+        for (int i=0; i<len; i++) {
+            for (int j=0; j<5; j++) {
+                VALID[j][i] = true;
+                SCORE[j][i] = i + j;
+                RAM[j][i] = i + j + 100;
+                TIME[j][i] = i + j + 200;
+            }
+        }
+
+        // ACT
+        try {
+            Analyser.save_to_spreadsheet("test.csv", len, VALID, SCORE, RAM, TIME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertThat(false).isTrue();
+        }
+
+        // ASSERT
+        assertThat(true).isTrue();
+    }
 
     @Test
     public void generate_number_returns_int_within_range() {

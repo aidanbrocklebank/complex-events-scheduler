@@ -3,6 +3,9 @@ package uk.ac.cam.agb67.dissertation;
 import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
 import uk.ac.cam.agb67.dissertation.algorithm.two.CoordinatorTwo;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +20,12 @@ public class Analyser {
         String location = args[1];
 
         // Establish the five algorithms we will be testing
-        SchedulingAlgorithm alg_greedy = new Coordinator(true, false);
-        SchedulingAlgorithm alg_brute_force = new Coordinator(false, false);
-        SchedulingAlgorithm alg_brute_force_greedy_optimised = new Coordinator(false,true);
-        SchedulingAlgorithm alg_CSP = new CoordinatorTwo(false);
-        SchedulingAlgorithm alg_CSP_random_optimised = new CoordinatorTwo(true);
+        SchedulingAlgorithm[] algorithms = new SchedulingAlgorithm[5];
+        algorithms[0] = new Coordinator(true, false);
+        algorithms[1] = new Coordinator(false, false);
+        algorithms[2] = new Coordinator(false,true);
+        algorithms[3] = new CoordinatorTwo(false);
+        algorithms[4] = new CoordinatorTwo(true);
 
         // Create the arrays we will store the results into
         boolean[][] VALID = new boolean[5][repetitions];
@@ -29,16 +33,32 @@ public class Analyser {
         long[][] RAM = new long[5][repetitions];
         long[][] TIME = new long[5][repetitions];
 
-        // Loop N times
-        // TODO
-            // Generate random data
-            //SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+        // The main loop which runs as many times as the input specified
+        // It generates a set of details and then tests each of the five algorithms on those details, storing the results
+        for (int i=0; i<repetitions; i++) {
+            // Generate the random event data
+            // TODO adjust these parameters
+            SchedulingProblem details = randomized_test_details(8, 5, 10, 25);
+
+            // Loop through the algorithms and tell them to generate a schedule with these details
+            for (int alg=0; alg<5; alg++) {
+                test_algorithm_with_details(algorithms[0], details, i, alg, VALID, SCORE, RAM, TIME);
+            }
+        }
 
         // Store the data to a spreadsheet
-        boolean stored = save_to_spreadsheet(VALID, SCORE, RAM, TIME);
+        try {
+            boolean stored = save_to_spreadsheet(location, repetitions, VALID, SCORE, RAM, TIME);
+        } catch (IOException e) {
+            System.err.println("Was not able to save the results to a file. Will try again with a different name.");
+            try { boolean stored = save_to_spreadsheet(location+"_fix", repetitions, VALID, SCORE, RAM, TIME);
+            } catch (IOException e2) {
+                System.err.println("Altering the name of the file did not resolve the issue.");
+            }
+        }
 
         // Comparisons?
-        // TODO
+        // TODO possibly add some automatic comparisons?
 
     }
 
@@ -78,9 +98,33 @@ public class Analyser {
         TIME[alg][i] = execution_time;
     }
 
-    static boolean save_to_spreadsheet(boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) {
-        //TODO implement
-        return false;
+    static boolean save_to_spreadsheet(String path, int rows, boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) throws IOException {
+
+        // Fix the path if necessary and create a new file
+        if (!path.substring(path.length()-4).equals(".csv")) path += ".csv";
+        File csv = new File("results\\" + path);
+        FileWriter csvWriter = new FileWriter(csv);
+
+        // Add header row here
+        String top = "Greedy Brute Force, , , , ,Brute Force, , , , ,Brute Force (Greedy Optimised), , , , ,CSP Algorithm, , , , ,CSP (Randomised Optimisation), ,\n";
+        String headers = "Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,\n";
+        csvWriter.write(top);
+        csvWriter.write(headers);
+
+        for (int r=0; r<rows; r++) {
+            StringBuilder row = new StringBuilder();
+
+            for (int alg=0; alg<5; alg++) {
+                row.append(VALID[alg][r]).append(",").append(SCORE[alg][r]).append(",").append(RAM[alg][r]).append(",").append(TIME[alg][r]).append(", ,");
+            }
+
+            // Place the row into the file
+            row.append("\n");
+            csvWriter.write(row.toString());
+        }
+
+        csvWriter.close();
+        return true;
     }
 
     // Randomly generates a scheduling problem to use as test data, given certain parameters
