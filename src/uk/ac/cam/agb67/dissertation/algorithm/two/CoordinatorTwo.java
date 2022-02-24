@@ -17,6 +17,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
 
     private boolean optimise_for_prefs = false;
+    private boolean retry = true;
 
     public CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
@@ -60,21 +61,32 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // Use Choco-solver to solve the model, taking the first acceptable solution
             boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
             if (!solved) {
-                System.err.println("The model was not solved."); return null;
-            }
+                System.err.println("The model was not solved.");
+                schedule = null;
 
-            // Finally decode the solved model into a schedule
-            schedule = decode_model_vars(details, day_assignments, start_time_assignments, room_assignments);
+            } else {
+                // Finally decode the solved model into a schedule
+                schedule = decode_model_vars(details, day_assignments, start_time_assignments, room_assignments);
+            }
         }
 
         // Inform the user if this algorithm has failed
-        if (schedule == null) {
+        TimetableVerifier ttv = new TimetableVerifier();
+        if (schedule == null || ttv.timetable_is_valid(schedule, details)) {
+            if (retry) {
+                // Make a single second attempt.
+                System.out.println("Algorithm 2 is attempting a single retry.");
+                retry = false;
+                return this.generate(details);
+            }
+
             System.err.println("Algorithm two failed to generate a schedule.");
             return null;
         }
 
         // Return schedule
         if (Main.DEBUG) System.out.println("Algorithm two has generated a schedule.");
+        if (!retry) System.out.println("MAJOR NOTE: Algorithm 2 went to a retry and THEN succeeded.");
         if (Main.DEBUG) System.out.println(schedule.toString());
         return schedule;
     }
@@ -299,7 +311,6 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         for (int s=0; s<details.Session_Details.size(); s++) {
             schedule.set(sol.getIntVal(day_assignments[s]), sol.getIntVal(start_time_assignments[s]), sol.getIntVal(room_assignments[s]), details.Session_Details.get(s));
         }
-
         return schedule;
     }
 

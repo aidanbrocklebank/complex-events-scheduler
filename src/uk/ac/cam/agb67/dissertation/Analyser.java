@@ -12,6 +12,7 @@ import java.util.List;
 public class Analyser {
 
     static boolean DEBUG = true;
+    // TODO get it to actually work with the CSP algorithm!
 
     public static void main(String[] args) {
 
@@ -39,14 +40,22 @@ public class Analyser {
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
-            // Generate the random event data
+            // Generate the random event data, making sure they are legitimate details
             // TODO adjust these parameters
-            // TODO Make sure these are actually generating preferences, maybe read out some of the generated details
-            SchedulingProblem details = randomized_test_details(4, 5, 10, 25);
+            // Make sure these are actually generating preferences, maybe read out some of the generated details
+
+            SchedulingProblem details = null;
+            boolean legitimate_details = false;
+            while (!legitimate_details) {
+                details = randomized_test_details(4, 5, 10, 25);
+                legitimate_details = details.check_validity();
+            }
+
+            System.out.print("["+i+"]");
 
             // Loop through the algorithms and tell them to generate a schedule with these details
             for (int alg=0; alg<5; alg++) {
-                test_algorithm_with_details(algorithms[0], details, i, alg, VALID, SCORE, RAM, TIME);
+                test_algorithm_with_details(algorithms[alg], details, i, alg, VALID, SCORE, RAM, TIME);
             }
         }
 
@@ -81,6 +90,7 @@ public class Analyser {
 
         // TODO Fix this to actually record RAM usage.
         // Use the given algorithm to generate a schedule, wrapped in system time checks and runtime environment checks
+        System.out.println("");
         Runtime environment_before = Runtime.getRuntime();
         long start_time = System.nanoTime();
 
@@ -121,7 +131,7 @@ public class Analyser {
 
         // Add header row here
         String top = "Greedy Brute Force, , , , ,Brute Force, , , , ,Brute Force (Greedy Optimised), , , , ,CSP Algorithm, , , , ,CSP (Randomised Optimisation), ,\n";
-        String headers = "Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,Valid?, Score, RAM, Time, ,\n";
+        String headers = "Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,\n";
         csvWriter.write(top);
         csvWriter.write(headers);
 
@@ -192,6 +202,7 @@ public class Analyser {
             if (DEBUG) System.out.println("Adding session #"+s+" of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
         }
 
+        // TODO Stop generating PDS sessions which clash!
         // Generate a number of predetermined sessions, replacing the last chunk of the session list
         details.PDS_Details = new ArrayList<>();
         int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 1);

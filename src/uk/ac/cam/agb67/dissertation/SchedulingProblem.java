@@ -96,6 +96,8 @@ public class SchedulingProblem {
             }
         }
 
+        // TODO check that no predetermined schedules clash with each other
+
         return valid;
     }
 

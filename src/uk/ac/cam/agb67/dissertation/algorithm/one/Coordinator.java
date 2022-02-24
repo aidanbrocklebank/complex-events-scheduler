@@ -16,7 +16,8 @@ public class Coordinator implements SchedulingAlgorithm {
     @Override
     public Timetable generate(SchedulingProblem details) {
         String s = "";
-        if (GreedyVariant) s="(Greedy variant).";
+        if (GreedyVariant) s="(Greedy variant)";
+        if (Optimise) s += "(Optimised)";
         if (Main.DEBUG) System.out.println("\nAttempting to generate a schedule with algorithm one. "+s+"\n");
 
         // Input validation step
@@ -30,7 +31,7 @@ public class Coordinator implements SchedulingAlgorithm {
 
         // Place the pre-determined sessions into the timetable
         for (PredeterminedSession pds : details.PDS_Details) {
-            if (Main.DEBUG) System.out.println("Adding predetermined session #"+pds.Session_ID +"at day: "+pds.PDS_Day+", time: "+pds.PDS_Start_Time+", room: "+ pds.PDS_Room);
+            if (Main.DEBUG) System.out.println("Adding predetermined session #"+pds.Session_ID +" at day: "+pds.PDS_Day+", time: "+pds.PDS_Start_Time+", room: "+ pds.PDS_Room);
             schedule.set(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room, pds);
         }
 
@@ -60,7 +61,7 @@ public class Coordinator implements SchedulingAlgorithm {
         TimetableVerifier verifier = new TimetableVerifier();
         boolean coherent = verifier.timetable_is_valid(schedule, details);
         if (!coherent) {
-            System.err.println("Timetable was not valid after brute force approach.");
+            System.err.println("Timetable was not valid after brute force "+s+" approach.");
             if (Main.DEBUG && schedule != null) System.out.println(schedule.toString());
             return null;
         }

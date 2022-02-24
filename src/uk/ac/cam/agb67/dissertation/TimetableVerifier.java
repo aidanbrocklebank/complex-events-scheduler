@@ -142,7 +142,20 @@ public class TimetableVerifier {
                         for (int inner = 0; inner < sesh.Session_Length; inner++) {
                             // If the following timeslots don't have the same sid and the consecutive hours, return false
                             if (tt.get_id(d,h+inner, r) != sid || tt.get_hour(d, h+inner, r) != inner ) {
-                                System.err.println("Day: "+d+", Time: "+(h+inner)+" (offset: "+inner+"), Room: "+r+", session: "+sid+" - Flagged as not contiguous.");
+
+                                System.err.println("Day: "+d+", Time: "+(h+inner)+" (from offset: "+inner+"), Room: "+r+", session: #"+sid+" - Flagged as not " +
+                                        "contiguous.");
+                                System.err.println("Actually observed session #" + tt.get_id(d,h+inner, r) + " in this slot. [Alternative reason: hour("+tt.get_hour(d,
+                                        h+inner, r)+") =/= inner("+inner+")]");
+
+                                /*
+                                if (sesh.getClass() == PredeterminedSession.class) System.err.println("Session #"+sid+" is PRED. Start time: "+ ((PredeterminedSession)sesh).PDS_Start_Time + " [Length of session #"+sid+" is: " + sesh.Session_Length + "]");
+                                int altSid = tt.get_id(d,h+inner, r);
+                                Session altSesh = sessions.get(tt.get_id(d,h+inner,r));
+                                if (altSesh.getClass() == PredeterminedSession.class) System.err.println("Session #"+altSid+" is PRED. Start time: "+ ((PredeterminedSession)altSesh).PDS_Start_Time + " [Length of session #"+altSid+" is: " + altSesh.Session_Length + "]");
+                                System.out.println(tt.toString());
+                                */
+
                                 return false;
                             }
                         }
