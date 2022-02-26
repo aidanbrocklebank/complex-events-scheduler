@@ -96,7 +96,20 @@ public class SchedulingProblem {
             }
         }
 
-        // TODO check that no predetermined schedules clash with each other
+        // Check that no predetermined schedules clash with each other
+        outer: for (PredeterminedSession pds1 : PDS_Details) {
+            for (PredeterminedSession pds2 : PDS_Details) {
+                if (pds1 == pds2) continue;
+                boolean time_clash = (pds2.PDS_Start_Time <= pds1.PDS_Start_Time) && (pds1.PDS_Start_Time < pds2.PDS_Start_Time + pds2.Session_Length);
+                boolean time_clash2 = (pds1.PDS_Start_Time <= pds2.PDS_Start_Time) && (pds2.PDS_Start_Time < pds1.PDS_Start_Time + pds1.Session_Length);
+                if (pds1.PDS_Room == pds2.PDS_Room && pds1.PDS_Day == pds2.PDS_Day && (time_clash || time_clash2)) {
+                    valid = false;
+                    System.err.println("Two PDS sessions were included in the same day and room with overlapping times");
+                    break outer;
+                }
+
+            }
+        }
 
         return valid;
     }

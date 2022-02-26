@@ -88,23 +88,47 @@ public class Analyser {
     public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
 
-        // TODO Fix this to actually record RAM usage.
+        // TODO Fix this to actually record RAM usage. Clean up the comments here.
         // Use the given algorithm to generate a schedule, wrapped in system time checks and runtime environment checks
         System.out.println("");
-        Runtime environment_before = Runtime.getRuntime();
+        //Runtime environment_before = Runtime.getRuntime();
+
+        final long[] max_RAM_used = {0};
+        final boolean[] in_execution = {true};
+        max_RAM_used[0] = 0;
+
+        Thread display = new Thread() {
+            @Override
+            public void run() {
+                while (in_execution[0]) {
+                    // Determine the currently free memory
+                    long current_RAM_used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    if (current_RAM_used > max_RAM_used[0]) max_RAM_used[0] = current_RAM_used;
+                    /*try {
+                        wait(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }*/
+                }
+            }
+        };
+
+        // Begin the thread to record RAM and check the system time
+        display.start();
         long start_time = System.nanoTime();
 
         //System.out.println("Generating new timetable.");
         Timetable tt = algorithm.generate(details);
-        //if (i==0) System.out.println("Full TT for algorithm "+ alg + ":");
-        //System.out.println(tt.toString());
 
         long end_time = System.nanoTime();
-        Runtime environment_after = Runtime.getRuntime();
+        in_execution[0] = false; System.gc();
+
+        //Runtime environment_after = Runtime.getRuntime();
 
         // Calculate the memory which was added to the program, and the execution time of the algorithm
-        long memory_added = environment_before.freeMemory() - environment_after.freeMemory();
+        //long memory_added = environment_before.freeMemory() - environment_after.freeMemory();
         long execution_time = end_time - start_time;
+        long memory_added = max_RAM_used[0];
 
         boolean valid = false;
         int score = -1;
@@ -131,7 +155,9 @@ public class Analyser {
 
         // Add header row here
         String top = "Greedy Brute Force, , , , ,Brute Force, , , , ,Brute Force (Greedy Optimised), , , , ,CSP Algorithm, , , , ,CSP (Randomised Optimisation), ,\n";
-        String headers = "Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,Valid?, Score, RAM, Time (ms), ,\n";
+        String headers = "Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms)" +
+                ", ," +
+                "Valid?, Score, RAM, Time (ms), ,\n";
         csvWriter.write(top);
         csvWriter.write(headers);
 
@@ -140,7 +166,8 @@ public class Analyser {
 
             for (int alg=0; alg<5; alg++) {
                 String time = String.valueOf((((double) TIME[alg][r]) / 1000000));
-                row.append(VALID[alg][r]).append(",").append(SCORE[alg][r]).append(",").append(RAM[alg][r]).append(",").append(time).append(", ,");
+                String ram = String.valueOf(((double) RAM[alg][r]) / (1000 * 1000));
+                row.append(VALID[alg][r]).append(",").append(SCORE[alg][r]).append(",").append(ram).append(",").append(time).append(", ,");
             }
 
             // Place the row into the file
@@ -202,7 +229,6 @@ public class Analyser {
             if (DEBUG) System.out.println("Adding session #"+s+" of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
         }
 
-        // TODO Stop generating PDS sessions which clash!
         // Generate a number of predetermined sessions, replacing the last chunk of the session list
         details.PDS_Details = new ArrayList<>();
         int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 1);
@@ -212,8 +238,12 @@ public class Analyser {
 
             // Take the details of the existing session and create a new PredeterminedSession
             // Generate it a predetermined day, time and room
+            int rand_day = generate_number(days-1, 0);
+            int rand_start = generate_number(8-remove.Session_Length, 0);
+            int rand_room = generate_number(rooms-1, 0);
             PredeterminedSession replace = new PredeterminedSession(remove.Session_ID, remove.Session_Name+"(PDS)", remove.Session_Length, remove.Session_KeyInds,
-                    generate_number(days-1, 0), generate_number(8-remove.Session_Length, 0), generate_number(rooms-1, 0));
+                    rand_day, rand_start, rand_room);
+            if (DEBUG) System.out.println("Generated a PDS sessions with day:"+rand_day+" time:"+rand_start+" room:"+rand_room);
 
             // Then replace the session
             details.Session_Details.remove(s);
