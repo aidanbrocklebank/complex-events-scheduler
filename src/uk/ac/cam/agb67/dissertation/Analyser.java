@@ -12,7 +12,6 @@ import java.util.List;
 public class Analyser {
 
     static boolean DEBUG = true;
-    // TODO get it to actually work with the CSP algorithm!
 
     public static void main(String[] args) {
 
@@ -87,16 +86,12 @@ public class Analyser {
     // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
     public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
-
-        // TODO Fix this to actually record RAM usage. Clean up the comments here.
-        // Use the given algorithm to generate a schedule, wrapped in system time checks and runtime environment checks
+        // TODO Fix this to record RAM usage for the algos which were too fast.
         System.out.println("");
-        //Runtime environment_before = Runtime.getRuntime();
 
+        // Prepare a thread which will run alongside the algorithm and record max RAM usage as it goes
         final long[] max_RAM_used = {0};
         final boolean[] in_execution = {true};
-        max_RAM_used[0] = 0;
-
         Thread display = new Thread() {
             @Override
             public void run() {
@@ -114,26 +109,30 @@ public class Analyser {
         };
 
         // Begin the thread to record RAM and check the system time
+        Timetable tt;
         display.start();
         long start_time = System.nanoTime();
 
-        //System.out.println("Generating new timetable.");
-        Timetable tt = algorithm.generate(details);
+        // Run the algorithm on the given details
+        try {
+            tt = algorithm.generate(details);
+        } catch (Exception e) {
+            // This method generated an exception.
+            System.err.println("The selected algorithms with the given details threw an exception.");
+             tt = null;
+        }
 
+        // Record the system time again and end the memory-watching thread
         long end_time = System.nanoTime();
         in_execution[0] = false; System.gc();
 
-        //Runtime environment_after = Runtime.getRuntime();
-
         // Calculate the memory which was added to the program, and the execution time of the algorithm
-        //long memory_added = environment_before.freeMemory() - environment_after.freeMemory();
         long execution_time = end_time - start_time;
         long memory_added = max_RAM_used[0];
 
+        // Check the accuracy and score of the generated schedule
         boolean valid = false;
         int score = -1;
-
-        // Check the accuracy and score of the generated schedule
         if (tt != null) {
             TimetableVerifier ttv = new TimetableVerifier();
             TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
@@ -142,6 +141,7 @@ public class Analyser {
             score = ttsm.timetable_preference_satisfaction(tt, details);
         }
 
+        // Store the results
         VALID[alg][i] = valid;
         SCORE[alg][i] = score;
         RAM[alg][i] = memory_added;

@@ -57,7 +57,7 @@ public class CoordinatorTwoTest {
 
     @Test
     public void algorithm_generates_coherent_schedule_2() {
-        // TODO clean up the tests a bit and seperate out some tests for the optimising version
+        // TODO clean up the tests a bit. IMPORTANT: seperate out some tests for the optimising version.
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(true);
         SchedulingProblem details = MainTest.test_details_C();
