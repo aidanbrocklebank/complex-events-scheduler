@@ -239,18 +239,6 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     event.retrieveIntVars(true)
             ));
 
-            /* ABANDONED IDEA
-            //IntVar satisfaction = event.intVar(0);
-
-            int minimum_gap = details.Minimum_Gap_Pref;
-            boolean reduce_overlap = details.Reduce_Overlap_Pref;
-            IntVar gap_satisfaction = event.intVar("Gap Satisfaction Metric", 0, 100, true);
-            IntVar overlap_satisfaction = event.intVar("Overlap Satisfaction Metric", 0, 100, true);
-            //implement the satisfaction intvar - IF this is going nowhere then put a cap on it
-
-            //Solution sol = solver.findOptimalSolution(satisfaction, true);
-            */
-
             // Find and decode a solution based on this search strategy
             Solution sol = solver.findSolution();
             Timetable prospect = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
@@ -262,7 +250,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 prospect_score = ttsm.timetable_preference_satisfaction(prospect, details);
                 if (Main.DEBUG) System.out.println("Found a valid timetable with score "+prospect_score+".");
             } catch (Exception e) {
-                if (Main.DEBUG) System.out.println("Found an invalidity.");
+                if (Main.DEBUG) System.out.println("The decoded schedule was not valid, and testing it threw an exception.");
                 break;
             }
 

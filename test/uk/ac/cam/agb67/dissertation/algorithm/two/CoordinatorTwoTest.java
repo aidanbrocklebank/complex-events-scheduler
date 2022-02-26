@@ -57,7 +57,61 @@ public class CoordinatorTwoTest {
 
     @Test
     public void algorithm_generates_coherent_schedule_2() {
-        // TODO clean up the tests a bit. IMPORTANT: seperate out some tests for the optimising version.
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo();
+        SchedulingProblem details = MainTest.test_details_C();
+        details.Hours_Per_Day -= 2;
+        details.Maximum_Days = 3;
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void randomised_algorithm_generates_coherent_schedule_0() {
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo(true);
+        SchedulingProblem details = MainTest.test_details_D();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        System.out.println("Overall Score: " + pref_score);
+    }
+
+    @Test
+    public void randomised_algorithm_generates_coherent_schedule_1() {
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo(true);
+        SchedulingProblem details = MainTest.test_details_A();
+        TimetableVerifier ttv = new TimetableVerifier();
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+
+        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
+        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
+        System.out.println("Overall Score: " + pref_score);
+    }
+
+    @Test
+    public void randomised_algorithm_generates_coherent_schedule_2() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(true);
         SchedulingProblem details = MainTest.test_details_C();
@@ -68,7 +122,6 @@ public class CoordinatorTwoTest {
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);
-        //correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
