@@ -46,7 +46,7 @@ public class Analyser {
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(4, 5, 10, 25);
+                details = randomized_test_details(4, 5, 17, 25);
                 legitimate_details = details.check_validity();
             }
 
@@ -58,19 +58,19 @@ public class Analyser {
             }
         }
 
-        // Determine the correct file location and then store the data to a spreadsheet
+        // Generate the path for the file, including a version number. If this file already exists then increment the version number
         boolean stored = false;
-        String path = "results\\" + location + ".csv";
+        int version = 1;
+        String path = "";
 
-        try {
-            stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
-        } catch (IOException e) {
-            System.err.println("Was not able to save the results to a file. Will try again with a different name.");
+        while (!stored) {
+            path = "results\\" + location + "_" + version + ".csv";
             try {
-                path = "results\\" + location + "_fix.csv";
                 stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
-            } catch (IOException e2) {
-                System.err.println("Altering the name of the file did not resolve the issue.");
+            } catch (IOException e) {
+                System.err.println("Was not able to save the results to a file. Will try again with a different name.");
+                version++;
+                if (version > 100) break;
             }
         }
 

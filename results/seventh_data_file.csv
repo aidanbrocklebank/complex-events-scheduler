@@ -1,0 +1,7 @@
+Greedy Brute Force, , , , ,Brute Force, , , , ,Brute Force (Greedy Optimised), , , , ,CSP Algorithm, , , , ,CSP (Randomised Optimisation), ,
+Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM, Time (ms), ,
+true,47,4.163712,4.5563, ,true,52,2.19136,2.1668, ,true,61,4.099072,36.9695, ,false,-1,5.453592,293.8875, ,false,-1,3.647824,22.9154, ,
+true,51,2.343008,0.2423, ,true,59,2.405496,0.4643, ,true,63,5.311,22.9188, ,false,-1,3.454192,15.4513, ,false,-1,3.43524,11.4708, ,
+true,52,0.0,0.2435, ,true,57,2.38516,0.4735, ,true,64,4.122424,14.0784, ,false,-1,3.536696,12.7587, ,false,-1,3.520072,9.7371, ,
+true,61,0.0,0.2221, ,true,62,2.381528,0.7155, ,true,65,5.210296,18.202, ,true,49,3.67064,57.3948, ,true,58,3.937552,45.6904, ,
+false,-1,0.0,0.8806, ,false,-1,2.398472,0.6591, ,false,-1,4.081728,9.5868, ,false,-1,3.218432,4.8724, ,false,-1,3.26332,5.1282, ,

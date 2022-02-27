@@ -86,7 +86,12 @@ public class TimetableVerifierTest {
 
         // ACT
         Timetable tt = MainTest.test_timetable_B();
-        List<Session> ls = MainTest.test_session_list_B();
+        List<Session> ls = new ArrayList<>();
+        ls.add(new Session(0));
+        ls.add(new Session(1, 3));
+        ls.add(new Session(2, 1));
+        ls.add(new Session(3, 2));
+        ls.add(new Session(4, 2));
 
         // ASSERT
         assertThat(ttv.timetabled_sessions_are_contiguous(tt, ls)).isEqualTo(true);
