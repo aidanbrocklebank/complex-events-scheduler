@@ -152,6 +152,7 @@ public class Analyser {
             try {
                 stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], PARAM, param_name);
             } catch (IOException e) {
+                // TODO make sure that it does this if a file exists, not just is open!
                 System.err.println("Was not able to save the results to a file. Will try again with a different name.");
                 version++;
                 if (version > 100) break;
@@ -188,7 +189,9 @@ public class Analyser {
         Timetable tt;
         display.setPriority(10);
         display.start();
+        System.out.println("Start Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
         long start_time = System.nanoTime();
+        System.out.println("Start Time (ms): " + (((double) start_time) / (1000 * 1000)));
 
         // Run the algorithm on the given details
         try {
@@ -199,8 +202,11 @@ public class Analyser {
              tt = null;
         }
 
+        // TODO find a better way to look at the times in MS
         // Record the system time again and end the memory-watching thread
         long end_time = System.nanoTime();
+        System.out.println("End Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+        System.out.println("End Time (ms): " + (((double) end_time) / (1000 * 1000)));
         in_execution[0] = false; System.gc();
 
         // Calculate the memory which was added to the program, and the execution time of the algorithm
@@ -375,7 +381,7 @@ public class Analyser {
         return (int) (minimum + (Math.random() * (maximum - minimum + 1)));
     }
 
-    // Randomly generates a (duplicate-free) list, length count, of numbers between minimum and maximum
+    // Randomly generates a (duplicate-free) list, of length count, of numbers between minimum and maximum
     static List<Integer> generate_numbers(int maximum, int minimum, int count) {
         if (count > (maximum - minimum)) {
             System.err.println("Tried to generate a duplicate free list which was too long for the given range.");
@@ -394,6 +400,5 @@ public class Analyser {
         }
         return list;
     }
-
 
 }
