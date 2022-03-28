@@ -1,6 +1,7 @@
 package uk.ac.cam.agb67.dissertation.algorithm.two;
 
 import uk.ac.cam.agb67.dissertation.*;
+import static uk.ac.cam.agb67.dissertation.Analyser.NanoToMilli;
 
 import org.chocosolver.solver.*;
 import org.chocosolver.solver.variables.*;
@@ -40,18 +41,21 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         IntVar[] start_time_assignments = new IntVar[details.Session_Details.size()];
         IntVar[] room_assignments = new IntVar[details.Session_Details.size()];
 
-        System.out.println("Pre-MODEL Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+        Analyser.SEGMENT_TIMES[0] = System.nanoTime();
+        System.out.println("Pre-MODEL Time (ms): " + (NanoToMilli(System.nanoTime())));
 
         // Use Choco-solver to model this scheduling problem,
         Model event_model = represent(details, day_assignments, start_time_assignments, room_assignments);
         Timetable schedule;
 
-        System.out.println("Post-MODEL Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+        Analyser.SEGMENT_TIMES[1] = System.nanoTime();
+        System.out.println("Post-MODEL Time (ms): " + (NanoToMilli(System.nanoTime())));
 
         if (optimise_for_prefs) {
             // Use Choco-solver to solve the model, finding the solution which maximises a metric for preference satisfaction
             Solution sol = optimise_and_solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
-            System.out.println("Post-OPT-SOLVE Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+            Analyser.SEGMENT_TIMES[2] = System.nanoTime();
+            System.out.println("Post-OPT-SOLVE Time (ms): " + (NanoToMilli(System.nanoTime())));
             if (sol == null) {
                 System.err.println("The optimising variant failed to solve the model. Deffering to the standard variant.");
                 this.optimise_for_prefs = false;
@@ -60,19 +64,22 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
             // Finally decode the solution into a schedule
             schedule = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
-            System.out.println("Post-DECODE Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+            Analyser.SEGMENT_TIMES[3] = System.nanoTime();
+            System.out.println("Post-DECODE Time (ms): " + (NanoToMilli(System.nanoTime())));
 
         } else {
             // Use Choco-solver to solve the model, taking the first acceptable solution
             boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
-            System.out.println("Post-SOLVE Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+            Analyser.SEGMENT_TIMES[2] = System.nanoTime();
+            System.out.println("Post-SOLVE Time (ms): " + (NanoToMilli(System.nanoTime())));
             if (!solved) {
                 System.err.println("The model was not solved."); return null;
             }
 
             // Finally decode the solved model into a schedule
             schedule = decode_model_vars(details, day_assignments, start_time_assignments, room_assignments);
-            System.out.println("Post-DECODE Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
+            Analyser.SEGMENT_TIMES[3] = System.nanoTime();
+            System.out.println("Post-DECODE Time (ms): " + (NanoToMilli(System.nanoTime())));
         }
 
         // Inform the user if this algorithm has failed

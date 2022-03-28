@@ -12,8 +12,11 @@ import java.util.List;
 public class Analyser {
 
     static boolean DEBUG = true;
+    static long BASETIME;
+    public static long[] SEGMENT_TIMES = new long[4];
 
     public static void main(String[] args) {
+        BASETIME = System.nanoTime();
 
         // Get the number of times to test, and the name for the output file
         int repetitions = Integer.parseInt(args[0]);
@@ -64,17 +67,18 @@ public class Analyser {
 
         // Generate the path for the file, including a version number. If this file already exists then increment the version number
         boolean stored = false;
-        int version = 1;
+        int version = 0;
         String path = "";
 
         while (!stored) {
+            version++;
+            if (version > 100) break;
             path = "results\\" + location + "_" + version + ".csv";
+
             try {
                 stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
             } catch (IOException e) {
                 System.err.println("Was not able to save the results to a file. Will try again with a different name.");
-                version++;
-                if (version > 100) break;
             }
         }
 
@@ -112,6 +116,11 @@ public class Analyser {
         long[][] TIME = new long[1][repetitions];
         int[] PARAM = new int[repetitions];
 
+        long[][] SEGMENTS = new long[4][repetitions];
+        if (target_algorithm != 3 && target_algorithm != 4) {
+            SEGMENTS = null;
+        }
+
         DEBUG = false;
         Main.DEBUG = false;
 
@@ -122,9 +131,8 @@ public class Analyser {
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
+
             // Generate the random event data, making sure they are legitimate details
-            // Make sure these are actually generating preferences, maybe read out some of the generated details
-            
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
@@ -140,6 +148,14 @@ public class Analyser {
 
             // Now run the algorithm on these details
             test_algorithm_with_details(algorithm, details, i, 0, VALID, SCORE, RAM, TIME);
+
+            if (target_algorithm == 3 || target_algorithm == 4) {
+                // Obtain the segment times for either CSP algorithm
+                SEGMENTS[0][i] = SEGMENT_TIMES[0];
+                SEGMENTS[1][i] = SEGMENT_TIMES[1];
+                SEGMENTS[2][i] = SEGMENT_TIMES[2];
+                SEGMENTS[3][i] = SEGMENT_TIMES[3];
+            }
         }
 
         // Generate the path for the file, including a version number. If this file already exists then increment the version number
@@ -148,14 +164,14 @@ public class Analyser {
         String path = "";
 
         while (!stored) {
+            version++;
+            if (version > 100) break;
             path = "results\\" + location + "_" + version + ".csv";
+
             try {
-                stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], PARAM, param_name);
+                stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, param_name);
             } catch (IOException e) {
-                // TODO make sure that it does this if a file exists, not just is open!
                 System.err.println("Was not able to save the results to a file. Will try again with a different name.");
-                version++;
-                if (version > 100) break;
             }
         }
 
@@ -234,6 +250,7 @@ public class Analyser {
     static boolean save_to_spreadsheet(String path, int rows, boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) throws IOException {
         // Create a new file
         File csv = new File(path);
+        if (csv.exists()) return false;
         FileWriter csvWriter = new FileWriter(csv);
 
         // Add header row here
@@ -262,14 +279,20 @@ public class Analyser {
         return true;
     }
 
-    static boolean save_to_spreadsheet(String path, int rows, String name, boolean[] VALID, int[] SCORE, long[] RAM, long[] TIME, int[] PARAM, String param_name) throws IOException {
+    static boolean save_to_spreadsheet(String path, int rows, String name, boolean[] VALID, int[] SCORE, long[] RAM, long[] TIME, long[][] SEGMENTS, int[] PARAM,
+                                       String param_name) throws IOException {
         // Create a new file
         File csv = new File(path);
+        if (csv.exists()) return false;
         FileWriter csvWriter = new FileWriter(csv);
 
         // Add header row here
         String top = name + ", , , , , ,\n";
         String header = "Valid?, Score, RAM (MB), Time (ms), "+param_name+", ,\n";
+        if (SEGMENTS != null) {
+            top = name + ", , , , , , Times (ms), , , ,\n";
+            header = "Valid?, Score, RAM (MB), Time (ms), "+param_name+", , Start, Modelled, Solved, Decoded,\n";
+        }
         csvWriter.write(top);
         csvWriter.write(header);
 
@@ -277,9 +300,13 @@ public class Analyser {
             StringBuilder row = new StringBuilder();
 
             // Write the values into the rows
-            String time = String.valueOf((((double) TIME[r]) / 1000000));
+            String time = String.valueOf((((double) TIME[r]) / (1000 * 1000)));
             String ram = String.valueOf(((double) RAM[r]) / (1000 * 1000));
             row.append(VALID[r]).append(",").append(SCORE[r]).append(",").append(ram).append(",").append(time).append(",").append(PARAM[r]).append(", ,");
+
+            if (SEGMENTS != null) {
+                row.append(NanoToMilli(SEGMENTS[0][r])).append(",").append(NanoToMilli(SEGMENTS[1][r])).append(",").append(NanoToMilli(SEGMENTS[2][r])).append(",").append(NanoToMilli(SEGMENTS[3][r])).append(",");
+            }
 
             // Place the row into the file
             row.append("\n");
@@ -399,6 +426,11 @@ public class Analyser {
             }
         }
         return list;
+    }
+
+    // Converts a system time in nanoseconds into a time in millesconds, offset by the start-time of the analyser
+    public static double NanoToMilli(long NanoSeconds) {
+        return ((double) (NanoSeconds - BASETIME)) / (1000 * 1000);
     }
 
 }
