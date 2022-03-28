@@ -73,7 +73,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
             System.out.println("Post-SOLVE Time (ms): " + (NanoToMilli(System.nanoTime())));
             if (!solved) {
-                System.err.println("The model was not solved."); return null;
+                System.err.println("The model was not solved."); Analyser.SEGMENT_TIMES[3] = System.nanoTime(); return null;
             }
 
             // Finally decode the solved model into a schedule

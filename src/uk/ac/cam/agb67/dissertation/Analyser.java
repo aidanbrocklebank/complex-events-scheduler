@@ -15,6 +15,7 @@ public class Analyser {
     static long BASETIME;
     public static long[] SEGMENT_TIMES = new long[4];
 
+    // Usage: Analyser <repetitions> <filename>
     public static void main(String[] args) {
         BASETIME = System.nanoTime();
 
@@ -90,6 +91,7 @@ public class Analyser {
 
     }
 
+    // Usage: Analyser <repetitions> <filename> <algorithm> <runs-per-rep> <parameter>
     public static void individual_test(String[] args) {
 
         int repetitions = Integer.parseInt(args[0]) * Integer.parseInt(args[3]);
@@ -125,8 +127,14 @@ public class Analyser {
         Main.DEBUG = false;
 
         // One parameter will be altered throughout to record how the results of the algorithm change
-        int num_sessions = 1;
-        String param_name = "#Sessions";
+        // Choose and set that parameter to 1, and the others to their default value
+        String target_parameter = args[4];
+        int num_sessions; int num_individuals; String param_name;
+        switch (target_parameter) {
+            case "s": param_name = "#Sessions"; num_sessions = 1; num_individuals = 25; break;
+            case "i": param_name = "#Individuals"; num_sessions = 10; num_individuals = 4; break;
+            default: param_name = ""; num_sessions = 10; num_individuals = 25;
+        }
 
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
@@ -136,13 +144,15 @@ public class Analyser {
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(4, 5, num_sessions, 25);
+                details = randomized_test_details(4, 5, num_sessions, num_individuals);
                 legitimate_details = details.check_validity();
             }
 
             // After every block of steps we will increase the changing parameter by one
-            PARAM[i] = num_sessions;
-            if (((i-1) % Integer.parseInt(args[3])) == 0) num_sessions++;
+            if (target_parameter.equals("s")) PARAM[i] = num_sessions;
+            if (target_parameter.equals("s") && ((i-1) % Integer.parseInt(args[3])) == 0) num_sessions++;
+            if (target_parameter.equals("i")) PARAM[i] = num_individuals;
+            if (target_parameter.equals("i") && ((i-1) % Integer.parseInt(args[3])) == 0) num_individuals++;
 
             System.out.print("["+i+"]");
 
@@ -155,6 +165,7 @@ public class Analyser {
                 SEGMENTS[1][i] = SEGMENT_TIMES[1];
                 SEGMENTS[2][i] = SEGMENT_TIMES[2];
                 SEGMENTS[3][i] = SEGMENT_TIMES[3];
+                SEGMENT_TIMES = new long[4];
             }
         }
 
@@ -411,7 +422,7 @@ public class Analyser {
     // Randomly generates a (duplicate-free) list, of length count, of numbers between minimum and maximum
     static List<Integer> generate_numbers(int maximum, int minimum, int count) {
         if (count > (maximum - minimum)) {
-            System.err.println("Tried to generate a duplicate free list which was too long for the given range.");
+            System.err.println("Tried to generate a duplicate free list which was too long for the given range. Count: "+count+", Range: "+minimum+" to "+maximum);
             return null;
         }
 
