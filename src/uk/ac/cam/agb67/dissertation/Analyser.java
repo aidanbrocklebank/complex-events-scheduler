@@ -7,24 +7,38 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Analyser {
 
     static boolean DEBUG = true;
+
+    // Used by algorithms to communicate segment times
     static long BASETIME;
     public static long[] SEGMENT_TIMES = new long[4];
 
+    // Default parameters for random tests
+    static final int DEF_DAYS = 4;
+    static final int DEF_ROOMS = 5;
+    static final int DEF_SESSIONS = 12;
+    static final int DEF_INDIVIDUALS = 25;
+
     // Usage: Analyser <repetitions> <filename>
+    // Usage: Analyser <repetitions> <filename> <algorithm 1> <algorithm 2>
     public static void main(String[] args) {
         BASETIME = System.nanoTime();
 
         // Get the number of times to test, and the name for the output file
         int repetitions = Integer.parseInt(args[0]);
         String location = args[1];
-        if (args[2] != "") {
+        if (args.length > 4) {
             individual_test(args);
             return;
+        }
+        List<Integer> Selected = null;
+        if (args.length > 2) {
+            Selected = Arrays.asList(Integer.parseInt(args[2]),Integer.parseInt(args[3]));
         }
 
         // Establish the five algorithms we will be testing
@@ -54,7 +68,7 @@ public class Analyser {
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(4, 5, 12, 25);
+                details = randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
                 legitimate_details = details.check_validity();
             }
 
@@ -62,6 +76,7 @@ public class Analyser {
 
             // Loop through the algorithms and tell them to generate a schedule with these details
             for (int alg=0; alg<5; alg++) {
+                if (Selected != null && !Selected.contains(alg)) continue;
                 test_algorithm_with_details(algorithms[alg], details, i, alg, VALID, SCORE, RAM, TIME);
             }
         }
@@ -85,19 +100,16 @@ public class Analyser {
 
         if (stored) System.out.println("Saved the results to a file: " + path);
 
-
-        // Comparisons?
-        // TODO possibly add some automatic comparisons?
-
     }
 
-    // Usage: Analyser <repetitions> <filename> <algorithm> <runs-per-rep> <parameter>
+    // Usage: Analyser <repetitions> <filename> <algorithm> <parameter> <runs-per-rep>
     public static void individual_test(String[] args) {
 
         // Decode the user input
-        int repetitions = Integer.parseInt(args[0]) * Integer.parseInt(args[3]);
+        int repetitions = Integer.parseInt(args[0]) * Integer.parseInt(args[4]);
         String location = args[1];
         int target_algorithm = Integer.parseInt(args[2]);
+        String target_parameter = args[3];
 
         // Select the algorithm to use based on the input
         SchedulingAlgorithm algorithm;
@@ -129,12 +141,11 @@ public class Analyser {
 
         // One parameter will be altered throughout to record how the results of the algorithm change
         // Choose and set that parameter to 1, and the others to their default value
-        String target_parameter = args[4];
         int num_sessions; int num_individuals; String param_name;
         switch (target_parameter) {
-            case "s": param_name = "#Sessions"; num_sessions = 1; num_individuals = 25; break;
-            case "i": param_name = "#Individuals"; num_sessions = 10; num_individuals = 4; break;
-            default: param_name = ""; num_sessions = 10; num_individuals = 25;
+            case "s": param_name = "#Sessions"; num_sessions = 1; num_individuals = DEF_INDIVIDUALS; break;
+            case "i": param_name = "#Individuals"; num_sessions = DEF_SESSIONS; num_individuals = 4; break;
+            default: param_name = ""; num_sessions = DEF_SESSIONS; num_individuals = DEF_INDIVIDUALS;
         }
 
         // The main loop which runs as many times as the input specified
@@ -145,15 +156,15 @@ public class Analyser {
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(4, 5, num_sessions, num_individuals);
+                details = randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
                 legitimate_details = details.check_validity();
             }
 
             // After every block of steps we will increase the changing parameter by one
             if (target_parameter.equals("s")) PARAM[i] = num_sessions;
-            if (target_parameter.equals("s") && ((i-1) % Integer.parseInt(args[3])) == 0) num_sessions++;
+            if (target_parameter.equals("s") && ((i-1) % Integer.parseInt(args[4])) == 0) num_sessions++;
             if (target_parameter.equals("i")) PARAM[i] = num_individuals;
-            if (target_parameter.equals("i") && ((i-1) % Integer.parseInt(args[3])) == 0) num_individuals++;
+            if (target_parameter.equals("i") && ((i-1) % Integer.parseInt(args[4])) == 0) num_individuals++;
 
             System.out.print("["+i+"]");
 
@@ -305,6 +316,10 @@ public class Analyser {
             csvWriter.write(row.toString());
         }
 
+        String footer =
+                "\n\nThe parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS;
+        csvWriter.write(footer);
+
         csvWriter.close();
         return true;
     }
@@ -346,10 +361,14 @@ public class Analyser {
 
         if (SEGMENTS != null) {
             System.out.println("/// Writing: p1: "+((double) SEGMENTS[1][rows] / (1000*1000))+", p2: "+(SEGMENTS[2][rows] / (1000*1000))+", p3: "+(SEGMENTS[3][rows] / (1000*1000)));
-            String footer =
+            String summary =
                     "\n , , , , , , , "+((double) SEGMENTS[1][rows] / (1000*1000))+", "+((double) SEGMENTS[2][rows] / (1000*1000))+", "+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
-            csvWriter.write(footer);
+            csvWriter.write(summary);
         }
+
+        String footer =
+                "\n\nThe DEFAULT parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS+" (Ignore for the specified parameter).";
+        csvWriter.write(footer);
 
         csvWriter.close();
         return true;
