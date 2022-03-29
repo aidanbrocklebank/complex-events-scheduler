@@ -94,11 +94,12 @@ public class Analyser {
     // Usage: Analyser <repetitions> <filename> <algorithm> <runs-per-rep> <parameter>
     public static void individual_test(String[] args) {
 
+        // Decode the user input
         int repetitions = Integer.parseInt(args[0]) * Integer.parseInt(args[3]);
         String location = args[1];
         int target_algorithm = Integer.parseInt(args[2]);
 
-        // Select the aglgorithm to use based on the input
+        // Select the algorithm to use based on the input
         SchedulingAlgorithm algorithm;
         String name = "";
         switch (target_algorithm) {
@@ -118,7 +119,7 @@ public class Analyser {
         long[][] TIME = new long[1][repetitions];
         int[] PARAM = new int[repetitions];
 
-        long[][] SEGMENTS = new long[4][repetitions];
+        long[][] SEGMENTS = new long[4][repetitions + 1];
         if (target_algorithm != 3 && target_algorithm != 4) {
             SEGMENTS = null;
         }
@@ -167,6 +168,23 @@ public class Analyser {
                 SEGMENTS[3][i] = SEGMENT_TIMES[3];
                 SEGMENT_TIMES = new long[4];
             }
+        }
+
+        // Further Processing:
+
+        // Calculate average segment times when relevant, and place them in the final row of the array
+        if (target_algorithm == 3 || target_algorithm == 4) {
+            long phase_one = 0, phase_two = 0, phase_three = 0;
+            for (int i = 0; i < repetitions; i++) {
+                phase_one = phase_one + (SEGMENTS[1][i] - SEGMENTS[0][i]);
+                phase_two = phase_two + (SEGMENTS[2][i] - SEGMENTS[1][i]);
+                phase_three = phase_three + (SEGMENTS[3][i] - SEGMENTS[2][i]);
+            }
+            System.out.println("/// Totals: p1: "+phase_one+", p2: "+phase_two+", p3: "+phase_three);
+            SEGMENTS[1][repetitions] = phase_one / (long) repetitions;
+            SEGMENTS[2][repetitions] = phase_two / (long) repetitions;
+            SEGMENTS[3][repetitions] = phase_three / (long) repetitions;
+            System.out.println("/// Averages: p1: "+SEGMENTS[1][repetitions]+", p2: "+SEGMENTS[2][repetitions]+", p3: "+SEGMENTS[3][repetitions]);
         }
 
         // Generate the path for the file, including a version number. If this file already exists then increment the version number
@@ -258,6 +276,7 @@ public class Analyser {
         TIME[alg][i] = execution_time;
     }
 
+    // Saves the results of testing five algorithms together to a spreadsheet
     static boolean save_to_spreadsheet(String path, int rows, boolean[][] VALID, int[][] SCORE, long[][] RAM, long[][] TIME) throws IOException {
         // Create a new file
         File csv = new File(path);
@@ -290,6 +309,7 @@ public class Analyser {
         return true;
     }
 
+    // Saves the results of testing an individual algorithm to a spreadsheet
     static boolean save_to_spreadsheet(String path, int rows, String name, boolean[] VALID, int[] SCORE, long[] RAM, long[] TIME, long[][] SEGMENTS, int[] PARAM,
                                        String param_name) throws IOException {
         // Create a new file
@@ -316,12 +336,19 @@ public class Analyser {
             row.append(VALID[r]).append(",").append(SCORE[r]).append(",").append(ram).append(",").append(time).append(",").append(PARAM[r]).append(", ,");
 
             if (SEGMENTS != null) {
-                row.append(NanoToMilli(SEGMENTS[0][r])).append(",").append(NanoToMilli(SEGMENTS[1][r])).append(",").append(NanoToMilli(SEGMENTS[2][r])).append(",").append(NanoToMilli(SEGMENTS[3][r])).append(",");
+                row.append(convert_time(SEGMENTS[0][r])).append(",").append(convert_time(SEGMENTS[1][r])).append(",").append(convert_time(SEGMENTS[2][r])).append(",").append(convert_time(SEGMENTS[3][r])).append(",");
             }
 
             // Place the row into the file
             row.append("\n");
             csvWriter.write(row.toString());
+        }
+
+        if (SEGMENTS != null) {
+            System.out.println("/// Writing: p1: "+((double) SEGMENTS[1][rows] / (1000*1000))+", p2: "+(SEGMENTS[2][rows] / (1000*1000))+", p3: "+(SEGMENTS[3][rows] / (1000*1000)));
+            String footer =
+                    "\n , , , , , , , "+((double) SEGMENTS[1][rows] / (1000*1000))+", "+((double) SEGMENTS[2][rows] / (1000*1000))+", "+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
+            csvWriter.write(footer);
         }
 
         csvWriter.close();
@@ -439,8 +466,8 @@ public class Analyser {
         return list;
     }
 
-    // Converts a system time in nanoseconds into a time in millesconds, offset by the start-time of the analyser
-    public static double NanoToMilli(long NanoSeconds) {
+    // Converts a system time in nanoseconds into a time in milliseconds, offset by the start-time of the analyser
+    public static double convert_time(long NanoSeconds) {
         return ((double) (NanoSeconds - BASETIME)) / (1000 * 1000);
     }
 
