@@ -98,8 +98,8 @@ public class Analyser {
             }
         }
 
+        // Indicate the final name of the saved file
         if (stored) System.out.println("Saved the results to a file: " + path);
-
     }
 
     // Usage: Analyser <repetitions> <filename> <algorithm> <parameter> <runs-per-rep>
@@ -151,6 +151,7 @@ public class Analyser {
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
+            System.out.println("["+i+"]");
 
             // Generate the random event data, making sure they are legitimate details
             SchedulingProblem details = null;
@@ -162,11 +163,9 @@ public class Analyser {
 
             // After every block of steps we will increase the changing parameter by one
             if (target_parameter.equals("s")) PARAM[i] = num_sessions;
-            if (target_parameter.equals("s") && ((i-1) % Integer.parseInt(args[4])) == 0) num_sessions++;
+            if (target_parameter.equals("s") && ((i+1) % Integer.parseInt(args[4])) == 0) num_sessions++;
             if (target_parameter.equals("i")) PARAM[i] = num_individuals;
-            if (target_parameter.equals("i") && ((i-1) % Integer.parseInt(args[4])) == 0) num_individuals++;
-
-            System.out.print("["+i+"]");
+            if (target_parameter.equals("i") && ((i+1) % Integer.parseInt(args[4])) == 0) num_individuals++;
 
             // Now run the algorithm on these details
             test_algorithm_with_details(algorithm, details, i, 0, VALID, SCORE, RAM, TIME);
@@ -200,7 +199,7 @@ public class Analyser {
 
         // Generate the path for the file, including a version number. If this file already exists then increment the version number
         boolean stored = false;
-        int version = 1;
+        int version = 0;
         String path = "";
 
         while (!stored) {
@@ -215,14 +214,13 @@ public class Analyser {
             }
         }
 
-        if (stored) System.out.println("Saved the results to a file: " + path);
-        
+        // Indicate the final name of the saved file.
+        if (stored) System.out.println("\nSaved the results to a file: " + path);
     }
 
     // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
     public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
-        // TODO Fix this to record RAM usage for the algos which were too fast.
         System.out.println("");
 
         // Prepare a thread which will run alongside the algorithm and record max RAM usage as it goes
@@ -258,7 +256,6 @@ public class Analyser {
              tt = null;
         }
 
-        // TODO find a better way to look at the times in MS
         // Record the system time again and end the memory-watching thread
         long end_time = System.nanoTime();
         System.out.println("End Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
@@ -295,10 +292,9 @@ public class Analyser {
         FileWriter csvWriter = new FileWriter(csv);
 
         // Add header row here
-        String top = "Greedy Brute Force, , , , ,Brute Force, , , , ,Brute Force (Greedy Optimised), , , , ,CSP Algorithm, , , , ,CSP (Randomised Optimisation), ,\n";
-        String headers = "Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms), ,Valid?, Score, RAM (MB), Time (ms)" +
-                ", ," +
-                "Valid?, Score, RAM, Time (ms), ,\n";
+        String top = "Greedy Brute Force,,,,,Brute Force,,,,,Brute Force (Greedy Optimised),,,,,CSP Algorithm,,,,,CSP (Randomised Optimisation),,\n";
+        String headers = "Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms)" +
+                ",,Valid?,Score,RAM,Time (ms),,\n";
         csvWriter.write(top);
         csvWriter.write(headers);
 
@@ -333,10 +329,10 @@ public class Analyser {
         FileWriter csvWriter = new FileWriter(csv);
 
         // Add header row here
-        String top = name + ", , , , , ,\n";
+        String top = name + ",,,,,,\n";
         String header = "Valid?, Score, RAM (MB), Time (ms), "+param_name+", ,\n";
         if (SEGMENTS != null) {
-            top = name + ", , , , , , Times (ms), , , ,\n";
+            top = name + ",,,,,,Times (ms),,,,\n";
             header = "Valid?, Score, RAM (MB), Time (ms), "+param_name+", , Start, Modelled, Solved, Decoded,\n";
         }
         csvWriter.write(top);
@@ -362,7 +358,7 @@ public class Analyser {
         if (SEGMENTS != null) {
             System.out.println("/// Writing: p1: "+((double) SEGMENTS[1][rows] / (1000*1000))+", p2: "+(SEGMENTS[2][rows] / (1000*1000))+", p3: "+(SEGMENTS[3][rows] / (1000*1000)));
             String summary =
-                    "\n , , , , , , , "+((double) SEGMENTS[1][rows] / (1000*1000))+", "+((double) SEGMENTS[2][rows] / (1000*1000))+", "+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
+                    "\n,,,,,,,"+((double) SEGMENTS[1][rows] / (1000*1000))+","+((double) SEGMENTS[2][rows] / (1000*1000))+","+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
             csvWriter.write(summary);
         }
 
