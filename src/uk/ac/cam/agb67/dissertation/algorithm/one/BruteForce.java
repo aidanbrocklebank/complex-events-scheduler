@@ -116,7 +116,7 @@ public class BruteForce {
         }
 
         // If there is no way for us to insert the current session, this recursive call has failed
-        System.err.println("No way to schedule session.");
+        if (Main.DEBUG) System.err.println("No way to schedule session.");
         return null;
     }
 

@@ -20,4 +20,9 @@ public class PredeterminedSession extends Session {
         PDS_Room = room;
     }
 
+    @Override
+    public String toString() {
+        return "<Session #"+Session_ID+": Name:'"+Session_Name+"', Length:"+Session_Length+", Participants:"+Session_KeyInds.toString()+" " +
+                "Day/Time:"+PDS_Day+"/"+PDS_Start_Time+" Room:"+PDS_Room+">";
+    }
 }

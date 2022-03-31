@@ -114,4 +114,36 @@ public class SchedulingProblem {
         return valid;
     }
 
+    // Pretty print a set of details
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+
+        s.append("Days:").append(Maximum_Days).append(" (Hours/Day:").append(Hours_Per_Day).append(") Rooms:").append(Maximum_Rooms).append("\nOccupancies: [");
+        for (Integer i : Room_Occupancy_Limits) {
+            s.append(" ").append(i).append(",");
+        }
+        s.append("]\nSessions: {\n");
+        for (Session sesh : Session_Details) {
+            s.append("  ").append(sesh.toString()).append("\n");
+        }
+        s.append("}\nPredetermined Sessions: {\n");
+        for (PredeterminedSession sesh : PDS_Details) {
+            s.append("  ").append(sesh.toString()).append("\n");
+        }
+        s.append("}\nKey Individuals: {\n");
+        for (KeyIndividual ind : KeyInd_Details) {
+            s.append("  ").append(ind.toString()).append("\n");
+        }
+        s.append("}\n");
+        if (Reduce_Overlap_Pref) {
+            s.append("Prefers reduced overlaps,");
+        } else {
+            s.append("Does NOT prefer reduced overlaps,");
+        }
+        s.append(" and prefers a minimum gap of ").append(Minimum_Gap_Pref).append(" between sessions.\n");
+
+        return s.toString();
+    }
+
 }

@@ -26,7 +26,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
     public Timetable generate(SchedulingProblem details) {
         String s = "";
         if (optimise_for_prefs) s="(Maximising preference values).";
-        System.out.println("\nAttempting to generate a schedule with algorithm two. "+s+"\n");
+        if (Main.DEBUG) System.out.println("\nAttempting to generate a schedule with algorithm two. "+s+"\n");
 
         // Input validation step
         if (!details.check_validity()) {

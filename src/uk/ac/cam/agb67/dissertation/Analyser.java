@@ -19,15 +19,29 @@ public class Analyser {
     public static long[] SEGMENT_TIMES = new long[4];
 
     // Default parameters for random tests
-    static final int DEF_DAYS = 4;
+    static final int DEF_DAYS = 5;
     static final int DEF_ROOMS = 5;
     static final int DEF_SESSIONS = 12;
     static final int DEF_INDIVIDUALS = 25;
+
+    // Saved in case of unexpected exit
+    private static SchedulingProblem latest_details;
+
+    // A thread for saving test details if we have to suddenly shut down the analyser
+    private static Thread shutdown = new Thread() {
+        @Override
+        public void run() {
+            if (save_session_details(latest_details, "results\\latest_test_details.txt")) {
+                System.err.println("Saved the latest test details to results\\latest_test_details.txt.");
+            }
+        }
+    };
 
     // Usage: Analyser <repetitions> <filename>
     // Usage: Analyser <repetitions> <filename> <algorithm 1> <algorithm 2>
     public static void main(String[] args) {
         BASETIME = System.nanoTime();
+        Runtime.getRuntime().addShutdownHook(shutdown);
 
         // Get the number of times to test, and the name for the output file
         int repetitions = Integer.parseInt(args[0]);
@@ -151,7 +165,8 @@ public class Analyser {
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
-            System.out.println("["+i+"]");
+            System.out.print("["+i+"]");
+            System.out.println(" With "+num_sessions+" sessions and "+num_individuals+" individuals.");
 
             // Generate the random event data, making sure they are legitimate details
             SchedulingProblem details = null;
@@ -190,11 +205,9 @@ public class Analyser {
                 phase_two = phase_two + (SEGMENTS[2][i] - SEGMENTS[1][i]);
                 phase_three = phase_three + (SEGMENTS[3][i] - SEGMENTS[2][i]);
             }
-            System.out.println("/// Totals: p1: "+phase_one+", p2: "+phase_two+", p3: "+phase_three);
             SEGMENTS[1][repetitions] = phase_one / (long) repetitions;
             SEGMENTS[2][repetitions] = phase_two / (long) repetitions;
             SEGMENTS[3][repetitions] = phase_three / (long) repetitions;
-            System.out.println("/// Averages: p1: "+SEGMENTS[1][repetitions]+", p2: "+SEGMENTS[2][repetitions]+", p3: "+SEGMENTS[3][repetitions]);
         }
 
         // Generate the path for the file, including a version number. If this file already exists then increment the version number
@@ -221,7 +234,7 @@ public class Analyser {
     // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
     public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
-        System.out.println("");
+        latest_details = details;
 
         // Prepare a thread which will run alongside the algorithm and record max RAM usage as it goes
         final long[] max_RAM_used = {0};
@@ -245,7 +258,6 @@ public class Analyser {
         display.start();
         System.out.println("Start Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
         long start_time = System.nanoTime();
-        System.out.println("Start Time (ms): " + (((double) start_time) / (1000 * 1000)));
 
         // Run the algorithm on the given details
         try {
@@ -258,7 +270,6 @@ public class Analyser {
 
         // Record the system time again and end the memory-watching thread
         long end_time = System.nanoTime();
-        System.out.println("End Time (ms): " + (((double) System.nanoTime()) / (1000 * 1000)));
         System.out.println("End Time (ms): " + (((double) end_time) / (1000 * 1000)));
         in_execution[0] = false; System.gc();
 
@@ -356,7 +367,6 @@ public class Analyser {
         }
 
         if (SEGMENTS != null) {
-            System.out.println("/// Writing: p1: "+((double) SEGMENTS[1][rows] / (1000*1000))+", p2: "+(SEGMENTS[2][rows] / (1000*1000))+", p3: "+(SEGMENTS[3][rows] / (1000*1000)));
             String summary =
                     "\n,,,,,,,"+((double) SEGMENTS[1][rows] / (1000*1000))+","+((double) SEGMENTS[2][rows] / (1000*1000))+","+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
             csvWriter.write(summary);
@@ -484,6 +494,22 @@ public class Analyser {
     // Converts a system time in nanoseconds into a time in milliseconds, offset by the start-time of the analyser
     public static double convert_time(long NanoSeconds) {
         return ((double) (NanoSeconds - BASETIME)) / (1000 * 1000);
+    }
+
+    // Prints a set of session details to a text file
+    static boolean save_session_details(SchedulingProblem details, String path)  {
+        if (details == null) return false;
+        File text = new File(path);
+
+        try {
+            FileWriter fileWriter = new FileWriter(text);
+            fileWriter.write(details.toString());
+            fileWriter.close();
+
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
 }
