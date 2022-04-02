@@ -136,7 +136,7 @@ public class Analyser {
             default:
                 throw new IllegalStateException("No valid algorithm of index " + target_algorithm);
         }
-        
+
         // Create the arrays we will store the results into
         boolean[][] VALID = new boolean[1][repetitions];
         int[][] SCORE = new int[1][repetitions];
