@@ -5,6 +5,7 @@ import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
 
 import java.io.IOException;
 import java.security.Key;
@@ -92,6 +93,22 @@ public class AnalyserTest {
         for (int i=0; i<max-min; i++) {
             assertThat(occurrences[i]).isAtMost(1);
         }
+    }
+
+    @Test
+    public void guaranteed_randomized_test_details_works() {
+        // ARRANGE
+        SchedulingProblem details;
+
+        // ACT
+        details = Analyser.guaranteed_randomized_test_details(20, 5, 150, 40);
+
+        Coordinator algoOne = new Coordinator(false, false);
+        Timetable tt = algoOne.generate(details);
+        System.out.println(tt);
+
+        // ASSERT
+        assertThat(details.check_validity()).isTrue();
     }
 
 }
