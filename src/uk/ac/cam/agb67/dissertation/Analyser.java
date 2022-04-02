@@ -21,8 +21,8 @@ public class Analyser {
     // Default parameters for random tests
     static final int DEF_DAYS = 50;
     static final int DEF_ROOMS = 50;
-    static final int DEF_SESSIONS = 45;
-    static final int DEF_INDIVIDUALS = 25;
+    static final int DEF_SESSIONS = 100;
+    static final int DEF_INDIVIDUALS = 50;
 
     // Saved in case of unexpected exit
     private static SchedulingProblem latest_details;
@@ -522,7 +522,7 @@ public class Analyser {
 
             int len = generate_number(h-pds.PDS_Start_Time, 1);
             pds.Session_Length = len;
-            if (Main.DEBUG) System.out.print("Chose length: "+ len + " for session #"+s+".\n");
+            //if (Main.DEBUG) System.out.print("Chose length: "+ len + " for session #"+s+".\n");
             for (int hour=pds.PDS_Start_Time; hour<(pds.PDS_Start_Time+len); hour++) {
                 sample.set(pds.PDS_Day, hour, pds.PDS_Room, s,hour-pds.PDS_Start_Time);
             }

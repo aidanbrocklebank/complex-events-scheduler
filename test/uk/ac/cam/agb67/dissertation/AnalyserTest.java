@@ -101,7 +101,7 @@ public class AnalyserTest {
         SchedulingProblem details;
 
         // ACT
-        details = Analyser.guaranteed_randomized_test_details(20, 10, 1000, 100);
+        details = Analyser.guaranteed_randomized_test_details(50, 50, 1000, 50);
 
         Coordinator algoOne = new Coordinator(false, false);
         //Timetable tt = algoOne.generate(details);
