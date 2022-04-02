@@ -21,7 +21,7 @@ public class Analyser {
     // Default parameters for random tests
     static final int DEF_DAYS = 50;
     static final int DEF_ROOMS = 50;
-    static final int DEF_SESSIONS = 12;
+    static final int DEF_SESSIONS = 45;
     static final int DEF_INDIVIDUALS = 25;
 
     // Saved in case of unexpected exit
@@ -265,7 +265,11 @@ public class Analyser {
         } catch (Exception e) {
             // This method generated an exception.
             System.err.println("The selected algorithms with the given details threw an exception.");
-             tt = null;
+            if (algorithm.getClass() == CoordinatorTwo.class) {
+                SEGMENT_TIMES[2] = System.nanoTime();
+                SEGMENT_TIMES[3] = System.nanoTime();
+            }
+            tt = null;
         }
 
         // Record the system time again and end the memory-watching thread
@@ -582,6 +586,9 @@ public class Analyser {
                 if (!busy_individuals.contains(a)) free_individuals.add(a);
             }
 
+            if (free_individuals.size() == 1) {pds.Session_KeyInds.add(free_individuals.get(0)); s++; continue;}
+            if (free_individuals.size() == 0) {s++; continue;}
+
             // Add a random selection of them to the session
             int num_to_add = generate_number((int)Math.min(free_individuals.size(), (num_individuals*0.15)+1), 1);
             List<Integer> indexes_to_add = generate_numbers(free_individuals.size()-1, 0, num_to_add);
@@ -603,7 +610,9 @@ public class Analyser {
             }
 
             // And randomly generate a limit between that and the total individuals available
-            details.Room_Occupancy_Limits.add(generate_number(num_individuals+1, max_people_in_room));
+            int occupancy = generate_number(num_individuals+1, max_people_in_room);
+            occupancy = (int) (Math.ceil((float)occupancy / 5) * 5);
+            details.Room_Occupancy_Limits.add(occupancy);
         }
 
         // Chose a portion of PDS and change the rest into normal sessions (keep the PDS in the normal details!)

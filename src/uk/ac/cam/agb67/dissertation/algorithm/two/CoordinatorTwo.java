@@ -52,12 +52,15 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         if (optimise_for_prefs) {
             // Use Choco-solver to solve the model, finding the solution which maximises a metric for preference satisfaction
             Solution sol = optimise_and_solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
+
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
             System.out.println("Post-OPT-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
             if (sol == null) {
-                System.err.println("The optimising variant failed to solve the model. Deffering to the standard variant.");
-                this.optimise_for_prefs = false;
-                return this.generate(details);
+                System.err.println("The optimising variant failed to solve the model. Returning null.");
+                Analyser.SEGMENT_TIMES[3] = System.nanoTime();
+                //this.optimise_for_prefs = false;
+                //return this.generate(details);
+                return null;
             }
 
             // Finally decode the solution into a schedule
@@ -68,6 +71,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         } else {
             // Use Choco-solver to solve the model, taking the first acceptable solution
             boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
+
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
             System.out.println("Post-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
             if (!solved) {
