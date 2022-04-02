@@ -76,13 +76,12 @@ public class Analyser {
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
             // Generate the random event data, making sure they are legitimate details
-            // TODO adjust these parameters
-            // Make sure these are actually generating preferences, maybe read out some of the generated details
 
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
+                details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
+                //details = randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
                 legitimate_details = details.check_validity();
             }
 
@@ -172,7 +171,8 @@ public class Analyser {
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
-                details = randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
+                details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
+                //details = randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
                 legitimate_details = details.check_validity();
             }
 
@@ -470,6 +470,11 @@ public class Analyser {
         Timetable sample = new Timetable(days, 8, rooms);
         SchedulingProblem details = new SchedulingProblem();
 
+        if (num_sessions > days * rooms * 8) {
+            System.err.println("Cannot create a schedule with "+num_sessions+" sessions in only "+(days*rooms*8)+" available timeslots.");
+            return null;
+        }
+
         // Lock in the defined parameters and randomise the preferences
         details.Maximum_Days = days;
         details.Hours_Per_Day = 8;
@@ -634,7 +639,7 @@ public class Analyser {
 
     // Randomly generates a (duplicate-free) list, of length count, of numbers between minimum and maximum
     static List<Integer> generate_numbers(int maximum, int minimum, int count) {
-        if (count > (maximum - minimum)) {
+        if (count > (maximum - minimum + 1)) {
             System.err.println("Tried to generate a duplicate free list which was too long for the given range. Count: "+count+", Range: "+minimum+" to "+maximum);
             return null;
         }

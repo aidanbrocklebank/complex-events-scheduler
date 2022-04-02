@@ -101,11 +101,11 @@ public class AnalyserTest {
         SchedulingProblem details;
 
         // ACT
-        details = Analyser.guaranteed_randomized_test_details(20, 5, 150, 40);
+        details = Analyser.guaranteed_randomized_test_details(20, 10, 1000, 100);
 
         Coordinator algoOne = new Coordinator(false, false);
-        Timetable tt = algoOne.generate(details);
-        System.out.println(tt);
+        //Timetable tt = algoOne.generate(details);
+        //System.out.println(tt);
 
         // ASSERT
         assertThat(details.check_validity()).isTrue();
