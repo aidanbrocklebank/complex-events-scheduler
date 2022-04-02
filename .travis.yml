@@ -1,5 +1,4 @@
 language: java
-jdk:
-  - oraclejdk13
-
-script: ant build
+sudo: true
+script:
+  - mvn clean verify
