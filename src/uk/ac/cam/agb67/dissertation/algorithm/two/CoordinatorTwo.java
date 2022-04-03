@@ -258,6 +258,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
             // Find and decode a solution based on this search strategy
             Solution sol = solver.findSolution();
+            if (sol == null) break;
             Timetable prospect = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
             boolean prospect_valid; int prospect_score;
 

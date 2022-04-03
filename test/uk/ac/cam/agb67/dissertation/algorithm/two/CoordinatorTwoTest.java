@@ -73,6 +73,21 @@ public class CoordinatorTwoTest {
     }
 
     @Test
+    public void algorithm_copes_with_larger_inputs() {
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo(true);
+        TimetableVerifier ttv = new TimetableVerifier();
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,100,100);
+
+        // ACT
+        Timetable tt = co.generate(details);
+        boolean correct = ttv.timetable_is_valid(tt, details);
+
+        // ASSERT
+        assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
     public void randomised_algorithm_generates_coherent_schedule_0() {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(true);

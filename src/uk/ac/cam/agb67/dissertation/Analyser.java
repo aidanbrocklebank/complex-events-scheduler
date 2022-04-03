@@ -6,6 +6,7 @@ import uk.ac.cam.agb67.dissertation.algorithm.two.CoordinatorTwo;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,18 +22,22 @@ public class Analyser {
     // Default parameters for random tests
     static final int DEF_DAYS = 50;
     static final int DEF_ROOMS = 50;
-    static final int DEF_SESSIONS = 100;
-    static final int DEF_INDIVIDUALS = 50;
+    static final int DEF_SESSIONS = 500;
+    static final int DEF_INDIVIDUALS = 500;
 
     // Saved in case of unexpected exit
     private static SchedulingProblem latest_details;
+    private static Timetable latest_details_tt;
 
     // A thread for saving test details if we have to suddenly shut down the analyser
     private static Thread shutdown = new Thread() {
         @Override
         public void run() {
-            if (save_session_details(latest_details, "results\\latest_test_details.txt")) {
+            if (save_details_to_file(latest_details, "results\\latest_test_details.txt")) {
                 System.err.println("Saved the latest test details to results\\latest_test_details.txt.");
+            }
+            if (save_details_to_file(latest_details_tt, "results\\latest_test_example_timetable.txt")) {
+                System.err.println("Saved an example timetable for the latest test to results\\latest_test_example_timetable.txt.");
             }
         }
     };
@@ -470,7 +475,7 @@ public class Analyser {
         return randomized_test_details(days, rooms, num_sessions, num_individuals, (overlap_rand >= 0.5), gap_pref);
     }
 
-    static SchedulingProblem guaranteed_randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
+    public static SchedulingProblem guaranteed_randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
         Timetable sample = new Timetable(days, 8, rooms);
         SchedulingProblem details = new SchedulingProblem();
 
@@ -638,6 +643,7 @@ public class Analyser {
             TimetableVerifier ttv = new TimetableVerifier();
             System.out.println("The schedule + details are valid together? " + (ttv.timetable_is_valid(sample, details)));
         }
+        latest_details_tt = sample;
         return details;
     }
 
@@ -672,7 +678,7 @@ public class Analyser {
     }
 
     // Prints a set of session details to a text file
-    static boolean save_session_details(SchedulingProblem details, String path)  {
+    static boolean save_details_to_file(Object details, String path)  {
         if (details == null) return false;
         File text = new File(path);
 
