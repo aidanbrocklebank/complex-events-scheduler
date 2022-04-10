@@ -25,6 +25,9 @@ public class AnalyserTest {
         long[][] RAM = new long[5][len];
         long[][] TIME = new long[5][len];
 
+        int[] PARAM = new int[len];
+        long[][] SEGMENTS = null;
+
         for (int i=0; i<len; i++) {
             for (int j=0; j<5; j++) {
                 VALID[j][i] = true;
@@ -32,11 +35,20 @@ public class AnalyserTest {
                 RAM[j][i] = i + j + 100;
                 TIME[j][i] = i + j + 200;
             }
+            PARAM[i] = i;
         }
 
         // ACT
         try {
             Analyser.save_to_spreadsheet("test.csv", len, VALID, SCORE, RAM, TIME);
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertThat(false).isTrue();
+        }
+
+        // ACT
+        try {
+            Analyser.save_to_spreadsheet("ind_test.csv", len, "Algorithm Name", VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, "#Param");
         } catch (IOException e) {
             e.printStackTrace();
             assertThat(false).isTrue();

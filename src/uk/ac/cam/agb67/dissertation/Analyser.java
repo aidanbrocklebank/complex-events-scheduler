@@ -13,19 +13,19 @@ import java.util.List;
 
 public class Analyser {
 
-    static boolean DEBUG = true;
+    private static boolean DEBUG = true;
 
     // Used by algorithms to communicate segment times
-    static long BASETIME;
+    private static long BASETIME;
     public static long[] SEGMENT_TIMES = new long[4];
 
     // Default parameters for random tests
-    static final int DEF_DAYS = 50;
-    static final int DEF_ROOMS = 50;
-    static final int DEF_SESSIONS = 500;
-    static final int DEF_INDIVIDUALS = 500;
+    private static final int DEF_DAYS = 50;
+    private static final int DEF_ROOMS = 50;
+    private static final int DEF_SESSIONS = 50;
+    private static final int DEF_INDIVIDUALS = 100;
 
-    // Saved in case of unexpected exit
+    // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;
     private static Timetable latest_details_tt;
 
@@ -80,13 +80,13 @@ public class Analyser {
         // The main loop which runs as many times as the input specified
         // It generates a set of details and then tests each of the five algorithms on those details, storing the results
         for (int i=0; i<repetitions; i++) {
-            // Generate the random event data, making sure they are legitimate details
 
+            // Generate the random event data, making sure they are legitimate details
             SchedulingProblem details = null;
             boolean legitimate_details = false;
             while (!legitimate_details) {
                 details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
-                //details = randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
+                if (details == null) continue;
                 legitimate_details = details.check_validity();
             }
 
@@ -107,7 +107,7 @@ public class Analyser {
         while (!stored) {
             version++;
             if (version > 100) break;
-            path = "results\\" + location + "_" + version + ".csv";
+            path = "results\\"+location+"_"+version+".csv";
 
             try {
                 stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
@@ -121,7 +121,7 @@ public class Analyser {
     }
 
     // Usage: Analyser <repetitions> <filename> <algorithm> <parameter> <runs-per-rep>
-    public static void individual_test(String[] args) {
+    private static void individual_test(String[] args) {
 
         // Decode the user input
         int repetitions = Integer.parseInt(args[0]) * Integer.parseInt(args[4]);
@@ -177,7 +177,7 @@ public class Analyser {
             boolean legitimate_details = false;
             while (!legitimate_details) {
                 details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
-                //details = randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
+                if (details == null) continue;
                 legitimate_details = details.check_validity();
             }
 
@@ -200,8 +200,6 @@ public class Analyser {
             }
         }
 
-        // Further Processing:
-
         // Calculate average segment times when relevant, and place them in the final row of the array
         if (target_algorithm == 3 || target_algorithm == 4) {
             long phase_one = 0, phase_two = 0, phase_three = 0;
@@ -223,7 +221,7 @@ public class Analyser {
         while (!stored) {
             version++;
             if (version > 100) break;
-            path = "results\\" + location + "_" + version + ".csv";
+            path = "results\\"+location+"_"+version+".csv";
 
             try {
                 stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, param_name);
@@ -237,7 +235,7 @@ public class Analyser {
     }
 
     // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
-    public static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
+    private static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
         latest_details = details;
 
@@ -251,8 +249,6 @@ public class Analyser {
                     // Determine the currently free memory
                     long current_RAM_used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                     if (current_RAM_used > max_RAM_used[0]) max_RAM_used[0] = current_RAM_used;
-
-                    // TODO break out of loops which run for too long?
                 }
             }
         };
@@ -318,6 +314,7 @@ public class Analyser {
         csvWriter.write(top);
         csvWriter.write(headers);
 
+        // Create each row in the file based on the data in the correct entries in the arrays
         for (int r=0; r<rows; r++) {
             StringBuilder row = new StringBuilder();
 
@@ -332,6 +329,7 @@ public class Analyser {
             csvWriter.write(row.toString());
         }
 
+        // Include a footer with details of the parameters
         String footer =
                 "\n\nThe parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS;
         csvWriter.write(footer);
@@ -358,6 +356,7 @@ public class Analyser {
         csvWriter.write(top);
         csvWriter.write(header);
 
+        // Create each row in the file based on the data in the correct entries in the arrays
         for (int r=0; r<rows; r++) {
             StringBuilder row = new StringBuilder();
 
@@ -375,12 +374,14 @@ public class Analyser {
             csvWriter.write(row.toString());
         }
 
+        // Include a summary line in datasets which include segment times, indicating the average segment durations
         if (SEGMENTS != null) {
             String summary =
                     "\n,,,,,,,"+((double) SEGMENTS[1][rows] / (1000*1000))+","+((double) SEGMENTS[2][rows] / (1000*1000))+","+((double) SEGMENTS[3][rows] / (1000*1000))+",\n";
             csvWriter.write(summary);
         }
 
+        // Include a footer with details of the parameters
         String footer =
                 "\n\nThe DEFAULT parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS+" (Ignore for the specified parameter).";
         csvWriter.write(footer);
@@ -389,8 +390,8 @@ public class Analyser {
         return true;
     }
 
-    // Randomly generates a scheduling problem to use as test data, given certain parameters
-    static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
+    // [Deprecated] Randomly generates a scheduling problem to use as test data, given certain parameters
+    private static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
         SchedulingProblem details = new SchedulingProblem();
         if (DEBUG) System.out.println("Generating a test data set, with "+days+" days and "+rooms+" rooms.");
 
@@ -459,14 +460,13 @@ public class Analyser {
             details.Session_Details.remove(s);
             details.Session_Details.add(s, replace);
             details.PDS_Details.add(replace);
-            if (DEBUG) System.out.println("Converting a session to predetermined. ID: #"+s+", length: "+remove.Session_Length+", day: "+replace.PDS_Day+", time: "+replace.PDS_Start_Time+", room:"+replace.PDS_Room);
         }
 
         return details;
     }
 
-    // Randomly generates test data with randomized gap preference and overlap preference
-    static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
+    // [Deprecated] Randomly generates test data with randomized gap preference and overlap preference
+    private static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
         int gap_pref = generate_number(3, 0);
         double overlap_rand = Math.random();
 
@@ -495,7 +495,7 @@ public class Analyser {
         details.Room_Occupancy_Limits = new ArrayList<>();
 
         details.Reduce_Overlap_Pref = (Math.random() >= 0.5);
-        details.Minimum_Gap_Pref = generate_number(3, 0);
+        details.Minimum_Gap_Pref = generate_number(4, 0);
 
         // Add a session to the timetable by randomising details
         for (int s=0; s<num_sessions;) {
@@ -522,12 +522,10 @@ public class Analyser {
             while ((h+1)<8 && sample.get_id(pds.PDS_Day, h+1, pds.PDS_Room) == -1) {
                 h++;
             }
-            //System.out.print("PDS Start Time:" + pds.PDS_Start_Time + " and we can go to h: " +h+ " (range of "+(h-pds.PDS_Start_Time)+")");
             if (h == pds.PDS_Start_Time) continue;
 
             int len = generate_number(h-pds.PDS_Start_Time, 1);
             pds.Session_Length = len;
-            //if (Main.DEBUG) System.out.print("Chose length: "+ len + " for session #"+s+".\n");
             for (int hour=pds.PDS_Start_Time; hour<(pds.PDS_Start_Time+len); hour++) {
                 sample.set(pds.PDS_Day, hour, pds.PDS_Room, s,hour-pds.PDS_Start_Time);
             }
@@ -678,7 +676,7 @@ public class Analyser {
     }
 
     // Prints a set of session details to a text file
-    static boolean save_details_to_file(Object details, String path)  {
+    private static boolean save_details_to_file(Object details, String path)  {
         if (details == null) return false;
         File text = new File(path);
 
