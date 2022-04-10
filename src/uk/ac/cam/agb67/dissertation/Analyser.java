@@ -163,6 +163,7 @@ public class Analyser {
         switch (target_parameter) {
             case "s": param_name = "#Sessions"; num_sessions = 1; num_individuals = DEF_INDIVIDUALS; break;
             case "i": param_name = "#Individuals"; num_sessions = DEF_SESSIONS; num_individuals = 4; break;
+            case "b": param_name = "#Sessions = #Individuals"; num_sessions = 4; num_individuals = 4; break;
             default: param_name = ""; num_sessions = DEF_SESSIONS; num_individuals = DEF_INDIVIDUALS;
         }
 
@@ -186,6 +187,8 @@ public class Analyser {
             if (target_parameter.equals("s") && ((i+1) % Integer.parseInt(args[4])) == 0) num_sessions++;
             if (target_parameter.equals("i")) PARAM[i] = num_individuals;
             if (target_parameter.equals("i") && ((i+1) % Integer.parseInt(args[4])) == 0) num_individuals++;
+            if (target_parameter.equals("b")) PARAM[i] = num_sessions;
+            if (target_parameter.equals("b") && ((i+1) % Integer.parseInt(args[4])) == 0) {num_sessions++; num_individuals++;}
 
             // Now run the algorithm on these details
             test_algorithm_with_details(algorithm, details, i, 0, VALID, SCORE, RAM, TIME);
@@ -383,7 +386,7 @@ public class Analyser {
 
         // Include a footer with details of the parameters
         String footer =
-                "\n\nThe DEFAULT parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS+" (Ignore for the specified parameter).";
+                "\n\nThe DEFAULT parameters of the random test data: Days:"+DEF_DAYS+"  Hours:8  Rooms:"+DEF_ROOMS+"  Sessions:"+DEF_SESSIONS+"  Individuals:"+DEF_INDIVIDUALS+" (Ignore for the specified parameter(s)).";
         csvWriter.write(footer);
 
         csvWriter.close();
