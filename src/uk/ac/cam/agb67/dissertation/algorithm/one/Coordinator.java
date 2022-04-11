@@ -22,8 +22,7 @@ public class Coordinator implements SchedulingAlgorithm {
 
         // Input validation step
         if (!details.potentially_schedulable()) {
-            System.err.println("The given scheduling problem details were invalid.");
-            return null;
+            System.err.println("The given scheduling problem details were invalid."); return null;
         }
 
         // Create an empty timetable
@@ -68,8 +67,7 @@ public class Coordinator implements SchedulingAlgorithm {
 
         // Inform the user if this algorithm has failed
         if (schedule == null) {
-            System.err.println("Algorithm one failed to generate a schedule.");
-            return null;
+            System.err.println("Algorithm one failed to generate a schedule."); return null;
         }
 
         // Return schedule

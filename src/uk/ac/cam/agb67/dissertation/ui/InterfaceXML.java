@@ -176,7 +176,6 @@ public class InterfaceXML {
 
         }
 
-
         // Create the geometric objects for the timetabled sessions
         StringBuilder timetable_data = new StringBuilder();
 
@@ -203,9 +202,7 @@ public class InterfaceXML {
                 }
 
             }
-
         }
-
 
         String complete_file_data = header + layout_data + timetable_data + footer;
 
@@ -228,10 +225,8 @@ public class InterfaceXML {
             for (loc=0; loc<length; loc++) {
                 if (numbers.substring(loc, loc+1).equals(",")) break;
             }
-            //System.out.println("loc was "+loc);
 
             // Decode the number before the comma
-            //System.out.println("substring is : "+numbers.substring(0,loc));
             try {
                 int num = Integer.parseInt(numbers.substring(0, loc));
                 list.add(num);
@@ -251,7 +246,7 @@ public class InterfaceXML {
     }
 
     // Takes a string and a filename, and creates a new file with the string as the contents
-    String create_file(String contents, String name) {
+    private String create_file(String contents, String name) {
         String filename = "samples\\"+name+".xml";
         try {
             File newFile = new File(filename);
@@ -266,14 +261,13 @@ public class InterfaceXML {
             writer.close();
 
         } catch (IOException e) {
-            System.err.println("Couldn't write to the file.");
             return null;
         }
         return filename;
     }
 
     // Creates a string representing an mxCell from certain values
-    String create_mxCell(int id, String text, int x, int y, int width, int height, String style) {
+    private String create_mxCell(int id, String text, int x, int y, int width, int height, String style) {
         return
         "        <mxCell id=\""+id+"\" value=\""+text+"\" style=\""+style+"\" vertex=\"1\" parent=\"1\">\n" +
         "          <mxGeometry x=\""+x+"\" y=\""+y+"\" width=\""+width+"\" height=\""+height+"\" as=\"geometry\" />\n" +

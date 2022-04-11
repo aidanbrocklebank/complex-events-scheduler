@@ -6,7 +6,7 @@ import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BruteForce {
+class BruteForce {
 
     private int MaxDays, HoursPerDay, MaxRooms;
     private List<KeyIndividual> KeyIndividuals;

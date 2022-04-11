@@ -31,9 +31,9 @@ public class Main {
         // Put together the algorithm to use from the parameters
         SchedulingAlgorithm algorithm;
         switch (algorithm_choice) {
-            case 0: algorithm = new Coordinator(true, optimise_choice);
-            case 1: algorithm = new Coordinator(false, optimise_choice);
-            case 2: algorithm = new CoordinatorTwo(optimise_choice);
+            case 0: algorithm = new Coordinator(true, optimise_choice); break;
+            case 1: algorithm = new Coordinator(false, optimise_choice); break;
+            case 2: algorithm = new CoordinatorTwo(optimise_choice); break;
             default: algorithm = new Coordinator(false, optimise_choice);
         }
 

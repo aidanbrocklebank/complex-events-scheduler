@@ -7,8 +7,8 @@ import java.util.List;
 
 public class GreedyMethod {
 
+    // The relevant details for the event schedule which is to be optimised
     private int MaxDays, HoursPerDay, MaxRooms;
-    private List<KeyIndividual> KeyIndividuals;
     private List<Integer> RoomOccupancyLimits;
     private List<Session> Sessions;
 
@@ -16,13 +16,11 @@ public class GreedyMethod {
         MaxDays = md;
         HoursPerDay = hpd;
         MaxRooms = mr;
-        KeyIndividuals = keys;
         RoomOccupancyLimits = rol;
         Sessions = ses;
     }
 
-    // Inserts a single session into the timetable in an acceptable slot, then recursively calls itself
-    // ALTERNATIVELY: Loops through the list of sessions adding them each in a slot which looks acceptable
+    // Loops through the list of sessions adding them each in a slot which looks acceptable
     Timetable insert_sessions(Timetable CurrentMapping, List<Session> AllSessions) {
 
         sessionLoop:

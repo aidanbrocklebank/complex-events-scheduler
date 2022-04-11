@@ -2,13 +2,13 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 
 import uk.ac.cam.agb67.dissertation.*;
 
-public class GreedyOptimiser {
+class GreedyOptimiser {
 
-    TimetableSatisfactionMeasurer TSM = new TimetableSatisfactionMeasurer();
+    private TimetableSatisfactionMeasurer TSM = new TimetableSatisfactionMeasurer();
 
-    public GreedyOptimiser() {}
+    GreedyOptimiser() {}
 
-    public Timetable optimisation_pass(Timetable current, SchedulingProblem details) {
+    Timetable optimisation_pass(Timetable current, SchedulingProblem details) {
 
         // look through the current timetable, select a session to move
         for (Session sesh : details.Session_Details) {
