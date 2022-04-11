@@ -143,19 +143,10 @@ public class TimetableVerifier {
                             // If the following timeslots don't have the same sid and the consecutive hours, return false
                             if (tt.get_id(d,h+inner, r) != sid || tt.get_hour(d, h+inner, r) != inner ) {
 
-                                System.err.println("Day: "+d+", Time: "+(h+inner)+" (from offset: "+inner+"), Room: "+r+", session: #"+sid+" - Flagged as not " +
-                                        "contiguous.");
-                                System.err.println("Actually observed session #" + tt.get_id(d,h+inner, r) + " in this slot. [Alternative reason: hour("+tt.get_hour(d,
-                                        h+inner, r)+") =/= inner("+inner+")]");
-
-                                /*
-                                if (sesh.getClass() == PredeterminedSession.class) System.err.println("Session #"+sid+" is PRED. Start time: "+ ((PredeterminedSession)sesh).PDS_Start_Time + " [Length of session #"+sid+" is: " + sesh.Session_Length + "]");
-                                int altSid = tt.get_id(d,h+inner, r);
-                                Session altSesh = sessions.get(tt.get_id(d,h+inner,r));
-                                if (altSesh.getClass() == PredeterminedSession.class) System.err.println("Session #"+altSid+" is PRED. Start time: "+ ((PredeterminedSession)altSesh).PDS_Start_Time + " [Length of session #"+altSid+" is: " + altSesh.Session_Length + "]");
-                                System.out.println(tt.toString());
-                                */
-
+                                if (Main.DEBUG) System.err.println("Day: "+d+", Time: "+(h+inner)+" (from offset: "+inner+"), Room: "+r+", session: #"+sid+" - Flagged " +
+                                        "as not contiguous.");
+                                if (Main.DEBUG) System.err.println("Actually observed session #" + tt.get_id(d,h+inner, r) + " in this slot. [Alternative reason: hour" +
+                                        "("+tt.get_hour(d,h+inner, r)+") =/= inner("+inner+")]");
                                 return false;
                             }
                         }
@@ -193,7 +184,7 @@ public class TimetableVerifier {
             for (int h = 0; h < tt.Hours_Per_Day; h++) {
                 for (int r = 0; r < tt.Total_Rooms; r++) {
 
-                    // When we find a session ID ...
+                    // Determine if we've found a session ID
                     int sid = tt.get_id(d,h,r);
                     if (sid != -1) {
 
@@ -216,7 +207,11 @@ public class TimetableVerifier {
         for (int[][] slice : occurrences) {
             for (int[] row : slice) {
                 for (int x : row) {
-                    if (x > 1) {ret = false; break; }
+                    if (x > 1) {
+                        ret = false;
+                        if (Main.DEBUG) System.err.println("At least one key individual was included in multiple overlapping sessions.");
+                        break;
+                    }
                 }
             }
         }
@@ -234,7 +229,7 @@ public class TimetableVerifier {
                     // When we find a session, check it's room and it's capacity
                     if (tt.get_id(d,h,r) != -1) {
                         if (sessions.get(tt.get_id(d,h,r)).Session_KeyInds.size() > capacities.get(r)) {
-                            System.err.println("Timetable included sessions scheduled in rooms which did not have capacity for the participants.");
+                            if (Main.DEBUG) System.err.println("Timetable included sessions scheduled in rooms which did not have capacity for the participants.");
                             return false;
                         }
 
@@ -259,7 +254,7 @@ public class TimetableVerifier {
             int scheduled_id = tt.get_id(pds.PDS_Day, pds.PDS_Start_Time, pds.PDS_Room);
             if (scheduled_id != pds.Session_ID) {
                 // Return false if we don't find this PDS
-                System.err.println("Timetable did not include a predetermined session in the correct assigned slot.");
+                if (Main.DEBUG) System.err.println("Timetable did not include a predetermined session in the correct assigned slot.");
                 return false;
             }
         }

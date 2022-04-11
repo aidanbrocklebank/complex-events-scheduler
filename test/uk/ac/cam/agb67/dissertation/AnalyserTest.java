@@ -8,9 +8,6 @@ import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
 
 import java.io.IOException;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RunWith(JUnit4.class)
@@ -120,7 +117,7 @@ public class AnalyserTest {
         //System.out.println(tt);
 
         // ASSERT
-        assertThat(details.check_validity()).isTrue();
+        assertThat(details.potentially_schedulable()).isTrue();
     }
 
 }

@@ -6,7 +6,6 @@ import uk.ac.cam.agb67.dissertation.algorithm.two.CoordinatorTwo;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +86,7 @@ public class Analyser {
             while (!legitimate_details) {
                 details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, DEF_SESSIONS, DEF_INDIVIDUALS);
                 if (details == null) continue;
-                legitimate_details = details.check_validity();
+                legitimate_details = details.potentially_schedulable();
             }
 
             System.out.print("["+i+"]");
@@ -179,7 +178,7 @@ public class Analyser {
             while (!legitimate_details) {
                 details = guaranteed_randomized_test_details(DEF_DAYS, DEF_ROOMS, num_sessions, num_individuals);
                 if (details == null) continue;
-                legitimate_details = details.check_validity();
+                legitimate_details = details.potentially_schedulable();
             }
 
             // After every block of steps we will increase the changing parameter by one

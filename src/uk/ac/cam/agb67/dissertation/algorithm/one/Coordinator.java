@@ -21,7 +21,7 @@ public class Coordinator implements SchedulingAlgorithm {
         if (Main.DEBUG) System.out.println("\nAttempting to generate a schedule with algorithm one. "+s+"\n");
 
         // Input validation step
-        if (!details.check_validity()) {
+        if (!details.potentially_schedulable()) {
             System.err.println("The given scheduling problem details were invalid.");
             return null;
         }

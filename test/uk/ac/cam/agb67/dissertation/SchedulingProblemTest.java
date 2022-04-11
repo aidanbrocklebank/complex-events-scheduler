@@ -5,7 +5,6 @@ import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import uk.ac.cam.agb67.dissertation.*;
 
 import java.util.Arrays;
 
@@ -29,7 +28,7 @@ public class SchedulingProblemTest {
         SchedulingProblem details = MainTest.test_details_A();
 
         // ACT
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(true);
@@ -42,7 +41,7 @@ public class SchedulingProblemTest {
 
         // ACT
         details.Session_Details.get(3).Session_ID = 1;
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);
@@ -55,7 +54,7 @@ public class SchedulingProblemTest {
 
         // ACT
         details.PDS_Details.add(new PredeterminedSession(7, "Session B*", 2, Arrays.asList(3, 1), 1, 0, 0));
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);
@@ -68,7 +67,7 @@ public class SchedulingProblemTest {
 
         // ACT
         details.Session_Details.get(0).Session_KeyInds.set(0, 25);
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);
@@ -81,7 +80,7 @@ public class SchedulingProblemTest {
 
         // ACT
         details.KeyInd_Details.get(0).KeyInd_Room_Prefs.set(0, 25);
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);
@@ -94,7 +93,7 @@ public class SchedulingProblemTest {
 
         // ACT
         details.Session_Details.get(0).Session_Length = 12;
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);
@@ -108,7 +107,7 @@ public class SchedulingProblemTest {
         // ACT
         details.Room_Occupancy_Limits = Arrays.asList(3, 3, 3, 3);
         details.Session_Details.get(1).Session_KeyInds = Arrays.asList(1, 2, 3, 4);
-        boolean valid = details.check_validity();
+        boolean valid = details.potentially_schedulable();
 
         // ASSERT
         assertThat(valid).isEqualTo(false);

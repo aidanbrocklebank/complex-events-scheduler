@@ -27,7 +27,7 @@ public class SchedulingProblem {
     public int Minimum_Gap_Pref;
 
     // Confirms the validity of the given data as a potentially schedule-able set of details
-    public boolean check_validity() {
+    public boolean potentially_schedulable() {
         boolean valid = true;
 
         // Check that there are no sessions in the list with id != index

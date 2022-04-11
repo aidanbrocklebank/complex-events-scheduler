@@ -4,9 +4,6 @@ import uk.ac.cam.agb67.dissertation.algorithm.one.*;
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     // Globally used debug switch
@@ -26,7 +23,7 @@ public class Main {
         SchedulingProblem details = ui.XML_to_Problem("samples\\" + location);
 
         // Check that they are a usable set of input details
-        if (!details.check_validity()) {
+        if (!details.potentially_schedulable()) {
             System.err.println("The given event details are not a valid input.");
             return;
         }
