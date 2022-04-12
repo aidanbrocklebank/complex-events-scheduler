@@ -8,9 +8,11 @@ class GreedyOptimiser {
 
     GreedyOptimiser() {}
 
+    // Returns a version of the provided timetable which has had each session either in
+    // the same timeslot, or moved once such as to attempt to improve the overall score
     Timetable optimisation_pass(Timetable current, SchedulingProblem details) {
 
-        // look through the current timetable, select a session to move
+        // Select each session in the timetable and look for a better assignment to move it to
         for (Session sesh : details.Session_Details) {
             // Don't move predetermined sessions.
             if (sesh.getClass() == PredeterminedSession.class) continue;
@@ -45,6 +47,7 @@ class GreedyOptimiser {
                                     improvable = potential;
                                     improvable_contains_sesh = true;
                                     break outer_loop;
+                                    // TODO this isn't actually greedy, either make it greedy or rename it
                                 }
                             }
 
@@ -58,10 +61,8 @@ class GreedyOptimiser {
             if (improvable_contains_sesh) {
                 current = improvable;
             }
-
         }
 
         return current;
     }
-
 }

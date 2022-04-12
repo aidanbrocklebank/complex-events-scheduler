@@ -17,7 +17,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
     private boolean optimise_for_prefs = false;
 
-    public CoordinatorTwo() {}
+    CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
         optimise_for_prefs = opt;
     }
@@ -58,8 +58,6 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             if (sol == null) {
                 System.err.println("The optimising variant failed to solve the model. Returning null.");
                 Analyser.SEGMENT_TIMES[3] = System.nanoTime();
-                //this.optimise_for_prefs = false;
-                //return this.generate(details);
                 return null;
             }
 
@@ -70,7 +68,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         } else {
             // Use Choco-solver to solve the model, taking the first acceptable solution
-            boolean solved = solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
+            boolean solved = solve(event_model);
 
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
             System.out.println("Post-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
@@ -84,14 +82,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             System.out.println("Post-DECODE Time (ms): " + (convert_time(System.nanoTime())));
         }
 
-        // Inform the user if this algorithm has failed
-        if (schedule == null) {
-            System.err.println("Algorithm two failed to generate a schedule.");
-            return null;
-        }
-
         // Return schedule
-        if (Main.DEBUG) System.out.println("Algorithm two has generated a schedule.");
+        if (Main.DEBUG) System.out.println("Algorithm two has generated a schedule:");
         if (Main.DEBUG) System.out.println(schedule.toString());
         return schedule;
     }
@@ -202,31 +194,31 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return event;
     }
 
-    private boolean solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
+    private boolean solve(Model event) {
         // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
 
         //if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
         //if (Main.DEBUG) System.out.println(event.toString());
 
-        long seed = (long) (Math.random() * Long.MAX_VALUE);
+        // long seed = (long) (Math.random() * Long.MAX_VALUE);
         // Search Strategy
-        // Choose an uninstantiated variable with the smallest domain, and select values from the beginning of its domain
+        // Choose an un-instantiated variable with the smallest domain, and select values from the beginning of its domain
         solver.setSearch(Search.intVarSearch(
                 new FirstFail(event),
                 new IntDomainMin(),
                 event.retrieveIntVars(true)
         ));
 
-        if(solver.solve()){
+        if(solver.solve()) {
             // Turn the instantiated values into a timetable to return
             return true;
 
-        }else if(solver.isStopCriterionMet()){
+        } else if(solver.isStopCriterionMet()) {
             System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
             if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
             return false;
-        }else {
+        } else {
             System.err.println("No solution exists which satisfies the constraints.");
             if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
             return false;

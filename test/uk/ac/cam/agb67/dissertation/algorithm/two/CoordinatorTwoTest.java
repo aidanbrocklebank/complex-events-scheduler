@@ -75,9 +75,9 @@ public class CoordinatorTwoTest {
     @Test
     public void algorithm_copes_with_larger_inputs() {
         // ARRANGE
-        CoordinatorTwo co = new CoordinatorTwo(true);
+        CoordinatorTwo co = new CoordinatorTwo(false);
         TimetableVerifier ttv = new TimetableVerifier();
-        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,100,100);
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,50,50);
 
         // ACT
         Timetable tt = co.generate(details);
@@ -130,7 +130,6 @@ public class CoordinatorTwoTest {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(true);
         SchedulingProblem details = MainTest.test_details_C();
-        details.Hours_Per_Day -= 2;
         details.Maximum_Days = 3;
         TimetableVerifier ttv = new TimetableVerifier();
 
