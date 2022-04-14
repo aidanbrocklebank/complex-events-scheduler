@@ -37,13 +37,16 @@ public class Main {
             default: algorithm = new Coordinator(false, optimise_choice);
         }
 
-        // Generate a schedule for the details and save it to a file
+        // Generate a schedule for the details, check it is valid
         Timetable schedule = algorithm.generate(details);
-        if (schedule != null) {
-            ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule");
-        } else {
-            System.err.println("Failed to create a schedule with the given input and desired algorithm.");
+        TimetableVerifier ttv = new TimetableVerifier();
+        if (!ttv.timetable_is_valid(schedule, details)) {
+            System.err.println("Failed to create a valid schedule with the given input and desired algorithm.");
+            return;
         }
+
+        // Then save it to a file
+        ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule");
     }
 
 }

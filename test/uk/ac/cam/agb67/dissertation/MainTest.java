@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
 @RunWith(JUnit4.class)
 public class MainTest {
 
@@ -74,7 +75,7 @@ public class MainTest {
         details.Hours_Per_Day = 8;
         details.Maximum_Rooms = 4;
 
-        details.Room_Occupancy_Limits = Arrays.asList(5, 5, 30, 30);
+        details.Room_Occupancy_Limits = Arrays.asList(5, 5, 1, 30);
 
         details.Reduce_Overlap_Pref = false;
         details.Minimum_Gap_Pref = 1;

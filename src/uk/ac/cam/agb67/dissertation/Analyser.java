@@ -21,8 +21,8 @@ public class Analyser {
     // Default parameters for random tests
     private static final int DEF_DAYS = 50;
     private static final int DEF_ROOMS = 50;
-    private static final int DEF_SESSIONS = 50;
-    private static final int DEF_INDIVIDUALS = 100;
+    private static final int DEF_SESSIONS = 75;
+    private static final int DEF_INDIVIDUALS = 75;
 
     // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;
@@ -637,7 +637,7 @@ public class Analyser {
             }
         }
 
-        if (Main.DEBUG) {
+        if (Main.DEBUG && false) {
             System.out.println("The random schedule which the algorithms may recreate:\n" + sample.toString());
             System.out.println("The details which arise:\n" + details.toString());
             TimetableVerifier ttv = new TimetableVerifier();

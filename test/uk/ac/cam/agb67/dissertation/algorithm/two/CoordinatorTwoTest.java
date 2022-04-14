@@ -77,7 +77,7 @@ public class CoordinatorTwoTest {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(false);
         TimetableVerifier ttv = new TimetableVerifier();
-        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,50,50);
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,75,75);
 
         // ACT
         Timetable tt = co.generate(details);

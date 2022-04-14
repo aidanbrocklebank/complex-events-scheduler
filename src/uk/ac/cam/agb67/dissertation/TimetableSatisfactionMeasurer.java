@@ -114,7 +114,7 @@ public class TimetableSatisfactionMeasurer {
 
     // Returns a score between 0 and 100 indicating how well individuals' room preferences have been met
     int room_preference_satisfaction(Timetable tt, SchedulingProblem details) {
-        // COMPLEX: [Sum for X] (#"participants in session X who were satisfied with room"/ #"participants in session X") / #"sessions" * 100
+        // [Sum for X] (#"participants in session X who were satisfied with room"/ #"participants in session X") / #"sessions" * 100
 
         double[] session_ratios = new double[details.Session_Details.size()];
 
@@ -157,7 +157,7 @@ public class TimetableSatisfactionMeasurer {
 
     // Returns a score between 0 and 100 indicating how well individuals' daily limit preferences have been met
     int limit_preference_satisfaction(Timetable tt, SchedulingProblem details) {
-        // COMPLEX: [Sum for X] (#"hours over their limit for individual X" / #"possible hours over limit for ind X") / #"individuals" * 100
+        // [Sum for X] (#"hours over their limit for individual X" / #"possible hours over limit for ind X") / #"individuals" * 100
 
         int[] hours_over_limit = new int[details.KeyInd_Details.size()];
 

@@ -47,7 +47,7 @@ class GreedyOptimiser {
                                     improvable = potential;
                                     improvable_contains_sesh = true;
                                     break outer_loop;
-                                    // TODO this isn't actually greedy, either make it greedy or rename it
+                                    // TODO this isn't actually greedy, so rename it
                                 }
                             }
 

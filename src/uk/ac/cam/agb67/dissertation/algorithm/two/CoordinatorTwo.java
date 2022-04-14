@@ -8,6 +8,7 @@ import org.chocosolver.solver.variables.*;
 import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.search.strategy.selectors.variables.*;
 import org.chocosolver.solver.search.strategy.selectors.values.*;
+import org.chocosolver.solver.exception.ContradictionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +94,6 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         Model event = new Model();
         int num_sessions = details.Session_Details.size();
 
-        // Variables initialisation
-        //day_assignments = new IntVar[num_sessions];
-        //start_time_assignments = new IntVar[num_sessions];
-        //room_assignments = new IntVar[num_sessions];
-
         // Give the variables their appropriate domains, or for predetermined sessions set them to their given values
         for (int s = 0; s < num_sessions; s++) {
             if (details.Session_Details.get(s).getClass() != PredeterminedSession.class) {
@@ -150,7 +146,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
         for (int s = 0; s < num_sessions; s++) {
             // For each session create an IntVar which tracks how large the room assigned to the session is
-            IntVar room_limit = event.intVar(("Room Capacity for session #" + s), 0, greatest_limit);
+            IntVar room_limit = event.intVar(("Room Capacity for session #" + s), 0, greatest_limit, false);
             event.element(room_limit, room_occupancy_limits, room_assignments[s]).post();
 
             // Ensure that the room size available to this session is greater than the number of people involved
@@ -198,10 +194,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         // Use the solver to find the first acceptable solution to the problem
         Solver solver = event.getSolver();
 
-        //if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
-        //if (Main.DEBUG) System.out.println(event.toString());
+        if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
+        if (Main.DEBUG) System.out.println(event.toString());
 
-        // long seed = (long) (Math.random() * Long.MAX_VALUE);
         // Search Strategy
         // Choose an un-instantiated variable with the smallest domain, and select values from the beginning of its domain
         solver.setSearch(Search.intVarSearch(
@@ -209,18 +204,32 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 new IntDomainMin(),
                 event.retrieveIntVars(true)
         ));
+        // TODO:
+        solver.limitTime("30s");
+
+        try {
+            solver.propagate();
+        } catch (ContradictionException e) {
+            System.err.println("Initial propagate lead to a contradiction. This model was innately unsolvable."); //return false;
+        }
 
         if(solver.solve()) {
-            // Turn the instantiated values into a timetable to return
+            // The values are now instantiated so return true to indicate that we can move to decoding
             return true;
 
         } else if(solver.isStopCriterionMet()) {
             System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
-            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            if (Main.DEBUG) {
+                System.err.println("Search status: " + solver.getSearchState());
+                solver.printStatistics();
+            }
             return false;
         } else {
             System.err.println("No solution exists which satisfies the constraints.");
-            if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
+            if (Main.DEBUG) {
+                System.err.println("Search status: " + solver.getSearchState());
+                solver.printStatistics();
+            }
             return false;
         }
     }
