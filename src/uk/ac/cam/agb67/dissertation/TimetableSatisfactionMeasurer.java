@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TimetableSatisfactionMeasurer {
 
-    boolean DEBUG = false;
+    private boolean DEBUG = false;
 
     public TimetableSatisfactionMeasurer() {}
     public TimetableSatisfactionMeasurer(boolean debug) { DEBUG = debug; }
@@ -27,9 +27,7 @@ public class TimetableSatisfactionMeasurer {
                 " "+ overlap_score+" \n(Individuals') Room Pref: "+ room_score+" \n(Individuals') Daily Limit Pref: "+ limit_score+"\n");
 
         // Combine the scores
-        int score = (gap_score + overlap_score + room_score + limit_score) / 4;
-
-        return score;
+        return (gap_score + overlap_score + room_score + limit_score) / 4;
     }
 
     // Returns a score between 0 and 100 indicating how well the gap preference has been met

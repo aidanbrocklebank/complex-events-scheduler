@@ -137,7 +137,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         event.allDifferent(timeslot_hash_array).post();
 
 
-        // We will use the integer constraint factory to impose the requirement that assigned rooms have enough capacity
+        // We will use an element integer constraint to impose the requirement that assigned rooms have enough capacity
         int[] room_occupancy_limits = int_list_to_array(details.Room_Occupancy_Limits);
         int greatest_limit = 0;
         for (int lim : details.Room_Occupancy_Limits) {
@@ -147,6 +147,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         for (int s = 0; s < num_sessions; s++) {
             // For each session create an IntVar which tracks how large the room assigned to the session is
             IntVar room_limit = event.intVar(("Room Capacity for session #" + s), 0, greatest_limit, false);
+            // This calls the element factory, creating a constraint which ensures that room_limit = room_occupancy_limits[room_assignments[s]]
             event.element(room_limit, room_occupancy_limits, room_assignments[s]).post();
 
             // Ensure that the room size available to this session is greater than the number of people involved
@@ -168,16 +169,15 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                     // So if they are in two parallel sessions with the same room, they will have the same hash
                     for (int offset = 0; offset < sesh.Session_Length; offset++) {
 
-                        // IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
-                        // relevant_timeslot_hash.add(temp);
-
-                        // The above implementation is the correct one, as afar as I can tell
-                        // But Choco-Solver tells me that it cannot find any solutions when I add those variables to the model, before even applying the constraint
-                        // Fix: So here is a modification which includes a constant addition, and this version works
-                        IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
-
-                        IntVar temp = extra_constant.add((start_time_assignments[sesh.Session_ID].add(offset)), day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
+                        // Computes the hash value (start_time + offset) + (day)(Hours_Per_Day)
+                        IntVar temp = start_time_assignments[sesh.Session_ID].add(offset).add(day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         relevant_timeslot_hash.add(temp);
+
+                        // The above implementation is the correct one, but here is a version which introduces a redundant constant
+                        // This modified version was necessary to make the algorithm work in Choco-solver 4.10.7
+                        // IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
+                        //IntVar temp = extra_constant.add((start_time_assignments[sesh.Session_ID].add(offset)),day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
+                        //relevant_timeslot_hash.add(temp);
                     }
                 }
             }
@@ -204,9 +204,10 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 new IntDomainMin(),
                 event.retrieveIntVars(true)
         ));
-        // TODO:
+        // TODO: decide on this
         solver.limitTime("30s");
 
+        // TODO: clean this up
         try {
             solver.propagate();
         } catch (ContradictionException e) {
@@ -316,6 +317,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return schedule;
     }
 
+    // Takes a list of integers and returns an array of those same numbers
     private int[] int_list_to_array(List<Integer> list) {
         int[] array = new int[list.size()];
 
@@ -326,6 +328,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return array;
     }
 
+    // Takes a list of IntVar objects and returns an array of those same objects
     private IntVar[] intvar_list_to_array(List<IntVar> list) {
         IntVar[] array = new IntVar[list.size()];
 
