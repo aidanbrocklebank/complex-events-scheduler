@@ -89,6 +89,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return schedule;
     }
 
+    // Models the event details given as a CSP problem for Choco-solver, storing the assignment variables in the given arrays
     private Model represent(SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
 
         Model event = new Model();
@@ -128,7 +129,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             // So we include an additional constraint to ensure no session starts too close to the end of the day
             // if (Main.DEBUG) System.out.println("Creating close-to-end-of-day limit for session "+s+". This limit is "+start_time_assignments[s]+" + "+details
             // .Session_Details.get(s).Session_Length+" <= "+details.Hours_Per_Day+" .");
-            event.arithm(event.intScaleView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
+            //event.arithm(event.intScaleView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
+            event.arithm(event.intOffsetView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
             // Condition: [start + length <= MaxHours] for session s
         }
 
@@ -175,7 +177,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
                         // The above implementation is the correct one, but here is a version which introduces a redundant constant
                         // This modified version was necessary to make the algorithm work in Choco-solver 4.10.7
-                        // IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
+                        //IntVar extra_constant = event.intVar("constant for session #" + sesh.Session_ID, 1);
                         //IntVar temp = extra_constant.add((start_time_assignments[sesh.Session_ID].add(offset)),day_assignments[sesh.Session_ID].mul(details.Hours_Per_Day)).intVar();
                         //relevant_timeslot_hash.add(temp);
                     }
@@ -190,8 +192,9 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return event;
     }
 
+    // Uses the solver to find the first acceptable solution to the problem, and returns true if successful
     private boolean solve(Model event) {
-        // Use the solver to find the first acceptable solution to the problem
+
         Solver solver = event.getSolver();
 
         if (Main.DEBUG) System.out.println("Printing full Event Model:\n");
@@ -205,13 +208,14 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 event.retrieveIntVars(true)
         ));
         // TODO: decide on this
-        solver.limitTime("30s");
+        solver.limitTime("10s");
 
         // TODO: clean this up
         try {
             solver.propagate();
         } catch (ContradictionException e) {
             System.err.println("Initial propagate lead to a contradiction. This model was innately unsolvable."); //return false;
+            System.err.println("Printing the contradiction: " + e.toString());
         }
 
         if(solver.solve()) {
@@ -219,7 +223,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             return true;
 
         } else if(solver.isStopCriterionMet()) {
-            System.err.println("The Choco-Solver could not determine whether or not a solution existed.");
+            System.err.println("The Choco-Solver could not determine whether or not a solution existed. AKA TIME LIMIT REACHED.");
             if (Main.DEBUG) {
                 System.err.println("Search status: " + solver.getSearchState());
                 solver.printStatistics();
@@ -235,6 +239,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         }
     }
 
+    // Uses the solver with a randomised search strategy to produce a series of distinct solutions, and returns the highest-scoring
     private Solution optimise_and_solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
         // Use the solver to find an acceptable solution to the problem, and iterate to improve the satisfaction score
         Solver solver = event.getSolver();
@@ -253,7 +258,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + " \n Seed B: "+ seedB);
 
             solver.setSearch(Search.intVarSearch(
-                    new Random<>(seedA),  //new FirstFail(event),
+                    new Random<>(seedA),
                     new IntDomainRandom(seedB),
                     event.retrieveIntVars(true)
             ));
@@ -296,6 +301,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         }
     }
 
+    // Returns a timetable which is formed by the instantiated arrays of assignments
     private Timetable decode_model_vars(SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
         // Create a new schedule, then iterate through the sessions in the event
         // For every session retrieve the instantiated value of the IntVars for the day, time and room
@@ -306,6 +312,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         return schedule;
     }
 
+    // Returns a timetable which is formed by the instantiated assignments in the given solution
     private Timetable decode_solution(Solution sol, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
         // Create a new schedule, then iterate through the sessions in the event
         // For every session retrieve the instantiated value of the IntVars for the day, time and room

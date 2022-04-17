@@ -478,17 +478,18 @@ public class Analyser {
     }
 
     public static SchedulingProblem guaranteed_randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
-        Timetable sample = new Timetable(days, 8, rooms);
+        int hours = 8;
+        Timetable sample = new Timetable(days, hours, rooms);
         SchedulingProblem details = new SchedulingProblem();
 
-        if (num_sessions > days * rooms * 8) {
-            System.err.println("Cannot create a schedule with "+num_sessions+" sessions in only "+(days*rooms*8)+" available timeslots.");
+        if (num_sessions > days * rooms * hours) {
+            System.err.println("Cannot create a schedule with "+num_sessions+" sessions in only "+(days*rooms*hours)+" available timeslots.");
             return null;
         }
 
         // Lock in the defined parameters and randomise the preferences
         details.Maximum_Days = days;
-        details.Hours_Per_Day = 8;
+        details.Hours_Per_Day = hours;
         details.Maximum_Rooms = rooms;
 
         details.Session_Details = new ArrayList<>();
@@ -502,9 +503,9 @@ public class Analyser {
         // Add a session to the timetable by randomising details
         for (int s=0; s<num_sessions;) {
             int rand_day = generate_number(days-1, 0);
-            int rand_time = generate_number(7, 0);
+            int rand_time = generate_number(hours-1, 0);
             int rand_room = generate_number(rooms-1, 0);
-            int len = generate_number(6, 0);
+            //int len = generate_number(6, 0);
 
             // Check if those details point to a free slot and add the session
             if (sample.get_id(rand_day, rand_time, rand_room) == -1) {
@@ -521,7 +522,7 @@ public class Analyser {
             int h = pds.PDS_Start_Time;
 
             // Find the number of free spaces after the sessions start
-            while ((h+1)<8 && sample.get_id(pds.PDS_Day, h+1, pds.PDS_Room) == -1) {
+            while ((h+1)<hours && sample.get_id(pds.PDS_Day, h+1, pds.PDS_Room) == -1) {
                 h++;
             }
             if (h == pds.PDS_Start_Time) continue;
@@ -536,7 +537,7 @@ public class Analyser {
         // Create individuals who are included in random sessions
         for (int p=0; p<num_individuals; p++) {
             List<Integer> new_room_prefs = generate_numbers(rooms-1, 0, generate_number((int)(rooms*0.1)+1,0));
-            KeyIndividual new_individual = new KeyIndividual("Person #"+p, generate_number(7,0), new_room_prefs);
+            KeyIndividual new_individual = new KeyIndividual("Person #"+p, generate_number(hours-1,0), new_room_prefs);
             details.KeyInd_Details.add(new_individual);
 
             // Choose a number of sessions to be part of
@@ -545,7 +546,7 @@ public class Analyser {
             List<Integer> included_sessions = generate_numbers(num_sessions-1, 0, included_sessions_num);
 
             // Check that those sessions do not clash
-            boolean[][] busy = new boolean[days][8];
+            boolean[][] busy = new boolean[days][hours];
             for (Integer s : included_sessions) {
                 PredeterminedSession pds = (PredeterminedSession) details.Session_Details.get(s);
 

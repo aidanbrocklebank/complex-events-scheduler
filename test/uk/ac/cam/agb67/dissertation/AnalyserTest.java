@@ -113,8 +113,8 @@ public class AnalyserTest {
         details = Analyser.guaranteed_randomized_test_details(50, 50, 1000, 50);
 
         Coordinator algoOne = new Coordinator(false, false);
-        //Timetable tt = algoOne.generate(details);
-        //System.out.println(tt);
+        Timetable tt = algoOne.generate(details);
+        System.out.println(tt);
 
         // ASSERT
         assertThat(details.potentially_schedulable()).isTrue();
