@@ -1,0 +1,6 @@
+Greedy Brute Force,,,,,Brute Force,,,,,Brute Force (Greedy Optimised),,,,,CSP Algorithm,,,,,CSP (Randomised Optimisation),,
+Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM (MB),Time (ms),,Valid?,Score,RAM,Time (ms),,
+false,0,0.0,0.0, ,true,62,17.786056,150.529901, ,false,0,0.0,0.0, ,false,0,0.0,0.0, ,true,65,217.937088,14000.307699, ,
+
+
+The parameters of the random test data: Days:60  Hours:8  Rooms:30  Sessions:100  Individuals:100

@@ -17,6 +17,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
 
     private boolean optimise_for_prefs = false;
+    private String time_limt = "100s";
+    private String opt_time_limit = "400s";
 
     CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
@@ -207,30 +209,29 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 new IntDomainMin(),
                 event.retrieveIntVars(true)
         ));
-        // TODO: decide on this
-        solver.limitTime("10s");
+        // Set a time limit to aid in bulk testing
+        solver.limitTime(time_limt);
 
-        // TODO: clean this up
+        /*
         try {
             solver.propagate();
         } catch (ContradictionException e) {
             System.err.println("Initial propagate lead to a contradiction. This model was innately unsolvable."); //return false;
             System.err.println("Printing the contradiction: " + e.toString());
         }
+        */
 
         if(solver.solve()) {
             // The values are now instantiated so return true to indicate that we can move to decoding
             return true;
 
-        } else if(solver.isStopCriterionMet()) {
-            System.err.println("The Choco-Solver could not determine whether or not a solution existed. AKA TIME LIMIT REACHED.");
-            if (Main.DEBUG) {
-                System.err.println("Search status: " + solver.getSearchState());
-                solver.printStatistics();
-            }
-            return false;
         } else {
-            System.err.println("No solution exists which satisfies the constraints.");
+            if(solver.isStopCriterionMet()) {
+                System.err.println("Choco-Solver could not determine whether or not a solution existed, because it was stopped by the time limit.");
+            } else {
+                System.err.println("No solution exists which satisfies the constraints.");
+            }
+
             if (Main.DEBUG) {
                 System.err.println("Search status: " + solver.getSearchState());
                 solver.printStatistics();
@@ -249,19 +250,24 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         TimetableVerifier ttv = new TimetableVerifier();
         TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
 
+        System.out.println("Iterations:");
         for (int i=0; i<10; i++) {
+            System.out.print("#");
 
             // Search Strategy:
             // Choose an uninstantiated variable with a random domain, and select random values from within that domain to try
             long seedA = (long) (Math.random() * Long.MAX_VALUE);
             long seedB = (long) (Math.random() * Long.MAX_VALUE);
-            if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + " \n Seed B: "+ seedB);
+            if (Main.DEBUG || true) System.out.println("Iteration of optimising search. Seed A: " + seedA + ", Seed B: "+ seedB);
 
+            // Reset the solver object and give it the newly randomised strategy
+            solver.reset();
             solver.setSearch(Search.intVarSearch(
                     new Random<>(seedA),
                     new IntDomainRandom(seedB),
                     event.retrieveIntVars(true)
             ));
+            solver.limitTime(opt_time_limit);
 
             // Find and decode a solution based on this search strategy
             Solution sol = solver.findSolution();
@@ -273,7 +279,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             try {
                 prospect_valid = ttv.timetable_is_valid(prospect, details);
                 prospect_score = ttsm.timetable_preference_satisfaction(prospect, details);
-                if (Main.DEBUG) System.out.println("Found a valid timetable with score "+prospect_score+".");
+                if (Main.DEBUG || true) System.out.println("Found a valid timetable with score "+prospect_score+".");
             } catch (Exception e) {
                 if (Main.DEBUG) System.out.println("The decoded schedule was not valid, and testing it threw an exception.");
                 break;
@@ -289,13 +295,16 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         }
 
         if (best_solution != null) {
-
-            //if (Main.DEBUG) System.out.println("Solution: " + sol.toString());
-            //if (Main.DEBUG) System.out.println("Day Assigmnent 0: " + sol.getIntVal(day_assignments[0]));
             return best_solution;
 
-        }else {
-            System.err.println("Optimising version of algorithm 2 failed to find a result.");
+        } else {
+            // Various relevant error messages and debug information:
+            System.err.println("Optimising version of algorithm 2 failed to find a result. Reason: ");
+            if(solver.isStopCriterionMet()) {
+                System.err.println("Choco-Solver could not determine whether or not a solution existed, because it was stopped by the time limit.");
+            } else {
+                System.err.println("No solution exists which satisfies the constraints.");
+            }
             if (Main.DEBUG) System.err.println("Search status: " + solver.getSearchState());
             return null;
         }

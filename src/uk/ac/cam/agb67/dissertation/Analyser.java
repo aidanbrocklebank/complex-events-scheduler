@@ -19,10 +19,10 @@ public class Analyser {
     public static long[] SEGMENT_TIMES = new long[4];
 
     // Default parameters for random tests
-    private static final int DEF_DAYS = 50;
-    private static final int DEF_ROOMS = 50;
-    private static final int DEF_SESSIONS = 75;
-    private static final int DEF_INDIVIDUALS = 75;
+    private static final int DEF_DAYS = 60;
+    private static final int DEF_ROOMS = 30;
+    private static final int DEF_SESSIONS = 150;
+    private static final int DEF_INDIVIDUALS = 150;
 
     // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;

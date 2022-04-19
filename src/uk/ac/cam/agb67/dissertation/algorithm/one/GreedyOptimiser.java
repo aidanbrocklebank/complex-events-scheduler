@@ -13,7 +13,13 @@ class GreedyOptimiser {
     Timetable optimisation_pass(Timetable current, SchedulingProblem details) {
 
         // Select each session in the timetable and look for a better assignment to move it to
+        System.out.print("\n");
+        for (Session ignored : details.Session_Details) {
+            System.out.print(".");
+        }
+        System.out.print("\n");
         for (Session sesh : details.Session_Details) {
+            System.out.print(".");
             // Don't move predetermined sessions.
             if (sesh.getClass() == PredeterminedSession.class) continue;
 
@@ -57,7 +63,7 @@ class GreedyOptimiser {
                 }
             }
 
-            // replace current (if we found a better score)
+            // Replace the current timetable (if we found a better score)
             if (improvable_contains_sesh) {
                 current = improvable;
             }

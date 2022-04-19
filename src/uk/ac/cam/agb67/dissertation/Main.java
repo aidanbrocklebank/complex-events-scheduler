@@ -7,7 +7,7 @@ import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 public class Main {
 
     // Globally used debug switch
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     // Takes use input in the form of the name of an XML file, selects an algorithm from their parameters,
     // schedules the input details with that algorithm and saves it to a file.
