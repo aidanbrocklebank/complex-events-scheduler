@@ -3,34 +3,32 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 import org.junit.Test;
 import uk.ac.cam.agb67.dissertation.*;
 
-import java.util.Arrays;
-
 import static com.google.common.truth.Truth.assertThat;
 
-public class GreedyOptimiserTest {
+public class NaiveOptimiserTest {
 
     @Test
     public void object_can_be_created() {
         // ARRANGE
-        GreedyOptimiser go;
+        NaiveOptimiser no;
         SchedulingProblem det = MainTest.test_details_A();
         // ACT
-        go = new GreedyOptimiser();
+        no = new NaiveOptimiser();
         // ASSERT
-        System.out.println(go.hashCode());
+        System.out.println(no.hashCode());
         assertThat(true);
     }
 
     @Test
     public void optimisation_pass_maintains_validity() {
         // ARRANGE
-        GreedyOptimiser go = new GreedyOptimiser();
+        NaiveOptimiser no = new NaiveOptimiser();
         Coordinator co = new Coordinator();
         SchedulingProblem details = MainTest.test_details_A();
 
         // ACT
         Timetable tt = co.generate(details);
-        Timetable improved = go.optimisation_pass(tt, details);
+        Timetable improved = no.optimisation_pass(tt, details);
 
         // ASSERT
         TimetableVerifier ttv = new TimetableVerifier();
@@ -43,13 +41,13 @@ public class GreedyOptimiserTest {
     @Test
     public void optimisation_pass_does_not_reduce_score() {
         // ARRANGE
-        GreedyOptimiser go = new GreedyOptimiser();
+        NaiveOptimiser no = new NaiveOptimiser();
         Coordinator co = new Coordinator();
         SchedulingProblem details = MainTest.test_details_A();
 
         // ACT
         Timetable tt = co.generate(details);
-        Timetable improved = go.optimisation_pass(tt, details);
+        Timetable improved = no.optimisation_pass(tt, details);
 
         // ASSERT
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);

@@ -17,8 +17,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
 
     private boolean optimise_for_prefs = false;
-    private String time_limt = "100s";
-    private String opt_time_limit = "400s";
+    private String time_limt = "60s";
+    private String opt_time_limit = "300s";
 
     CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
@@ -250,15 +250,16 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         TimetableVerifier ttv = new TimetableVerifier();
         TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
 
-        System.out.println("Iterations:");
+        System.out.println("- random optimising -");
+        System.out.println("..........");
         for (int i=0; i<10; i++) {
-            System.out.print("#");
+            System.out.print(".");
 
             // Search Strategy:
             // Choose an uninstantiated variable with a random domain, and select random values from within that domain to try
             long seedA = (long) (Math.random() * Long.MAX_VALUE);
             long seedB = (long) (Math.random() * Long.MAX_VALUE);
-            if (Main.DEBUG || true) System.out.println("Iteration of optimising search. Seed A: " + seedA + ", Seed B: "+ seedB);
+            if (Main.DEBUG) System.out.println("Iteration of optimising search. Seed A: " + seedA + ", Seed B: "+ seedB);
 
             // Reset the solver object and give it the newly randomised strategy
             solver.reset();
@@ -279,7 +280,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             try {
                 prospect_valid = ttv.timetable_is_valid(prospect, details);
                 prospect_score = ttsm.timetable_preference_satisfaction(prospect, details);
-                if (Main.DEBUG || true) System.out.println("Found a valid timetable with score "+prospect_score+".");
+                if (Main.DEBUG) System.out.println("Found a valid timetable with score "+prospect_score+".");
             } catch (Exception e) {
                 if (Main.DEBUG) System.out.println("The decoded schedule was not valid, and testing it threw an exception.");
                 break;

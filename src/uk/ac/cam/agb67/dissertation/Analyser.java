@@ -21,8 +21,8 @@ public class Analyser {
     // Default parameters for random tests
     private static final int DEF_DAYS = 60;
     private static final int DEF_ROOMS = 30;
-    private static final int DEF_SESSIONS = 150;
-    private static final int DEF_INDIVIDUALS = 150;
+    private static int DEF_SESSIONS = 150;
+    private static int DEF_INDIVIDUALS = 150;
 
     // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;
@@ -43,20 +43,29 @@ public class Analyser {
 
     // Usage: Analyser <repetitions> <filename>
     // Usage: Analyser <repetitions> <filename> <algorithm 1> <algorithm 2>
+    // Usage: Analyser <repetitions> <filename> #<sessions>#<individuals> <algorithm 1> <algorithm 2>
     public static void main(String[] args) {
         BASETIME = System.nanoTime();
-        Runtime.getRuntime().addShutdownHook(shutdown);
+        if (DEBUG) Runtime.getRuntime().addShutdownHook(shutdown);
 
         // Get the number of times to test, and the name for the output file
         int repetitions = Integer.parseInt(args[0]);
         String location = args[1];
-        if (args.length > 4) {
+        if (args.length == 4 && (args[3].equals("s") || args[3].equals("b") || args[3].equals("i"))) {
             individual_test(args);
             return;
         }
+        // Decode the rest of the arguments for the test run
+        int off = 0;
+        if (args[2].substring(0,1).equals("#")) {
+            off = 1;
+            String[] params = args[2].substring(1).split("#");
+            DEF_SESSIONS = Integer.parseInt(params[0]);
+            DEF_INDIVIDUALS = Integer.parseInt(params[1]);
+        }
         List<Integer> Selected = null;
-        if (args.length > 2) {
-            Selected = Arrays.asList(Integer.parseInt(args[2]),Integer.parseInt(args[3]));
+        if (args.length > 2+off) {
+            Selected = Arrays.asList(Integer.parseInt(args[2+off]),Integer.parseInt(args[3+off]));
         }
 
         // Establish the five algorithms we will be testing
@@ -89,7 +98,7 @@ public class Analyser {
                 legitimate_details = details.potentially_schedulable();
             }
 
-            System.out.print("["+i+"]");
+            System.out.println("["+i+"]");
 
             // Loop through the algorithms and tell them to generate a schedule with these details
             for (int alg=0; alg<5; alg++) {
@@ -277,7 +286,7 @@ public class Analyser {
 
         // Record the system time again and end the memory-watching thread
         long end_time = System.nanoTime();
-        System.out.println("End Time (ms): " + (((double) end_time) / (1000 * 1000)));
+        System.out.println("End Time (ms):   " + (((double) end_time) / (1000 * 1000)));
         in_execution[0] = false; System.gc();
 
         // Calculate the memory which was added to the program, and the execution time of the algorithm

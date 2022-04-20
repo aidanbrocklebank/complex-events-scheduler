@@ -116,7 +116,7 @@ public class CoordinatorTest {
     }
 
     @Test
-    public void greedy_optimiser_maintains_validity_0() {
+    public void naive_optimiser_maintains_validity_0() {
         // ARRANGE
         Coordinator co = new Coordinator();
         Coordinator opt = new Coordinator(false, true);
@@ -142,7 +142,7 @@ public class CoordinatorTest {
     }
 
     @Test
-    public void greedy_optimiser_maintains_validity_1() {
+    public void naive_optimiser_maintains_validity_1() {
         // ARRANGE
         Coordinator co = new Coordinator();
         Coordinator opt = new Coordinator(false, true);
@@ -168,7 +168,7 @@ public class CoordinatorTest {
     }
 
     @Test
-    public void greedy_optimiser_maintains_validity_2() {
+    public void naive_optimiser_maintains_validity_2() {
         // ARRANGE
         Coordinator co = new Coordinator();
         Coordinator opt = new Coordinator(false, true);

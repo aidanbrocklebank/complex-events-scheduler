@@ -2,11 +2,11 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 
 import uk.ac.cam.agb67.dissertation.*;
 
-class GreedyOptimiser {
+class NaiveOptimiser {
 
     private TimetableSatisfactionMeasurer TSM = new TimetableSatisfactionMeasurer();
 
-    GreedyOptimiser() {}
+    NaiveOptimiser() {}
 
     // Returns a version of the provided timetable which has had each session either in
     // the same timeslot, or moved once such as to attempt to improve the overall score
@@ -53,7 +53,6 @@ class GreedyOptimiser {
                                     improvable = potential;
                                     improvable_contains_sesh = true;
                                     break outer_loop;
-                                    // TODO this isn't actually greedy, so rename it
                                 }
                             }
 

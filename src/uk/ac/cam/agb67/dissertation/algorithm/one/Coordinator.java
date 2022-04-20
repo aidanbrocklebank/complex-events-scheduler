@@ -46,10 +46,10 @@ public class Coordinator implements SchedulingAlgorithm {
         }
 
 
-        // Optional Greedy Optimisation Step
+        // Optional Naive Optimisation Step
         if (Optimise) {
             System.out.print(" - optimising - ");
-            GreedyOptimiser optimiser = new GreedyOptimiser();
+            NaiveOptimiser optimiser = new NaiveOptimiser();
             Timetable optimisedSchedule = optimiser.optimisation_pass(schedule, details);
             schedule = optimisedSchedule;
 
