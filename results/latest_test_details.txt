@@ -1,92 +1,114 @@
 Days:60 (Hours/Day:8) Rooms:30
-Occupancies: [ 45, 40, 40, 30, 20, 30, 40, 20, 20, 40, 15, 10, 20, 15, 15, 10, 20, 15, 15, 40, 15, 25, 25, 30, 40, 40, 30, 40, 40, 35,]
+Occupancies: [ 50, 20, 50, 35, 45, 30, 50, 15, 45, 40, 25, 50, 45, 20, 50, 20, 20, 20, 25, 35, 35, 25, 30, 35, 25, 35, 35, 30, 35, 15,]
 Sessions: {
-  <Session #0: Name:'Session #0', Length:2, Participants:[3, 8, 16, 17, 23, 38]>
-  <Session #1: Name:'Session #1', Length:3, Participants:[2, 10, 15, 20, 24, 25]>
-  <Session #2: Name:'Session #2', Length:2, Participants:[6, 10, 11, 22, 24, 25, 34, 35]>
-  <Session #3: Name:'Session #3', Length:1, Participants:[15, 21, 24, 27]>
-  <Session #4: Name:'Session #4', Length:3, Participants:[29]>
-  <Session #5: Name:'Session #5', Length:4, Participants:[2, 4, 7, 26, 31, 35]>
-  <Session #6: Name:'Session #6', Length:4, Participants:[8, 19, 21, 29, 30]>
-  <Session #7: Name:'Session #7', Length:1, Participants:[7, 19, 20, 25, 29, 37, 38]>
-  <Session #8: Name:'Session #8', Length:1, Participants:[4, 9, 12, 14, 36, 39]>
-  <Session #9: Name:'Session #9', Length:1, Participants:[3, 20, 28, 35, 38]>
-  <Session #10: Name:'Session #10', Length:1, Participants:[0, 6, 11, 13, 29, 31]>
-  <Session #11: Name:'Session #11', Length:1, Participants:[1, 6, 38]>
-  <Session #12: Name:'Session #12', Length:4, Participants:[0, 7, 9, 16, 34]>
-  <Session #13: Name:'Session #13', Length:1, Participants:[1, 8, 10, 12, 20, 27]>
-  <Session #14: Name:'Session #14', Length:1, Participants:[2, 6, 9, 15, 18, 25, 27, 33]>
-  <Session #15: Name:'Session #15', Length:1, Participants:[4, 8, 23]>
-  <Session #16: Name:'Session #16', Length:1, Participants:[2, 3, 11, 13, 18, 19, 20, 22, 26, 31]>
-  <Session #17: Name:'Session #17', Length:5, Participants:[7, 9, 21, 24, 27, 30, 31, 39]>
-  <Session #18: Name:'Session #18', Length:6, Participants:[13, 18, 22, 24, 25, 27, 32, 33]>
-  <Session #19: Name:'Session #19', Length:1, Participants:[27]>
-  <Session #20: Name:'Session #20', Length:1, Participants:[5, 10, 13, 17, 19, 22, 25, 34]>
-  <Session #21: Name:'Session #21', Length:2, Participants:[13, 33, 35]>
-  <Session #22: Name:'Session #22', Length:3, Participants:[11, 28, 29]>
-  <Session #23: Name:'Session #23', Length:2, Participants:[4, 6, 15, 33, 35]>
-  <Session #24: Name:'Session #24', Length:1, Participants:[34]>
-  <Session #25: Name:'Session #25', Length:1, Participants:[9, 15, 31, 36]>
-  <Session #26: Name:'Session #26', Length:3, Participants:[24, 25, 31]>
-  <Session #27: Name:'Session #27', Length:3, Participants:[38]>
-  <Session #28: Name:'Session #28', Length:3, Participants:[9, 25, 33]>
-  <Session #29: Name:'Session #29', Length:7, Participants:[15, 31, 39]>
-  <Session #30: Name:'Session #30', Length:1, Participants:[3, 23, 32, 34]>
-  <Session #31: Name:'Session #31', Length:3, Participants:[12, 27, 35, 38, 39]>
-  <Session #32: Name:'Session #32', Length:2, Participants:[2, 4, 7, 23, 24]>
-  <Session #33: Name:'Session #33', Length:2, Participants:[13, 17, 21, 23, 31]>
-  <Session #34: Name:'Session #34', Length:3, Participants:[7, 18, 25, 32]>
-  <Session #35: Name:'Session #35', Length:1, Participants:[0, 1, 16, 17, 20, 29, 31, 38]>
-  <Session #36: Name:'Session #36', Length:1, Participants:[10, 13, 15, 17]>
-  <Session #37: Name:'Session #37', Length:3, Participants:[0, 4, 5, 9, 15, 21, 35, 38, 39] Day/Time:34/2 Room:3>
-  <Session #38: Name:'Session #38', Length:3, Participants:[2, 5, 6, 8, 19] Day/Time:59/4 Room:23>
-  <Session #39: Name:'Session #39', Length:4, Participants:[23, 27, 34, 36] Day/Time:44/3 Room:12>
+  <Session #0: Name:'Session #0', Length:5, Participants:[5, 6, 22, 30, 34, 37, 46]>
+  <Session #1: Name:'Session #1', Length:1, Participants:[6, 17, 30, 33, 42, 43, 47]>
+  <Session #2: Name:'Session #2', Length:3, Participants:[6, 31, 42]>
+  <Session #3: Name:'Session #3', Length:7, Participants:[2, 5, 8, 18, 23, 27]>
+  <Session #4: Name:'Session #4', Length:6, Participants:[7, 9, 10, 24, 32]>
+  <Session #5: Name:'Session #5', Length:3, Participants:[11, 16, 18, 25, 28, 35, 40]>
+  <Session #6: Name:'Session #6', Length:5, Participants:[4, 5, 13, 16, 17, 23, 35]>
+  <Session #7: Name:'Session #7', Length:1, Participants:[22, 34, 35, 47]>
+  <Session #8: Name:'Session #8', Length:2, Participants:[2, 6, 47, 49]>
+  <Session #9: Name:'Session #9', Length:1, Participants:[4, 6, 16, 20, 42, 46]>
+  <Session #10: Name:'Session #10', Length:1, Participants:[0, 8, 11, 39]>
+  <Session #11: Name:'Session #11', Length:1, Participants:[6, 14, 15, 21, 25, 31, 39]>
+  <Session #12: Name:'Session #12', Length:5, Participants:[8, 11, 13, 35, 42]>
+  <Session #13: Name:'Session #13', Length:4, Participants:[8, 9, 14, 18, 19, 37, 40, 44, 48]>
+  <Session #14: Name:'Session #14', Length:2, Participants:[2, 8, 15, 20, 31, 48]>
+  <Session #15: Name:'Session #15', Length:4, Participants:[18, 19, 37, 40]>
+  <Session #16: Name:'Session #16', Length:2, Participants:[18, 28, 39, 46]>
+  <Session #17: Name:'Session #17', Length:2, Participants:[5, 29, 30, 34, 43]>
+  <Session #18: Name:'Session #18', Length:1, Participants:[7, 19, 20, 31, 38, 42, 46, 48]>
+  <Session #19: Name:'Session #19', Length:2, Participants:[8, 17, 34, 42, 43, 46, 48]>
+  <Session #20: Name:'Session #20', Length:1, Participants:[9, 16, 18, 23, 39, 48]>
+  <Session #21: Name:'Session #21', Length:4, Participants:[7, 8, 9, 14, 15, 18, 21, 29, 31, 35, 43]>
+  <Session #22: Name:'Session #22', Length:5, Participants:[5, 10, 20, 23, 34, 36, 37, 47]>
+  <Session #23: Name:'Session #23', Length:5, Participants:[19, 25, 32, 48]>
+  <Session #24: Name:'Session #24', Length:1, Participants:[11, 14, 37, 43]>
+  <Session #25: Name:'Session #25', Length:1, Participants:[11, 16, 35, 38, 44]>
+  <Session #26: Name:'Session #26', Length:4, Participants:[8, 14, 20, 31, 45]>
+  <Session #27: Name:'Session #27', Length:1, Participants:[6, 8, 19, 28, 43]>
+  <Session #28: Name:'Session #28', Length:5, Participants:[4, 9, 19]>
+  <Session #29: Name:'Session #29', Length:1, Participants:[9, 14, 19, 25, 31, 44]>
+  <Session #30: Name:'Session #30', Length:2, Participants:[2, 11, 16, 18, 22, 31, 44]>
+  <Session #31: Name:'Session #31', Length:1, Participants:[6, 9, 10, 13, 15, 38]>
+  <Session #32: Name:'Session #32', Length:3, Participants:[9, 43]>
+  <Session #33: Name:'Session #33', Length:5, Participants:[16, 21, 28, 31, 33, 37, 39]>
+  <Session #34: Name:'Session #34', Length:2, Participants:[19, 33, 40, 42, 44]>
+  <Session #35: Name:'Session #35', Length:3, Participants:[39, 40, 41, 42, 44]>
+  <Session #36: Name:'Session #36', Length:3, Participants:[9, 10, 12, 13, 14, 37]>
+  <Session #37: Name:'Session #37', Length:2, Participants:[2, 4, 19, 38]>
+  <Session #38: Name:'Session #38', Length:4, Participants:[8, 9, 29, 30, 40]>
+  <Session #39: Name:'Session #39', Length:7, Participants:[5, 41]>
+  <Session #40: Name:'Session #40', Length:2, Participants:[0, 9, 18, 20, 36, 46, 49]>
+  <Session #41: Name:'Session #41', Length:2, Participants:[8, 13, 20, 35, 42]>
+  <Session #42: Name:'Session #42', Length:1, Participants:[13, 26, 47, 48]>
+  <Session #43: Name:'Session #43', Length:3, Participants:[23, 25, 34, 35, 40, 47, 48]>
+  <Session #44: Name:'Session #44', Length:1, Participants:[3, 5, 6, 14, 16, 21, 29, 48]>
+  <Session #45: Name:'Session #45', Length:2, Participants:[0, 21, 35, 37, 43] Day/Time:37/3 Room:7>
+  <Session #46: Name:'Session #46', Length:1, Participants:[14, 16, 20, 22, 34, 46, 47] Day/Time:21/0 Room:16>
+  <Session #47: Name:'Session #47', Length:1, Participants:[5, 31] Day/Time:32/7 Room:21>
+  <Session #48: Name:'Session #48', Length:3, Participants:[5, 24, 30, 48] Day/Time:29/4 Room:28>
+  <Session #49: Name:'Session #49', Length:1, Participants:[1, 30, 31, 34, 35, 40, 47, 48] Day/Time:53/7 Room:8>
 }
 Predetermined Sessions: {
-  <Session #37: Name:'Session #37', Length:3, Participants:[0, 4, 5, 9, 15, 21, 35, 38, 39] Day/Time:34/2 Room:3>
-  <Session #38: Name:'Session #38', Length:3, Participants:[2, 5, 6, 8, 19] Day/Time:59/4 Room:23>
-  <Session #39: Name:'Session #39', Length:4, Participants:[23, 27, 34, 36] Day/Time:44/3 Room:12>
+  <Session #45: Name:'Session #45', Length:2, Participants:[0, 21, 35, 37, 43] Day/Time:37/3 Room:7>
+  <Session #46: Name:'Session #46', Length:1, Participants:[14, 16, 20, 22, 34, 46, 47] Day/Time:21/0 Room:16>
+  <Session #47: Name:'Session #47', Length:1, Participants:[5, 31] Day/Time:32/7 Room:21>
+  <Session #48: Name:'Session #48', Length:3, Participants:[5, 24, 30, 48] Day/Time:29/4 Room:28>
+  <Session #49: Name:'Session #49', Length:1, Participants:[1, 30, 31, 34, 35, 40, 47, 48] Day/Time:53/7 Room:8>
 }
 Key Individuals: {
-  <Individual: Name:'Person #0', Daily Limit:7, Preferred Rooms:[28, 5]>
-  <Individual: Name:'Person #1', Daily Limit:4, Preferred Rooms:[26, 21, 9]>
-  <Individual: Name:'Person #2', Daily Limit:3, Preferred Rooms:[1, 16, 3, 0]>
-  <Individual: Name:'Person #3', Daily Limit:5, Preferred Rooms:[]>
-  <Individual: Name:'Person #4', Daily Limit:1, Preferred Rooms:[]>
-  <Individual: Name:'Person #5', Daily Limit:4, Preferred Rooms:[27, 26, 20]>
-  <Individual: Name:'Person #6', Daily Limit:1, Preferred Rooms:[2]>
-  <Individual: Name:'Person #7', Daily Limit:7, Preferred Rooms:[25]>
-  <Individual: Name:'Person #8', Daily Limit:3, Preferred Rooms:[25]>
-  <Individual: Name:'Person #9', Daily Limit:7, Preferred Rooms:[]>
-  <Individual: Name:'Person #10', Daily Limit:5, Preferred Rooms:[5, 13]>
-  <Individual: Name:'Person #11', Daily Limit:5, Preferred Rooms:[21]>
-  <Individual: Name:'Person #12', Daily Limit:3, Preferred Rooms:[19]>
-  <Individual: Name:'Person #13', Daily Limit:5, Preferred Rooms:[29, 26, 20]>
-  <Individual: Name:'Person #14', Daily Limit:0, Preferred Rooms:[17, 8, 4]>
-  <Individual: Name:'Person #15', Daily Limit:5, Preferred Rooms:[]>
-  <Individual: Name:'Person #16', Daily Limit:1, Preferred Rooms:[11]>
-  <Individual: Name:'Person #17', Daily Limit:7, Preferred Rooms:[27, 28]>
-  <Individual: Name:'Person #18', Daily Limit:1, Preferred Rooms:[17, 0, 11]>
-  <Individual: Name:'Person #19', Daily Limit:7, Preferred Rooms:[]>
-  <Individual: Name:'Person #20', Daily Limit:6, Preferred Rooms:[2, 27, 17, 5]>
-  <Individual: Name:'Person #21', Daily Limit:4, Preferred Rooms:[27, 23, 1]>
-  <Individual: Name:'Person #22', Daily Limit:5, Preferred Rooms:[18, 5, 15, 6]>
-  <Individual: Name:'Person #23', Daily Limit:0, Preferred Rooms:[25, 12, 8]>
-  <Individual: Name:'Person #24', Daily Limit:0, Preferred Rooms:[]>
-  <Individual: Name:'Person #25', Daily Limit:6, Preferred Rooms:[25]>
-  <Individual: Name:'Person #26', Daily Limit:6, Preferred Rooms:[8, 1]>
-  <Individual: Name:'Person #27', Daily Limit:4, Preferred Rooms:[22, 15, 28, 18]>
-  <Individual: Name:'Person #28', Daily Limit:6, Preferred Rooms:[]>
-  <Individual: Name:'Person #29', Daily Limit:3, Preferred Rooms:[]>
-  <Individual: Name:'Person #30', Daily Limit:4, Preferred Rooms:[20, 17, 11]>
-  <Individual: Name:'Person #31', Daily Limit:2, Preferred Rooms:[17, 15, 25, 9]>
-  <Individual: Name:'Person #32', Daily Limit:4, Preferred Rooms:[28, 19, 29]>
-  <Individual: Name:'Person #33', Daily Limit:2, Preferred Rooms:[12]>
-  <Individual: Name:'Person #34', Daily Limit:4, Preferred Rooms:[1]>
-  <Individual: Name:'Person #35', Daily Limit:1, Preferred Rooms:[29]>
-  <Individual: Name:'Person #36', Daily Limit:4, Preferred Rooms:[3, 13]>
-  <Individual: Name:'Person #37', Daily Limit:4, Preferred Rooms:[5, 2]>
-  <Individual: Name:'Person #38', Daily Limit:5, Preferred Rooms:[5]>
-  <Individual: Name:'Person #39', Daily Limit:0, Preferred Rooms:[20, 27, 19, 2]>
+  <Individual: Name:'Person #0', Daily Limit:5, Preferred Rooms:[]>
+  <Individual: Name:'Person #1', Daily Limit:2, Preferred Rooms:[]>
+  <Individual: Name:'Person #2', Daily Limit:0, Preferred Rooms:[3, 11]>
+  <Individual: Name:'Person #3', Daily Limit:5, Preferred Rooms:[22, 26, 29]>
+  <Individual: Name:'Person #4', Daily Limit:6, Preferred Rooms:[21]>
+  <Individual: Name:'Person #5', Daily Limit:1, Preferred Rooms:[14, 0]>
+  <Individual: Name:'Person #6', Daily Limit:3, Preferred Rooms:[11, 8, 5, 25]>
+  <Individual: Name:'Person #7', Daily Limit:6, Preferred Rooms:[15, 19]>
+  <Individual: Name:'Person #8', Daily Limit:3, Preferred Rooms:[2, 11]>
+  <Individual: Name:'Person #9', Daily Limit:3, Preferred Rooms:[]>
+  <Individual: Name:'Person #10', Daily Limit:2, Preferred Rooms:[11, 25, 29]>
+  <Individual: Name:'Person #11', Daily Limit:1, Preferred Rooms:[]>
+  <Individual: Name:'Person #12', Daily Limit:5, Preferred Rooms:[19, 25, 15, 14]>
+  <Individual: Name:'Person #13', Daily Limit:7, Preferred Rooms:[26, 20, 17]>
+  <Individual: Name:'Person #14', Daily Limit:0, Preferred Rooms:[9, 12]>
+  <Individual: Name:'Person #15', Daily Limit:6, Preferred Rooms:[28]>
+  <Individual: Name:'Person #16', Daily Limit:2, Preferred Rooms:[9, 22, 28]>
+  <Individual: Name:'Person #17', Daily Limit:0, Preferred Rooms:[]>
+  <Individual: Name:'Person #18', Daily Limit:4, Preferred Rooms:[2]>
+  <Individual: Name:'Person #19', Daily Limit:2, Preferred Rooms:[27, 10]>
+  <Individual: Name:'Person #20', Daily Limit:6, Preferred Rooms:[1]>
+  <Individual: Name:'Person #21', Daily Limit:5, Preferred Rooms:[14, 0]>
+  <Individual: Name:'Person #22', Daily Limit:4, Preferred Rooms:[4, 24, 8]>
+  <Individual: Name:'Person #23', Daily Limit:1, Preferred Rooms:[28, 3, 29, 14]>
+  <Individual: Name:'Person #24', Daily Limit:3, Preferred Rooms:[28]>
+  <Individual: Name:'Person #25', Daily Limit:4, Preferred Rooms:[23]>
+  <Individual: Name:'Person #26', Daily Limit:2, Preferred Rooms:[24, 26, 14]>
+  <Individual: Name:'Person #27', Daily Limit:5, Preferred Rooms:[19]>
+  <Individual: Name:'Person #28', Daily Limit:1, Preferred Rooms:[]>
+  <Individual: Name:'Person #29', Daily Limit:2, Preferred Rooms:[10, 23, 16]>
+  <Individual: Name:'Person #30', Daily Limit:6, Preferred Rooms:[21, 7, 1, 2]>
+  <Individual: Name:'Person #31', Daily Limit:1, Preferred Rooms:[2, 4]>
+  <Individual: Name:'Person #32', Daily Limit:7, Preferred Rooms:[18]>
+  <Individual: Name:'Person #33', Daily Limit:2, Preferred Rooms:[20, 21]>
+  <Individual: Name:'Person #34', Daily Limit:6, Preferred Rooms:[20, 9]>
+  <Individual: Name:'Person #35', Daily Limit:6, Preferred Rooms:[14, 4, 20, 3]>
+  <Individual: Name:'Person #36', Daily Limit:4, Preferred Rooms:[]>
+  <Individual: Name:'Person #37', Daily Limit:6, Preferred Rooms:[]>
+  <Individual: Name:'Person #38', Daily Limit:7, Preferred Rooms:[14, 17, 8]>
+  <Individual: Name:'Person #39', Daily Limit:7, Preferred Rooms:[3, 7, 19]>
+  <Individual: Name:'Person #40', Daily Limit:2, Preferred Rooms:[13, 6, 20]>
+  <Individual: Name:'Person #41', Daily Limit:4, Preferred Rooms:[15, 8, 1, 26]>
+  <Individual: Name:'Person #42', Daily Limit:6, Preferred Rooms:[10, 26]>
+  <Individual: Name:'Person #43', Daily Limit:6, Preferred Rooms:[14]>
+  <Individual: Name:'Person #44', Daily Limit:4, Preferred Rooms:[2, 7, 4]>
+  <Individual: Name:'Person #45', Daily Limit:4, Preferred Rooms:[27, 23]>
+  <Individual: Name:'Person #46', Daily Limit:2, Preferred Rooms:[9, 17, 7, 27]>
+  <Individual: Name:'Person #47', Daily Limit:3, Preferred Rooms:[7, 26]>
+  <Individual: Name:'Person #48', Daily Limit:6, Preferred Rooms:[29, 9, 15]>
+  <Individual: Name:'Person #49', Daily Limit:2, Preferred Rooms:[9]>
 }
-Prefers reduced overlaps, and prefers a minimum gap of 3 between sessions.
+Prefers reduced overlaps, and prefers a minimum gap of 2 between sessions.

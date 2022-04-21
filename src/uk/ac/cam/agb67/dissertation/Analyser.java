@@ -51,7 +51,7 @@ public class Analyser {
         // Get the number of times to test, and the name for the output file
         int repetitions = Integer.parseInt(args[0]);
         String location = args[1];
-        if (args.length == 4 && (args[3].equals("s") || args[3].equals("b") || args[3].equals("i"))) {
+        if (args.length == 5 && (args[3].equals("s") || args[3].equals("b") || args[3].equals("i"))) {
             individual_test(args);
             return;
         }
