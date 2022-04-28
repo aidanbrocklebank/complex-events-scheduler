@@ -291,14 +291,65 @@ public class MainTest {
     }
 
     @Test
-    public void run_main() {
+    public void main_runs() {
+        // ARRANGE
         File file = new File("samples\\NewInput_schedule.xml");
         file.delete();
 
-        String[] args = {"NewInput.xml", "1", "false"};
-        Main.main(args);
+        // ACT
+        Main.main(new String[]{"NewInput.xml", "1", "false"});
 
+        // ASSERT
         assertThat(file.exists()).isTrue();
+    }
+
+    @Test
+    public void main_utilises_algorithm_choice() {
+        // ARRANGE
+        File file = new File("samples\\NewInput_schedule.xml");
+        file.delete();
+
+        // ACT
+        Main.main(new String[]{"NewInput.xml", "0", "false"});
+        Main.main(new String[]{"NewInput.xml", "1", "false"});
+        Main.main(new String[]{"NewInput.xml", "1", "true"});
+        Main.main(new String[]{"NewInput.xml", "2", "false"});
+        Main.main(new String[]{"NewInput.xml", "2", "true"});
+
+        // And can resort to a default
+        Main.main(new String[]{"NewInput.xml", "5", "false"});
+
+        // ASSERT
+        assertThat(file.exists()).isTrue();
+    }
+
+    @Test
+    public void main_rejects_invalid_inputs() {
+        // ARRANGE
+        File file = new File("samples\\NewInput_schedule.xml");
+        file.delete();
+
+        // ACT
+        Main.main(new String[]{"InvalidInput.xml", "1", "false"});
+
+        // ASSERT
+        assertThat(file.exists()).isFalse();
+    }
+
+    @Test
+    public void main_fails_gracefully() {
+        // ARRANGE
+
+        // ACT
+        try {
+            Main.main(new String[]{"FakeName.xml", "1", "false"});
+        } catch (Exception e) {
+            // ASSERT
+            assertThat(false).isTrue();
+        }
+
+        // ASSERT
+        assertThat(true).isTrue();
     }
 
 }

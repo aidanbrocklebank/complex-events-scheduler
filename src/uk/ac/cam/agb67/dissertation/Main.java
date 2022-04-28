@@ -4,6 +4,8 @@ import uk.ac.cam.agb67.dissertation.algorithm.one.*;
 import uk.ac.cam.agb67.dissertation.algorithm.two.*;
 import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
+import java.io.File;
+
 public class Main {
 
     // Globally used debug switch
@@ -20,6 +22,11 @@ public class Main {
 
         // Retrieve the input details from the file
         InterfaceXML ui = new InterfaceXML();
+        File check_existance = new File("samples\\" + location);
+        if (!check_existance.exists()) {
+            System.err.println("The input file was not found.");
+            return;
+        }
         SchedulingProblem details = ui.XML_to_Problem("samples\\" + location);
 
         // Check that they are a usable set of input details
@@ -41,8 +48,7 @@ public class Main {
         Timetable schedule = algorithm.generate(details);
         TimetableVerifier ttv = new TimetableVerifier();
         if (!ttv.timetable_is_valid(schedule, details)) {
-            System.err.println("Failed to create a valid schedule with the given input and desired algorithm.");
-            return;
+            System.err.println("Failed to create a valid schedule with the given input and desired algorithm."); return;
         }
 
         // Then save it to a file

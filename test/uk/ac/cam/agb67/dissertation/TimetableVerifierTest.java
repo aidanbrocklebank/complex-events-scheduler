@@ -60,11 +60,11 @@ public class TimetableVerifierTest {
         List<Session> ls = new ArrayList<>();
 
         // ACT
-        ls.add(new Session(0));
-        ls.add(new Session(1));
-        ls.add(new Session(2));
-        ls.add(new Session(3));
-        ls.add(new Session(4));
+        ls.add(new Session(0, 1));
+        ls.add(new Session(1, 1));
+        ls.add(new Session(2, 1));
+        ls.add(new Session(3, 1));
+        ls.add(new Session(4, 1));
 
         tt.set(0,3,0, 4, 0);
         tt.set(0,4,0, 0, 1);
@@ -87,7 +87,7 @@ public class TimetableVerifierTest {
         // ACT
         Timetable tt = MainTest.test_timetable_B();
         List<Session> ls = new ArrayList<>();
-        ls.add(new Session(0));
+        ls.add(new Session(0, 1));
         ls.add(new Session(1, 3));
         ls.add(new Session(2, 1));
         ls.add(new Session(3, 2));
@@ -133,6 +133,11 @@ public class TimetableVerifierTest {
         tt.set(2,6,1, 4, 0);
         assertThat(ttv.timetabled_individuals_dont_clash(tt, ls)).isEqualTo(false);
 
+        SchedulingProblem details = new SchedulingProblem();
+        details.Session_Details = ls;
+        details.Room_Occupancy_Limits = Arrays.asList(10, 10);
+        details.PDS_Details = new ArrayList<>();
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);
     }
 
     @Test
@@ -164,7 +169,11 @@ public class TimetableVerifierTest {
         tt.set(2, 4, 1, 4, 0);
         assertThat(ttv.sessions_are_scheduled_in_large_enough_rooms(tt, ls, cap)).isEqualTo(false);
 
-
+        SchedulingProblem details = new SchedulingProblem();
+        details.Session_Details = ls;
+        details.Room_Occupancy_Limits = cap;
+        details.PDS_Details = new ArrayList<>();
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);
     }
 
     @Test
@@ -229,9 +238,22 @@ public class TimetableVerifierTest {
         tt.set(2,0,0, details.Session_Details.get(4));
         tt.set(2,1,0, details.Session_Details.get(5));
 
-        tt.set(0,0,0, details.Session_Details.get(6));
+        tt.set(0,2,0, details.Session_Details.get(6));
 
         System.out.println(tt.toString());
+
+        // ASSERT
+        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);
+    }
+
+    @Test
+    public void verifier_rejects_empty_schedule() {
+        // ARRANGE
+        TimetableVerifier ttv = new TimetableVerifier();
+        SchedulingProblem details = MainTest.test_details_A();
+
+        // ACT
+        Timetable tt = null;
 
         // ASSERT
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);

@@ -195,6 +195,7 @@ public class CoordinatorTwoTest {
     @Test
     public void algorithm_generates_coherent_schedule_edge_case_2() {
         // ARRANGE
+        Main.DEBUG = true;
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_F();
         TimetableVerifier ttv = new TimetableVerifier();

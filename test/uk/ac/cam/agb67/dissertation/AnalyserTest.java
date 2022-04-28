@@ -135,8 +135,6 @@ public class AnalyserTest {
         File test = new File("results/all_test_1.csv");
         test.delete();
 
-
-
         // ACT
         Analyser.main(new String[]{"1", "all_test"});
 
