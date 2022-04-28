@@ -1,0 +1,15 @@
+Brute Force,,,,,,
+Valid?, Score, RAM (MB), Time (ms), #Individuals, ,
+true,67,7.008576,25.2839,4, ,
+true,60,6.242472,6.9548,5, ,
+true,70,6.262568,9.6005,6, ,
+true,42,6.29132,8.118,7, ,
+true,44,6.2758,8.5516,8, ,
+true,69,6.263672,3.708601,9, ,
+true,80,6.254144,1.996501,10, ,
+true,78,6.150432,6.326,11, ,
+true,49,6.280944,14.5448,12, ,
+true,44,6.254184,7.1423,13, ,
+
+
+The DEFAULT parameters of the random test data: Days:60  Hours:8  Rooms:30  Sessions:10  Individuals:10 (Ignore for the specified parameter(s)).

@@ -1,0 +1,15 @@
+Greedy Brute Force,,,,,,
+Valid?, Score, RAM (MB), Time (ms), #Sessions = #Individuals, ,
+true,34,5.092424,7.5244,4, ,
+true,71,4.988976,3.2578,5, ,
+true,33,4.989248,1.8982,6, ,
+true,31,4.989712,0.835,7, ,
+true,53,4.989928,2.3176,8, ,
+true,73,5.037672,1.493499,9, ,
+true,49,5.038104,10.015101,10, ,
+true,52,5.03864,5.0446,11, ,
+true,46,5.038904,5.572101,12, ,
+true,49,5.039256,1.169699,13, ,
+
+
+The DEFAULT parameters of the random test data: Days:60  Hours:8  Rooms:30  Sessions:10  Individuals:10 (Ignore for the specified parameter(s)).

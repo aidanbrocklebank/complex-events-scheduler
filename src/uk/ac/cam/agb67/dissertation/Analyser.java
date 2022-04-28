@@ -244,7 +244,7 @@ public class Analyser {
     }
 
     // Test a provided algorithm on provided details, recording memory and latency, and checking score and validity
-    private static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
+    static void test_algorithm_with_details(SchedulingAlgorithm algorithm, SchedulingProblem details, int i, int alg, boolean[][] VALID, int[][] SCORE,
                                                    long[][] RAM, long[][] TIME) {
         latest_details = details;
 

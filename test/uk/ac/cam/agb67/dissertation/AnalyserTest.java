@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
+import uk.ac.cam.agb67.dissertation.algorithm.two.CoordinatorTwo;
+import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,6 +116,18 @@ public class AnalyserTest {
     }
 
     @Test
+    public void generate_numbers_fails_gracefully() {
+        // ARRANGE
+        int max = 100; int min = 20;
+
+        // ACT
+        List<Integer> random = Analyser.generate_numbers(max, min, 100);
+
+        // ASSERT
+        assertThat(random).isEqualTo(null);
+    }
+
+    @Test
     public void guaranteed_randomized_test_details_works() {
         // ARRANGE
         SchedulingProblem details;
@@ -127,6 +141,18 @@ public class AnalyserTest {
 
         // ASSERT
         assertThat(details.potentially_schedulable()).isTrue();
+    }
+
+    @Test
+    public void guaranteed_randomized_test_details_fails_gracefully() {
+        // ARRANGE
+        SchedulingProblem details;
+
+        // ACT
+        details = Analyser.guaranteed_randomized_test_details(1, 1, 10, 10);
+
+        // ASSERT
+        assertThat(details).isEqualTo(null);
     }
 
     @Test
@@ -174,17 +200,43 @@ public class AnalyserTest {
     @Test
     public void testing_algorithm_with_parameter_increasing_runs() {
         // ARRANGE
-        File test = new File("results/param_test_1.csv");
-        test.delete();
+        File testS = new File("results/paramS_test_1.csv");
+        File testI = new File("results/paramI_test_1.csv");
+        File testB = new File("results/paramB_test_1.csv");
+        testS.delete();
+        testI.delete();
+        testB.delete();
 
         // ACT
-        Analyser.main(new String[]{"10", "param_test", "3", "s", "1"});
+        Analyser.main(new String[]{"10", "paramS_test", "3", "s", "1"});
+        Analyser.main(new String[]{"10", "paramI_test", "1", "i", "1"});
+        Analyser.main(new String[]{"10", "paramB_test", "0", "b", "1"});
 
         // ASSERT
-        test = new File("results/param_test_1.csv");
-        assertThat(test.exists()).isTrue();
+        assertThat(testS.exists()).isTrue();
+        assertThat(testI.exists()).isTrue();
+        assertThat(testB.exists()).isTrue();
     }
 
-    // TODO new test for test_algorithm_with_details() which uses ALGO 2 and gives an invalid set of details
+    @Test
+    public void testing_with_invalid_details_fails() {
+        // ARRANGE
+        int len = 10;
+        boolean[][] VALID = new boolean[5][len];
+        int[][] SCORE = new int[5][len];
+        long[][] RAM = new long[5][len];
+        long[][] TIME = new long[5][len];
+
+        SchedulingAlgorithm algorithm = new CoordinatorTwo(false);
+
+        InterfaceXML ui = new InterfaceXML();
+        SchedulingProblem details = ui.XML_to_Problem("samples/IncorrectInput.xml");
+
+        // ACT
+        Analyser.test_algorithm_with_details(algorithm, details, 0, 3, VALID, SCORE, RAM, TIME);
+
+        // ASSERT
+        assertThat(true).isTrue();
+    }
 
 }
