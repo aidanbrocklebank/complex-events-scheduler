@@ -77,14 +77,45 @@ public class CoordinatorTwoTest {
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo(false);
         TimetableVerifier ttv = new TimetableVerifier();
-        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,40,75,50);
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,50,50);
 
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);
+        if (correct) System.out.println(tt.toString());
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
+    }
+
+    @Test
+    public void algorithm_time_limit_works() {
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo(false);
+        TimetableVerifier ttv = new TimetableVerifier();
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,1000,50);
+
+        // ACT
+        co.time_limt = "1s";
+        Timetable tt = co.generate(details);
+
+        // ASSERT
+        assertThat(tt).isEqualTo(null);
+    }
+
+    @Test
+    public void randomised_variant_time_limit_works() {
+        // ARRANGE
+        CoordinatorTwo co = new CoordinatorTwo(true);
+        TimetableVerifier ttv = new TimetableVerifier();
+        SchedulingProblem details = Analyser.guaranteed_randomized_test_details(50,50,1000,50);
+
+        // ACT
+        co.opt_time_limit = "1s";
+        Timetable tt = co.generate(details);
+
+        // ASSERT
+        assertThat(tt).isEqualTo(null);
     }
 
     @Test

@@ -1,0 +1,15 @@
+Algorithm Name,,,,,,
+Valid?, Score, RAM (MB), Time (ms), #Param, ,
+true,0,1.0E-4,2.0E-4,0, ,
+true,1,1.01E-4,2.01E-4,1, ,
+true,2,1.02E-4,2.02E-4,2, ,
+true,3,1.03E-4,2.03E-4,3, ,
+true,4,1.04E-4,2.04E-4,4, ,
+true,5,1.05E-4,2.05E-4,5, ,
+true,6,1.06E-4,2.06E-4,6, ,
+true,7,1.07E-4,2.07E-4,7, ,
+true,8,1.08E-4,2.08E-4,8, ,
+true,9,1.09E-4,2.09E-4,9, ,
+
+
+The DEFAULT parameters of the random test data: Days:60  Hours:8  Rooms:30  Sessions:10  Individuals:10 (Ignore for the specified parameter(s)).

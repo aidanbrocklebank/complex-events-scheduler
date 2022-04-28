@@ -17,8 +17,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 // In the following comments, timeslot refers to an assigned day/time/room combination
 
     private boolean optimise_for_prefs = false;
-    private String time_limt = "60s";
-    private String opt_time_limit = "300s";
+    String time_limt = "60s";
+    String opt_time_limit = "300s";
 
     CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
@@ -211,15 +211,6 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         ));
         // Set a time limit to aid in bulk testing
         solver.limitTime(time_limt);
-
-        /*
-        try {
-            solver.propagate();
-        } catch (ContradictionException e) {
-            System.err.println("Initial propagate lead to a contradiction. This model was innately unsolvable."); //return false;
-            System.err.println("Printing the contradiction: " + e.toString());
-        }
-        */
 
         if(solver.solve()) {
             // The values are now instantiated so return true to indicate that we can move to decoding

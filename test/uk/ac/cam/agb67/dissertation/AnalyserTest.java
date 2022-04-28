@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import uk.ac.cam.agb67.dissertation.algorithm.one.Coordinator;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class AnalyserTest {
     @Test
     public void writes_correctly_to_CSV_file() {
         // ARRANGE
+        boolean success_1 = false;
+        boolean success_2 = false;
+
         int len = 10;
         boolean[][] VALID = new boolean[5][len];
         int[][] SCORE = new int[5][len];
@@ -35,24 +39,29 @@ public class AnalyserTest {
             PARAM[i] = i;
         }
 
+        File test = new File("test.csv");
+        test.delete();
+        File ind_test = new File("ind_test.csv");
+        ind_test.delete();
+
         // ACT
         try {
-            Analyser.save_to_spreadsheet("test.csv", len, VALID, SCORE, RAM, TIME);
+            success_1 = Analyser.save_to_spreadsheet("test.csv", len, VALID, SCORE, RAM, TIME);
         } catch (IOException e) {
             e.printStackTrace();
             assertThat(false).isTrue();
         }
 
-        // ACT
         try {
-            Analyser.save_to_spreadsheet("ind_test.csv", len, "Algorithm Name", VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, "#Param");
+            success_2 = Analyser.save_to_spreadsheet("ind_test.csv", len, "Algorithm Name", VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, "#Param");
         } catch (IOException e) {
             e.printStackTrace();
             assertThat(false).isTrue();
         }
 
         // ASSERT
-        assertThat(true).isTrue();
+        assertThat(success_1).isTrue();
+        assertThat(success_2).isTrue();
     }
 
     @Test
@@ -119,5 +128,65 @@ public class AnalyserTest {
         // ASSERT
         assertThat(details.potentially_schedulable()).isTrue();
     }
+
+    @Test
+    public void testing_all_algorithms_runs() {
+        // ARRANGE
+        File test = new File("results/all_test_1.csv");
+        test.delete();
+
+
+
+        // ACT
+        Analyser.main(new String[]{"1", "all_test"});
+
+        // ASSERT
+        test = new File("results/all_test_1.csv");
+        assertThat(test.exists()).isTrue();
+    }
+
+    @Test
+    public void testing_two_algorithms_runs() {
+        // ARRANGE
+        File test = new File("results/compare_test_1.csv");
+        test.delete();
+
+        // ACT
+        Analyser.main(new String[]{"10", "compare_test", "#10#10", "0", "1"});
+
+        // ASSERT
+        test = new File("results/compare_test_1.csv");
+        assertThat(test.exists()).isTrue();
+    }
+
+    @Test
+    public void testing_CSP_algorithms_runs() {
+        // ARRANGE
+        File test = new File("results/csp_compare_test_1.csv");
+        test.delete();
+
+        // ACT
+        Analyser.main(new String[]{"10", "csp_compare_test", "#10#10", "3", "4"});
+
+        // ASSERT
+        test = new File("results/csp_compare_test_1.csv");
+        assertThat(test.exists()).isTrue();
+    }
+
+    @Test
+    public void testing_algorithm_with_parameter_increasing_runs() {
+        // ARRANGE
+        File test = new File("results/param_test_1.csv");
+        test.delete();
+
+        // ACT
+        Analyser.main(new String[]{"10", "param_test", "3", "s", "1"});
+
+        // ASSERT
+        test = new File("results/param_test_1.csv");
+        assertThat(test.exists()).isTrue();
+    }
+
+    // TODO new test for test_algorithm_with_details() which uses ALGO 2 and gives an invalid set of details
 
 }

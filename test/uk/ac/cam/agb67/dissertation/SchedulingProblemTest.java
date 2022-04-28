@@ -29,6 +29,7 @@ public class SchedulingProblemTest {
 
         // ACT
         boolean valid = details.potentially_schedulable();
+        System.out.println(details.toString());
 
         // ASSERT
         assertThat(valid).isEqualTo(true);

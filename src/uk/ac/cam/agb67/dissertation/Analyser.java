@@ -21,8 +21,8 @@ public class Analyser {
     // Default parameters for random tests
     private static final int DEF_DAYS = 60;
     private static final int DEF_ROOMS = 30;
-    private static int DEF_SESSIONS = 150;
-    private static int DEF_INDIVIDUALS = 150;
+    private static int DEF_SESSIONS = 10;
+    private static int DEF_INDIVIDUALS = 10;
 
     // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;
@@ -57,7 +57,7 @@ public class Analyser {
         }
         // Decode the rest of the arguments for the test run
         int off = 0;
-        if (args[2].substring(0,1).equals("#")) {
+        if (args.length > 2 && args[2].substring(0,1).equals("#")) {
             off = 1;
             String[] params = args[2].substring(1).split("#");
             DEF_SESSIONS = Integer.parseInt(params[0]);
@@ -228,12 +228,10 @@ public class Analyser {
         boolean stored = false;
         int version = 0;
         String path = "";
-
         while (!stored) {
             version++;
             if (version > 100) break;
             path = "results\\"+location+"_"+version+".csv";
-
             try {
                 stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, param_name);
             } catch (IOException e) {
@@ -401,90 +399,6 @@ public class Analyser {
         return true;
     }
 
-    // [Deprecated] Randomly generates a scheduling problem to use as test data, given certain parameters
-    private static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals, boolean overlap_pref, int gap_pref) {
-        SchedulingProblem details = new SchedulingProblem();
-        if (DEBUG) System.out.println("Generating a test data set, with "+days+" days and "+rooms+" rooms.");
-
-        // Lock in the defined parameters
-        details.Maximum_Days = days;
-        details.Hours_Per_Day = 8;
-        details.Maximum_Rooms = rooms;
-
-        details.Reduce_Overlap_Pref = overlap_pref;
-        details.Minimum_Gap_Pref = gap_pref;
-
-        // Generate a room occupancy for every room, from 10% of the total individuals to double the total individuals
-        details.Room_Occupancy_Limits = new ArrayList<>();
-        for (int r=0; r<rooms; r++) {
-            int limit = generate_number(num_individuals * 2, (int)(num_individuals * 0.1));
-            details.Room_Occupancy_Limits.add(limit);
-        }
-        if (DEBUG) System.out.println("Room occupancy limits: "+details.Room_Occupancy_Limits.toString()+".");
-
-        // Generate a list of key individuals, of length num_individuals
-        details.KeyInd_Details = new ArrayList<>();
-        for (int k=0; k<num_individuals; k++) {
-            // Generate a preference for max sessions in one day
-            int daily_limit_pref = generate_number(8, 1);
-
-            // Then generate a set of room preferences
-            int num_room_prefs = generate_number((int)((rooms * 0.1) + 1), 0);
-            List<Integer> room_prefs = generate_numbers((rooms-1), 0, num_room_prefs);
-
-            // Then create and add the key individual
-            KeyIndividual KeyInd = new KeyIndividual("Person #"+k, daily_limit_pref, room_prefs);
-            details.KeyInd_Details.add(KeyInd);
-            if (DEBUG) System.out.println("Adding an individual with daily limit: "+daily_limit_pref+", and ("+num_room_prefs+") room prefs: "+room_prefs.toString()+".");
-        }
-
-        // Generate a list of sessions, of length num_sessions
-        details.Session_Details = new ArrayList<>();
-        for (int s=0; s<num_sessions; s++) {
-            // Generate the number of key individuals to be in the session, and their IDs
-            int num_participating_individuals = generate_number((int)(num_individuals * 0.15), 1);
-            List<Integer> participating_individual_IDs = generate_numbers((num_individuals-1), 0, num_participating_individuals);
-
-            // Then create and add the session
-            Session sesh = new Session(s, "Session #"+s, generate_number(6,1), participating_individual_IDs);
-            details.Session_Details.add(sesh);
-            if (DEBUG) System.out.println("Adding session #"+s+" of length: "+sesh.Session_Length+", with individuals: "+participating_individual_IDs.toString()+".");
-        }
-
-        // Generate a number of predetermined sessions, replacing the last chunk of the session list
-        details.PDS_Details = new ArrayList<>();
-        int num_predetermined = generate_number((int)(num_sessions * 0.1) + 1, 1);
-        if (DEBUG) System.out.println("Generating "+num_predetermined+" PDS sessions.");
-        for (int s=(num_sessions-num_predetermined); s<num_sessions; s++) {
-            Session remove = details.Session_Details.get(s);
-
-            // Take the details of the existing session and create a new PredeterminedSession
-            // Generate it a predetermined day, time and room
-            int rand_day = generate_number(days-1, 0);
-            int rand_start = generate_number(8-remove.Session_Length, 0);
-            int rand_room = generate_number(rooms-1, 0);
-            PredeterminedSession replace = new PredeterminedSession(remove.Session_ID, remove.Session_Name+"(PDS)", remove.Session_Length, remove.Session_KeyInds,
-                    rand_day, rand_start, rand_room);
-            if (DEBUG) System.out.println("Generated a PDS sessions with day:"+rand_day+" time:"+rand_start+" room:"+rand_room);
-
-            // Then replace the session
-            details.Session_Details.remove(s);
-            details.Session_Details.add(s, replace);
-            details.PDS_Details.add(replace);
-        }
-
-        return details;
-    }
-
-    // [Deprecated] Randomly generates test data with randomized gap preference and overlap preference
-    private static SchedulingProblem randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
-        int gap_pref = generate_number(3, 0);
-        double overlap_rand = Math.random();
-
-        if (DEBUG) System.out.println("desired gap: " +gap_pref+ ",    desire overlap?: "+ (overlap_rand >= 0.5));
-
-        return randomized_test_details(days, rooms, num_sessions, num_individuals, (overlap_rand >= 0.5), gap_pref);
-    }
 
     public static SchedulingProblem guaranteed_randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
         int hours = 8;
