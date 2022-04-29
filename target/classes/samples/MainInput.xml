@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2022-02-09T17:54:56.874Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36" version="16.5.3" etag="Qm7_r3G_3n8ce38aC0js" type="device">
+  <diagram id="PjJKD4H2vEPQxSfLZq6m">
+    <mxGraphModel dx="1038" dy="547" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Aidan B" DailyLimitPreference="6" RoomPreferences="1,2,4,5" id="2">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Discussion Session" length="4" participants="0,1,2,3" id="3">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Panel One" length="5" participants="1,2,6" id="4">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Event Details" Days="5" HoursPerDay="8" Rooms="6" RoomCapacities="10,10,30,40,5,25" BookingGapPreference="1" ReduceOverlapPreference="false" id="5">
+          <mxCell style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontStyle=1" vertex="1" parent="1">
+            <mxGeometry x="400" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Predecided Panel" length="5" participants="1,2,5" day="2" hour="0" room="4" id="6">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="80" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Group Q&amp;amp;A" length="3" participants="3,4,5,6" id="7">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Alan Y" DailyLimitPreference="2" RoomPreferences="2,5" id="8">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Paul A" DailyLimitPreference="6" RoomPreferences="1,3,4" id="9">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Elle W" DailyLimitPreference="4" RoomPreferences="0,5" id="10">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Harry P" DailyLimitPreference="3" RoomPreferences="0,1,4" id="11">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Steve B" DailyLimitPreference="5" RoomPreferences="" id="12">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Dinner" length="2" participants="0,1,2,3,4,5,6" id="13">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Alex H" DailyLimitPreference="8" RoomPreferences="2,4" id="14">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="524.5" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Panel Two" length="3" participants="2,4,5,6" id="15">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Panel Three" length="5" participants="1,2,6" id="16">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
