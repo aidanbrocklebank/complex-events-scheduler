@@ -32,11 +32,11 @@ public class Analyser {
     private static Thread shutdown = new Thread() {
         @Override
         public void run() {
-            if (save_details_to_file(latest_details, "results\\latest_test_details.txt")) {
-                System.err.println("Saved the latest test details to results\\latest_test_details.txt.");
+            if (save_details_to_file(latest_details, "results/latest_test_details.txt")) {
+                System.err.println("Saved the latest test details to results/latest_test_details.txt.");
             }
-            if (save_details_to_file(latest_details_tt, "results\\latest_test_example_timetable.txt")) {
-                System.err.println("Saved an example timetable for the latest test to results\\latest_test_example_timetable.txt.");
+            if (save_details_to_file(latest_details_tt, "results/latest_test_example_timetable.txt")) {
+                System.err.println("Saved an example timetable for the latest test to results/latest_test_example_timetable.txt.");
             }
         }
     };
@@ -115,7 +115,7 @@ public class Analyser {
         while (!stored) {
             version++;
             if (version > 100) break;
-            path = "results\\"+location+"_"+version+".csv";
+            path = "results/"+location+"_"+version+".csv";
 
             try {
                 stored = save_to_spreadsheet(path, repetitions, VALID, SCORE, RAM, TIME);
@@ -231,7 +231,7 @@ public class Analyser {
         while (!stored) {
             version++;
             if (version > 100) break;
-            path = "results\\"+location+"_"+version+".csv";
+            path = "results/"+location+"_"+version+".csv";
             try {
                 stored = save_to_spreadsheet(path, repetitions, name, VALID[0], SCORE[0], RAM[0], TIME[0], SEGMENTS, PARAM, param_name);
             } catch (IOException e) {

@@ -22,12 +22,12 @@ public class Main {
 
         // Retrieve the input details from the file
         InterfaceXML ui = new InterfaceXML();
-        File check_existance = new File("samples\\" + location);
+        File check_existance = new File("samples/" + location);
         if (!check_existance.exists()) {
             System.err.println("The input file was not found.");
             return;
         }
-        SchedulingProblem details = ui.XML_to_Problem("samples\\" + location);
+        SchedulingProblem details = ui.XML_to_Problem("samples/" + location);
 
         // Check that they are a usable set of input details
         if (!details.potentially_schedulable()) {

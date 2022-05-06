@@ -247,7 +247,7 @@ public class InterfaceXML {
 
     // Takes a string and a filename, and creates a new file with the string as the contents
     private String create_file(String contents, String name) {
-        String filename = "samples\\"+name+".xml";
+        String filename = "samples/"+name+".xml";
         try {
             File newFile = new File(filename);
             if (newFile.createNewFile()) {

@@ -60,7 +60,7 @@ public class InterfaceXMLTest {
         InterfaceXML ui = new InterfaceXML();
 
         // ACT
-        SchedulingProblem details = ui.XML_to_Problem("samples\\FullInput.xml");
+        SchedulingProblem details = ui.XML_to_Problem("samples/FullInput.xml");
 
         if (Main.DEBUG) {
             System.out.println(details.Session_Details.toString());
@@ -95,7 +95,7 @@ public class InterfaceXMLTest {
 
         // ACT
         ui = new InterfaceXML();
-        SchedulingProblem details = ui.XML_to_Problem("samples\\IncorrectInput.xml");
+        SchedulingProblem details = ui.XML_to_Problem("samples/IncorrectInput.xml");
 
         // ASSERT
         assertThat(details).isEqualTo(null);
