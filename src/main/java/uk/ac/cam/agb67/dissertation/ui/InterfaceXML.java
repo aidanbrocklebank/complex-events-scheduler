@@ -3,7 +3,7 @@ package uk.ac.cam.agb67.dissertation.ui;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import part.norfolk.xml.ReadXmlDomParser;
+import uk.ac.cam.agb67.dissertation.ui.ReadXmlDomParser;
 
 import uk.ac.cam.agb67.dissertation.*;
 

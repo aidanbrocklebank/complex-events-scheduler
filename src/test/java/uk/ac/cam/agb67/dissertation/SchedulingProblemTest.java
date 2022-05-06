@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class SchedulingProblemTest {
 
     @Test
-    public void object_can_be_created(){
+    public void testObject_can_be_created(){
         // ARRANGE
         SchedulingProblem details;
         // ACT

@@ -2,20 +2,14 @@ package uk.ac.cam.agb67.dissertation;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import part.norfolk.xml.ReadXmlDomParser;
-import uk.ac.cam.agb67.dissertation.*;
-import uk.ac.cam.agb67.dissertation.ui.InterfaceXML;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.channels.ScatteringByteChannel;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
 @RunWith(JUnit4.class)
