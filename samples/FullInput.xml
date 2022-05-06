@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2022-01-12T19:42:53.010Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" version="16.0.0" etag="5k19cP3_g_uF928sBds0" type="google">
+  <diagram id="fiw8ViPKSiUFMmO84K9m">
+    <mxGraphModel dx="1038" dy="489" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Aidan Brocklebank" DailyLimitPreference="3" RoomPreferences="1,2,4,5,9" id="2">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Group Learning" length="4" participants="0,6,15" id="3">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Panel Three" length="5" participants="1,2,7,19" id="4">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Event Details" Days="5" HoursPerDay="8" Rooms="6" RoomCapacities="10,10,30,40,5,25" BookingGapPreference="1" ReduceOverlapPreference="false" id="5">
+          <mxCell style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontStyle=1" vertex="1" parent="1">
+            <mxGeometry x="400" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Pred Panel" length="5" participants="1,2,7,19" day="2" hour="4" room="7" id="6">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="80" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Group Dance" length="3" participants="6,7,8,14" id="7">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="80" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Jim Baxter" DailyLimitPreference="2" RoomPreferences="12,2,7" id="8">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="240" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
