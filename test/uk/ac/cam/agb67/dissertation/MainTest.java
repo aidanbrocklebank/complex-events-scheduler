@@ -293,11 +293,11 @@ public class MainTest {
     @Test
     public void main_runs() {
         // ARRANGE
-        File file = new File("samples\\NewInput_schedule_1base.xml");
+        File file = new File("samples\\Main_Input_schedule_1base.xml");
         file.delete();
 
         // ACT
-        Main.main(new String[]{"NewInput.xml", "1", "false"});
+        Main.main(new String[]{"Main_Input.xml", "1", "false"});
 
         // ASSERT
         assertThat(file.exists()).isTrue();
@@ -306,18 +306,18 @@ public class MainTest {
     @Test
     public void main_utilises_algorithm_choice() {
         // ARRANGE
-        File file = new File("samples\\NewInput_schedule_2opt.xml");
+        File file = new File("samples\\Main_Input_schedule_2opt.xml");
         file.delete();
 
         // ACT
-        Main.main(new String[]{"NewInput.xml", "0", "false"});
-        Main.main(new String[]{"NewInput.xml", "1", "false"});
-        Main.main(new String[]{"NewInput.xml", "1", "true"});
-        Main.main(new String[]{"NewInput.xml", "2", "false"});
-        Main.main(new String[]{"NewInput.xml", "2", "true"});
+        Main.main(new String[]{"Main_Input.xml", "0", "false"});
+        Main.main(new String[]{"Main_nput.xml", "1", "false"});
+        Main.main(new String[]{"Main_Input.xml", "1", "true"});
+        Main.main(new String[]{"Main_Input.xml", "2", "false"});
+        Main.main(new String[]{"Main_Input.xml", "2", "true"});
 
         // And can resort to a default
-        Main.main(new String[]{"NewInput.xml", "5", "false"});
+        Main.main(new String[]{"Main_Input.xml", "5", "false"});
 
         // ASSERT
         assertThat(file.exists()).isTrue();
@@ -326,11 +326,11 @@ public class MainTest {
     @Test
     public void main_rejects_invalid_inputs() {
         // ARRANGE
-        File file = new File("samples\\NewInput_schedule.xml");
+        File file = new File("samples\\Main_Input_schedule.xml");
         file.delete();
 
         // ACT
-        Main.main(new String[]{"InvalidInput.xml", "1", "false"});
+        Main.main(new String[]{"Invalid_Input.xml", "1", "false"});
 
         // ASSERT
         assertThat(file.exists()).isFalse();

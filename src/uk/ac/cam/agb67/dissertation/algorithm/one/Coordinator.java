@@ -15,6 +15,7 @@ public class Coordinator implements SchedulingAlgorithm {
 
     @Override
     public Timetable generate(SchedulingProblem details) {
+
         String s = "";
         if (GreedyVariant) s="(Greedy variant)";
         if (Optimise) s += "(Optimised)";

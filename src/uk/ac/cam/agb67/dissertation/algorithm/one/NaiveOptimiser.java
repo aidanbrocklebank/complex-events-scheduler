@@ -12,14 +12,19 @@ class NaiveOptimiser {
     // the same timeslot, or moved once such as to attempt to improve the overall score
     Timetable optimisation_pass(Timetable current, SchedulingProblem details) {
 
-        // Select each session in the timetable and look for a better assignment to move it to
-        System.out.print("\n");
-        for (Session ignored : details.Session_Details) {
-            System.out.print(".");
+        // Visually track progress
+        if (Main.DEBUG) {
+            System.out.print("\n");
+            for (Session ignored : details.Session_Details) {
+                System.out.print(".");
+            }
+            System.out.print("\n");
         }
-        System.out.print("\n");
+
+        // Select each session in the timetable and look for a better assignment to move it to
         for (Session sesh : details.Session_Details) {
-            System.out.print(".");
+            if (Main.DEBUG) System.out.print(".");
+
             // Don't move predetermined sessions.
             if (sesh.getClass() == PredeterminedSession.class) continue;
 

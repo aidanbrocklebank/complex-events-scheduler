@@ -2,7 +2,6 @@ package uk.ac.cam.agb67.dissertation.algorithm.one;
 
 import uk.ac.cam.agb67.dissertation.*;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,26 +47,6 @@ class BruteForce {
         int len = sesh.Session_Length;
         List<Integer> KeyIDs = sesh.Session_KeyInds;
 
-        /*
-        // Determine the full set of preferred rooms for this session
-        List<Integer> PreferredRooms = new ArrayList<>();
-        for (int k : KeyIDs) {
-            //if (Main.DEBUG) System.out.println("Unioning room preferences for particpant "+k+", with existing preferred rooms: "+PreferredRooms.toString());
-            union_room_preferences(k, PreferredRooms);
-        }
-
-        // Fill a list with all the room IDs, then remove those in the preferred set
-        List<Integer> RemainingRoomIDs = new ArrayList<>();
-        for (int i=0; i<MaxRooms; i++) {
-            RemainingRoomIDs.add(i);
-        }
-        RemainingRoomIDs.removeAll(PreferredRooms);
-
-         */
-
-        //if (Main.DEBUG) System.out.println("PreferredRooms: "+ PreferredRooms.toString());
-        //if (Main.DEBUG) System.out.println("RemainingRoomIDs: "+ RemainingRoomIDs.toString());
-
         // Iterate through the hours available for the whole event
         for (int day = 0; day < MaxDays; day++) {
             for (int hour = 0; hour < HoursPerDay; hour++) {
@@ -91,29 +70,6 @@ class BruteForce {
                         if (FinalMapping != null) return FinalMapping;
                     }
                 }
-
-                /*
-                // Iterate through the rest of the rooms available this hour
-                for (int room : RemainingRoomIDs) {
-
-                    // Check for participants having bookings in other rooms at that time, and that the room is empty at that time
-                    boolean SessionDoesntClash = Coordinator.check_session_doesnt_clash(CurrentMapping, day, hour, room, sesh, Sessions);
-                    if (SessionDoesntClash && (RoomOccupancyLimits.get(room) >= sesh.Session_KeyInds.size())) {
-
-                        if (Main.DEBUG) System.out.println("Adding session "+ sid +", at day:"+day+" time:"+hour+" room:"+room+".\n");
-
-                        // Insert this session at this point in the current schedule, as a new schedule
-                        Timetable NewMapping = CurrentMapping.deep_copy();
-                        NewMapping.set(day, hour, room, sesh);
-
-                        // Recursively add the rest of the sessions
-                        Timetable FinalMapping = insert_sessions(NewMapping, RemainingSessions);
-
-                        // If that didn't fail, propagate it back up the stack
-                        if (FinalMapping != null) return FinalMapping;
-                    }
-                } */
-
             }
         }
 

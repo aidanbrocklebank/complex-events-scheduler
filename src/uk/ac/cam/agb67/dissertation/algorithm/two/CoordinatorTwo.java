@@ -18,7 +18,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
     private boolean optimise_for_prefs = false;
     String time_limt = "60s";
-    String opt_time_limit = "300s";
+    String opt_time_limit = "60s";
 
     CoordinatorTwo() {}
     public CoordinatorTwo(boolean opt) {
@@ -27,6 +27,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
     @Override
     public Timetable generate(SchedulingProblem details) {
+
         String s = "";
         if (optimise_for_prefs) s="(Maximising preference values).";
         if (Main.DEBUG) System.out.println("\nAttempting to generate a schedule with algorithm two. "+s+"\n");
@@ -42,22 +43,26 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         IntVar[] start_time_assignments = new IntVar[details.Session_Details.size()];
         IntVar[] room_assignments = new IntVar[details.Session_Details.size()];
 
+        // Record first segment time
         Analyser.SEGMENT_TIMES[0] = System.nanoTime();
-        System.out.println("Pre-MODEL Time (ms): " + (convert_time(System.nanoTime())));
+        if (Main.DEBUG) System.out.println("Pre-MODEL Time (ms): " + (convert_time(System.nanoTime())));
 
         // Use Choco-solver to model this scheduling problem,
         Model event_model = represent(details, day_assignments, start_time_assignments, room_assignments);
         Timetable schedule;
 
+        // Record second segment time
         Analyser.SEGMENT_TIMES[1] = System.nanoTime();
-        System.out.println("Post-MODEL Time (ms): " + (convert_time(System.nanoTime())));
+        if (Main.DEBUG) System.out.println("Post-MODEL Time (ms): " + (convert_time(System.nanoTime())));
 
         if (optimise_for_prefs) {
             // Use Choco-solver to solve the model, finding the solution which maximises a metric for preference satisfaction
             Solution sol = optimise_and_solve(event_model, details, day_assignments, start_time_assignments, room_assignments);
 
+            // Record third segment time
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
-            System.out.println("Post-OPT-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
+            if (Main.DEBUG) System.out.println("Post-OPT-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
+
             if (sol == null) {
                 System.err.println("The optimising variant failed to solve the model. Returning null.");
                 Analyser.SEGMENT_TIMES[3] = System.nanoTime();
@@ -66,23 +71,30 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
             // Finally decode the solution into a schedule
             schedule = decode_solution(sol, details, day_assignments, start_time_assignments, room_assignments);
+
+            // Record fourth segment time
             Analyser.SEGMENT_TIMES[3] = System.nanoTime();
-            System.out.println("Post-DECODE Time (ms): " + (convert_time(System.nanoTime())));
+            if (Main.DEBUG) System.out.println("Post-DECODE Time (ms): " + (convert_time(System.nanoTime())));
 
         } else {
+
             // Use Choco-solver to solve the model, taking the first acceptable solution
             boolean solved = solve(event_model);
 
+            // Record third segment time
             Analyser.SEGMENT_TIMES[2] = System.nanoTime();
-            System.out.println("Post-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
+            if (Main.DEBUG) System.out.println("Post-SOLVE Time (ms): " + (convert_time(System.nanoTime())));
+
             if (!solved) {
                 System.err.println("The model was not solved."); Analyser.SEGMENT_TIMES[3] = System.nanoTime(); return null;
             }
 
             // Finally decode the solved model into a schedule
             schedule = decode_model_vars(details, day_assignments, start_time_assignments, room_assignments);
+
+            // Record fourth segment time
             Analyser.SEGMENT_TIMES[3] = System.nanoTime();
-            System.out.println("Post-DECODE Time (ms): " + (convert_time(System.nanoTime())));
+            if (Main.DEBUG) System.out.println("Post-DECODE Time (ms): " + (convert_time(System.nanoTime())));
         }
 
         // Return schedule
@@ -126,14 +138,11 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                         day_assignments[s].mul(details.Hours_Per_Day).mul(details.Maximum_Rooms)).intVar();
                 timeslot_hash.add(temp);
             }
-            // The timeslot_hash list is not perfect however as offsets could spill over into other hashcodes if time+offset > MaxHours
 
+            // The timeslot_hash list is not perfect however as offsets could spill over into other hashcodes if time+offset > MaxHours
             // So we include an additional constraint to ensure no session starts too close to the end of the day
-            // if (Main.DEBUG) System.out.println("Creating close-to-end-of-day limit for session "+s+". This limit is "+start_time_assignments[s]+" + "+details
-            // .Session_Details.get(s).Session_Length+" <= "+details.Hours_Per_Day+" .");
-            //event.arithm(event.intScaleView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
-            event.arithm(event.intOffsetView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
             // Condition: [start + length <= MaxHours] for session s
+            event.arithm(event.intOffsetView(start_time_assignments[s], details.Session_Details.get(s).Session_Length), "<=", details.Hours_Per_Day).post();
         }
 
         // We then require that time-slot hashcodes are all unique in the model
@@ -209,6 +218,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
                 new IntDomainMin(),
                 event.retrieveIntVars(true)
         ));
+
         // Set a time limit to aid in bulk testing
         solver.limitTime(time_limt);
 
@@ -217,6 +227,8 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
             return true;
 
         } else {
+            // Output the relevant error message.
+
             if(solver.isStopCriterionMet()) {
                 System.err.println("Choco-Solver could not determine whether or not a solution existed, because it was stopped by the time limit.");
             } else {
@@ -233,6 +245,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
 
     // Uses the solver with a randomised search strategy to produce a series of distinct solutions, and returns the highest-scoring
     private Solution optimise_and_solve(Model event, SchedulingProblem details, IntVar[] day_assignments, IntVar[] start_time_assignments, IntVar[] room_assignments) {
+
         // Use the solver to find an acceptable solution to the problem, and iterate to improve the satisfaction score
         Solver solver = event.getSolver();
         Solution best_solution = null;
@@ -241,10 +254,12 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         TimetableVerifier ttv = new TimetableVerifier();
         TimetableSatisfactionMeasurer ttsm = new TimetableSatisfactionMeasurer();
 
-        System.out.println("- random optimising -");
+        // Visually track progress
+        if (Main.DEBUG) System.out.println("- random optimising -");
         System.out.println("..........");
+
         for (int i=0; i<10; i++) {
-            System.out.print(".");
+            if (Main.DEBUG)System.out.print(".");
 
             // Search Strategy:
             // Choose an uninstantiated variable with a random domain, and select random values from within that domain to try
@@ -292,6 +307,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         } else {
             // Various relevant error messages and debug information:
             System.err.println("Optimising version of algorithm 2 failed to find a result. Reason: ");
+
             if(solver.isStopCriterionMet()) {
                 System.err.println("Choco-Solver could not determine whether or not a solution existed, because it was stopped by the time limit.");
             } else {

@@ -230,7 +230,7 @@ public class AnalyserTest {
         SchedulingAlgorithm algorithm = new CoordinatorTwo(false);
 
         InterfaceXML ui = new InterfaceXML();
-        SchedulingProblem details = ui.XML_to_Problem("samples/IncorrectInput.xml");
+        SchedulingProblem details = ui.XML_to_Problem("samples/Incorrect_Input.xml");
 
         // ACT
         Analyser.test_algorithm_with_details(algorithm, details, 0, 3, VALID, SCORE, RAM, TIME);
