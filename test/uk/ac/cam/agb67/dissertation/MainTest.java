@@ -293,7 +293,7 @@ public class MainTest {
     @Test
     public void main_runs() {
         // ARRANGE
-        File file = new File("samples\\NewInput_schedule.xml");
+        File file = new File("samples\\NewInput_schedule_1base.xml");
         file.delete();
 
         // ACT
@@ -306,7 +306,7 @@ public class MainTest {
     @Test
     public void main_utilises_algorithm_choice() {
         // ARRANGE
-        File file = new File("samples\\NewInput_schedule.xml");
+        File file = new File("samples\\NewInput_schedule_2opt.xml");
         file.delete();
 
         // ACT
