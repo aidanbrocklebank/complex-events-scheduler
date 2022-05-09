@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2022-05-06T14:14:02.459Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36" etag="9sx7YXWkeDlC_49OYXmG" version="18.0.1">
+  <diagram id="2hRaAk2sKGXNfGLzqwsI" name="Page-1">
+    <mxGraphModel dx="2031" dy="1007" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Event Details" Days="7" HoursPerDay="8" Rooms="4" RoomCapacities="2,1,2,100" BookingGapPreference="0" ReduceOverlapPreference="false" id="WuaejPNsn2_3SlHVDloT-1">
+          <mxCell style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontStyle=1;size=0.03571428571428571;fontSize=26;" vertex="1" parent="1">
+            <mxGeometry x="60" y="40" width="260" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IA Students" DailyLimitPreference="3" RoomPreferences="2" id="WuaejPNsn2_3SlHVDloT-2">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="60" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IA Students (Additional)" DailyLimitPreference="3" RoomPreferences="2" id="WuaejPNsn2_3SlHVDloT-6">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="60" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IB Students" DailyLimitPreference="3" RoomPreferences="0,1" id="WuaejPNsn2_3SlHVDloT-7">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="60" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IB Students (Additional)" DailyLimitPreference="3" RoomPreferences="0,1" id="WuaejPNsn2_3SlHVDloT-8">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="60" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part II Students" DailyLimitPreference="3" RoomPreferences="0,1" id="WuaejPNsn2_3SlHVDloT-9">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="60" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SATURDAY" length="8" participants="" day="2" hour="0" room="0" id="WuaejPNsn2_3SlHVDloT-10">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SATURDAY" length="8" participants="" day="2" hour="0" room="1" id="WuaejPNsn2_3SlHVDloT-11">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SATURDAY" length="8" participants="" day="2" hour="0" room="2" id="WuaejPNsn2_3SlHVDloT-12">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SATURDAY" length="8" participants="" day="2" hour="0" room="3" id="WuaejPNsn2_3SlHVDloT-13">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SUNDAY" length="8" participants="" day="3" hour="0" room="0" id="WuaejPNsn2_3SlHVDloT-14">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SUNDAY" length="8" participants="" day="3" hour="0" room="1" id="WuaejPNsn2_3SlHVDloT-15">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SUNDAY" length="8" participants="" day="3" hour="0" room="2" id="WuaejPNsn2_3SlHVDloT-16">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="SUNDAY" length="8" participants="" day="3" hour="0" room="3" id="WuaejPNsn2_3SlHVDloT-17">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="200" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompTheory" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-18">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompTheory" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-19">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompConstr" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-20">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompConstr" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-22">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompConstr" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-23">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="FHCI" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-24">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="FHCI" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-25">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompNet" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-26">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompNet" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-27">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="760" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompNet" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-28">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="840" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompNet" length="2" participants="2,3" id="WuaejPNsn2_3SlHVDloT-29">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="340" y="920" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Algorithms" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-30">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Algorithms" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-31">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Algorithms" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-32">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Hardware" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-33">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="DiscMath" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-34">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="DiscMath" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-35">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="DiscMath" length="2" participants="0,1" id="WuaejPNsn2_3SlHVDloT-36">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="480" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Crypto" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-37">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Crypto" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-38">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Crypto" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-39">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="QuantComp" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-40">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="QuantComp" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-41">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="OptComp" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-42">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="OptComp" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-43">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="OptComp" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-44">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompSysMod" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-45">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="760" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="CompSysMod" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-46">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="620" y="840" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="InfoTheory" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-48">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="InfoTheory" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-49">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="InfoTheory" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-50">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="MLBayInfer" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-51">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="MLBayInfer" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-52">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="RandAlg" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-53">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="RandAlg" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-54">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="AdComArch" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-55">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="AdComArch" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-56">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="760" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="AdComArch" length="2" participants="4" id="WuaejPNsn2_3SlHVDloT-57">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="840" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="WuaejPNsn2_3SlHVDloT-60" value="Lectures" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;size=0.014705882352941176;fontSize=26;" vertex="1" parent="1">
+          <mxGeometry x="340" y="40" width="540" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

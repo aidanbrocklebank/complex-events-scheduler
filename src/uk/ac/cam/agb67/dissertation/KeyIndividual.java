@@ -4,7 +4,7 @@ import java.util.List;
 
 public class KeyIndividual {
 
-    public int ID;
+    // public int ID;
 
     // Key Individual Preferences
     public String KeyInd_Name;

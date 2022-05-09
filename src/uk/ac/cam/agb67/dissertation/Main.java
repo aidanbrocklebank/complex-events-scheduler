@@ -51,8 +51,17 @@ public class Main {
             System.err.println("Failed to create a valid schedule with the given input and desired algorithm."); return;
         }
 
+        System.out.println("SCHEDULE: \n" + schedule.toString());
+
+        String suffix;
+        if (optimise_choice) {
+            suffix = algorithm_choice + "opt";
+        } else{
+            suffix = algorithm_choice + "base";
+        }
+
         // Then save it to a file
-        ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule");
+        ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule_" + suffix);
     }
 
 }

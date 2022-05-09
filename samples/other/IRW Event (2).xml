@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2022-05-06T13:55:43.976Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36" etag="5Qp7398ZDhUdjLcv4gfW" version="18.0.1">
+  <diagram id="jCS_CA0dAkn2pGIU7-qL" name="Page-1">
+    <mxGraphModel dx="1422" dy="705" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="Event Details" Days="6" HoursPerDay="12" Rooms="2" RoomCapacities="30,30" BookingGapPreference="0" ReduceOverlapPreference="true" id="GN9fdEZagJrNlD1u8afb-1">
+          <mxCell style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontStyle=1" vertex="1" parent="1">
+            <mxGeometry x="40" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IA Students" DailyLimitPreference="6" RoomPreferences="" id="GN9fdEZagJrNlD1u8afb-2">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part IB Students" DailyLimitPreference="6" RoomPreferences="" id="GN9fdEZagJrNlD1u8afb-4">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Part II Students" DailyLimitPreference="6" RoomPreferences="0" id="GN9fdEZagJrNlD1u8afb-6">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::DE" length="2" participants="0,5" id="GN9fdEZagJrNlD1u8afb-7">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::ICA" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-8">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::PoC" length="2" participants="2,3" id="GN9fdEZagJrNlD1u8afb-9">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::Prolog" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-10">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::Cmpu" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-13">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::ELE" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-14">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::DM" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-15">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::ACA" length="2" participants="2,3" id="GN9fdEZagJrNlD1u8afb-16">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="120" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::L&amp;amp;P" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-17">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::Cplr" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-18">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::OC" length="2" participants="2,3" id="GN9fdEZagJrNlD1u8afb-19">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::IT" length="2" participants="2,5" id="GN9fdEZagJrNlD1u8afb-20">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::Crypto" length="2" participants="2,4" id="GN9fdEZagJrNlD1u8afb-21">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="II::RA" length="2" participants="2,5" id="GN9fdEZagJrNlD1u8afb-22">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="780" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::FoCS" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-23">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="200" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::OS" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-24">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="280" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::IGra" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-25">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::OOP" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-26">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::DB" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-27">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::Algs" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-28">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IA::Algs" length="2" participants="0,3" id="GN9fdEZagJrNlD1u8afb-29">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="500" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::ProgC" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-30">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::CDS" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-31">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="600" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::Nets" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-32">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="680" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="IB::Nets" length="2" participants="1,3" id="GN9fdEZagJrNlD1u8afb-33">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="640" y="760" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Party" length="2" participants="0,1,2,3,4,5" id="GN9fdEZagJrNlD1u8afb-34">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="920" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="John Fawcett" DailyLimitPreference="10" RoomPreferences="1" id="GN9fdEZagJrNlD1u8afb-35">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="360" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Peter Rugg" DailyLimitPreference="2" RoomPreferences="0" id="GN9fdEZagJrNlD1u8afb-36">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="440" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Matthew Ireland" DailyLimitPreference="8" RoomPreferences="0" id="GN9fdEZagJrNlD1u8afb-37">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;glass=0;shadow=0;sketch=0;perimeterSpacing=0;strokeWidth=1;" vertex="1" parent="1">
+            <mxGeometry x="40" y="520" width="120" height="60" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
