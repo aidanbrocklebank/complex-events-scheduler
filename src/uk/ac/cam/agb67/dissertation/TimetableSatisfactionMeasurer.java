@@ -1,11 +1,10 @@
 package uk.ac.cam.agb67.dissertation;
 
-import org.chocosolver.solver.constraints.nary.nvalue.amnv.differences.D;
-
 import java.util.List;
 
 public class TimetableSatisfactionMeasurer {
 
+    // A private debug flag for the satisfaction measurer
     private boolean DEBUG = false;
 
     public TimetableSatisfactionMeasurer() {}
@@ -211,7 +210,5 @@ public class TimetableSatisfactionMeasurer {
         if (DEBUG) System.out.println("]\n Then (#total_ratios="+total+" / #individuals="+(details.KeyInd_Details.size() - excemptions)+")");
         return (int) (100 * (total / (details.KeyInd_Details.size() - excemptions)));
     }
-
-
 
 }

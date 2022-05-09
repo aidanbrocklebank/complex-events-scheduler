@@ -11,6 +11,7 @@ public class Session {
     public int Session_Length;
     public List<Integer> Session_KeyInds;
 
+    // Constructor methods taking different parameters, to be used in different contexts
     public Session(int id) {
         Session_ID = id;
     }

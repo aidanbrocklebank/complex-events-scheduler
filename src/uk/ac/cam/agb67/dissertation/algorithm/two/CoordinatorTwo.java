@@ -25,6 +25,7 @@ public class CoordinatorTwo implements SchedulingAlgorithm {
         optimise_for_prefs = opt;
     }
 
+    // Generates a schedule for the given event details using the CSP approach, or CSPRO variant
     @Override
     public Timetable generate(SchedulingProblem details) {
 

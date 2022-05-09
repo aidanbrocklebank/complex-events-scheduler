@@ -13,6 +13,7 @@ public class Coordinator implements SchedulingAlgorithm {
     public Coordinator(boolean greedy) { GreedyVariant = greedy; }
     public Coordinator(boolean greedy, boolean opt) {GreedyVariant = greedy; Optimise = opt; }
 
+    // Generates a schedule for the given event details using the Brute-Force approach, or Greedy variant, with or without Naive Optimisation
     @Override
     public Timetable generate(SchedulingProblem details) {
 

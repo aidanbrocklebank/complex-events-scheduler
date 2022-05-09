@@ -114,7 +114,6 @@ public class SchedulingProblem {
         return valid;
     }
 
-    // Pretty print a set of details
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();

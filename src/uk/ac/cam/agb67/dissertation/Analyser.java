@@ -21,8 +21,8 @@ public class Analyser {
     // Default parameters for random tests
     private static final int DEF_DAYS = 60;
     private static final int DEF_ROOMS = 30;
-    private static int DEF_SESSIONS = 10;
-    private static int DEF_INDIVIDUALS = 10;
+    private static int DEF_SESSIONS = 50;
+    private static int DEF_INDIVIDUALS = 50;
 
     // Saved to a file in the case of a forced exit
     private static SchedulingProblem latest_details;
@@ -41,6 +41,7 @@ public class Analyser {
         }
     };
 
+    // Manages bulk testing of multiple algorithms
     // Usage: Analyser <repetitions> <filename>
     // Usage: Analyser <repetitions> <filename> <algorithm 1> <algorithm 2>
     // Usage: Analyser <repetitions> <filename> #<sessions>#<individuals> <algorithm 1> <algorithm 2>
@@ -128,6 +129,7 @@ public class Analyser {
         if (stored) System.out.println("Saved the results to a file: " + path);
     }
 
+    // Manages bulk testing of individual algorithms with a changing parameter
     // Usage: Analyser <repetitions> <filename> <algorithm> <parameter> <runs-per-rep>
     private static void individual_test(String[] args) {
 
@@ -399,8 +401,10 @@ public class Analyser {
         return true;
     }
 
-
+    // Returns a set of event details which are guaranteed to be schedulable
     public static SchedulingProblem guaranteed_randomized_test_details(int days, int rooms, int num_sessions, int num_individuals) {
+
+        // Establish the timetable and check that these parameters make sense
         int hours = 8;
         Timetable sample = new Timetable(days, hours, rooms);
         SchedulingProblem details = new SchedulingProblem();
@@ -561,7 +565,7 @@ public class Analyser {
             }
         }
 
-        if (Main.DEBUG && false) {
+        if (Main.DEBUG) {
             System.out.println("The random schedule which the algorithms may recreate:\n" + sample.toString());
             System.out.println("The details which arise:\n" + details.toString());
             TimetableVerifier ttv = new TimetableVerifier();
@@ -583,6 +587,7 @@ public class Analyser {
             return null;
         }
 
+        // Iterate through generating fresh random numbers
         List<Integer> list = new ArrayList<>();
         for (int i=0; i<count; i++) {
             int gen = generate_number(maximum, minimum);

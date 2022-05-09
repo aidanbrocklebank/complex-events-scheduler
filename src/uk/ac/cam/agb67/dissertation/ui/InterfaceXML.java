@@ -41,7 +41,6 @@ public class InterfaceXML {
                     // Determine if the object is a session, a key individual, or the overall details
                     NodeList innerCell = object.getElementsByTagName("mxCell");
                     String object_style_info = innerCell.item(0).getAttributes().getNamedItem("style").getTextContent();
-                    //if (Main.DEBUG) System.out.println("Style info for object "+i+" was: "+object_style_info);
 
                     //NOTE: Event's will have rounded=0, while key individuals will have rounded=1
                     if (object_style_info.substring(0, 9).equals("rounded=1")) {
@@ -113,7 +112,7 @@ public class InterfaceXML {
             return details;
 
         } catch (NumberFormatException e) {
-            System.err.println("There were incorrectly formated values in the XML input.");
+            System.err.println("There were incorrectly formatted values in the XML input.");
             return null;
         }
     }

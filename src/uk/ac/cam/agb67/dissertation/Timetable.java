@@ -8,10 +8,10 @@ public class Timetable {
     public int Total_Rooms;
 
     // The 3-d array which tells us which hours of which sessions happen at which day/time/room combinations.
-    int[][][] session_id_map;
-    int[][][] session_hour_map;
+    private int[][][] session_id_map;
+    private int[][][] session_hour_map;
 
-    // Create a new empty timetable from parameters
+    // Creates a new empty timetable from parameters
     public Timetable(int td, int hpd, int tr) {
         Total_Days = td;
         Hours_Per_Day = hpd;
@@ -30,7 +30,7 @@ public class Timetable {
         }
     }
 
-    // Place a full session into the timetable
+    // Places a full session into the timetable
     public void set(int day, int time, int room, Session session) {
         for (int t = 0; t < session.Session_Length; t++) {
             if (time+t >= session_id_map[0].length) {System.err.println("Tried to set a session in a timetable which extends over the number of hours.");}
@@ -40,7 +40,7 @@ public class Timetable {
             }
         }
     }
-    // Place a single session-hour into the timetable
+    // Places a single session-hour into the timetable
     public void set(int day, int time, int room, int sid, int hour) {
         session_id_map[day][time][room] = sid;
         session_hour_map[day][time][room] = hour;
@@ -48,7 +48,6 @@ public class Timetable {
 
     // Getters
     public int get_id(int day, int time, int room) {
-        //if (Main.DEBUG) System.out.println("Getting Day: "+day+", Time: "+time+", Room: "+room+":");
         return session_id_map[day][time][room];
     }
     public int get_hour(int day, int time, int room) {
@@ -88,7 +87,6 @@ public class Timetable {
         return copy;
     }
 
-    // Pretty print
     public String toString() {
         String s = "";
         for (int d=0; d<Total_Days; d++) {

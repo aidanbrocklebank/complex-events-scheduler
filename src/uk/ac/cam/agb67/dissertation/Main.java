@@ -8,10 +8,10 @@ import java.io.File;
 
 public class Main {
 
-    // Globally used debug switch
+    // Globally used debug flag
     public static boolean DEBUG = false;
 
-    // Takes use input in the form of the name of an XML file, selects an algorithm from their parameters,
+    // Takes user input in the form of the name of an XML file, selects an algorithm from their parameters,
     // schedules the input details with that algorithm and saves it to a file.
     public static void main(String[] args) {
 
@@ -51,8 +51,10 @@ public class Main {
             System.err.println("Failed to create a valid schedule with the given input and desired algorithm."); return;
         }
 
+        // Print the schedule to the console
         System.out.println("SCHEDULE: \n" + schedule.toString());
 
+        // Determine the suffix for the filename
         String suffix;
         if (optimise_choice) {
             suffix = algorithm_choice + "opt";
@@ -60,7 +62,7 @@ public class Main {
             suffix = algorithm_choice + "base";
         }
 
-        // Then save it to a file
+        // Then save the schedule to a file
         ui.Schedule_to_XML(schedule, details, location.substring(0, location.length() - 4) + "_schedule_" + suffix);
     }
 
