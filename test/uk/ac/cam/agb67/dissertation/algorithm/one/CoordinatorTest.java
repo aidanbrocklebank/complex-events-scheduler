@@ -18,8 +18,10 @@ public class CoordinatorTest {
         // ARRANGE
         Coordinator co;
         SchedulingProblem det = MainTest.test_details_A();
+
         // ACT
         co = new Coordinator();
+
         // ASSERT
         System.out.println(co.hashCode());
         assertThat(true);
@@ -131,7 +133,6 @@ public class CoordinatorTest {
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
         assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
 
-
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
         if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
@@ -157,7 +158,6 @@ public class CoordinatorTest {
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
         assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
 
-
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
         if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
@@ -182,7 +182,6 @@ public class CoordinatorTest {
         // ASSERT
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
         assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
-
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);

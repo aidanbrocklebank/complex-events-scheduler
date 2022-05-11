@@ -15,8 +15,10 @@ public class SchedulingProblemTest {
     public void object_can_be_created(){
         // ARRANGE
         SchedulingProblem details;
+
         // ACT
         details = new SchedulingProblem();
+
         // ASSERT
         System.out.println(details.hashCode());
         assertThat(true);

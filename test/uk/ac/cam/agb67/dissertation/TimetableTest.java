@@ -15,8 +15,10 @@ public class TimetableTest {
     public void object_can_be_created(){
         // ARRANGE
         Timetable tt;
+
         // ACT
         tt = new Timetable(7, 8,10);
+
         // ASSERT
         System.out.println(tt.hashCode());
         assertThat(true);
@@ -33,7 +35,6 @@ public class TimetableTest {
         Timetable tt2 = tt.deep_copy();
 
         // ASSERT
-        //System.err.println(tt2.toString());
         assertThat(tt2.get_id(5,6,7)).isEqualTo(101);
         assertThat(tt2.get_hour(5,6,7)).isEqualTo(2);
         assertThat(tt2 == tt).isEqualTo(false);
@@ -65,7 +66,6 @@ public class TimetableTest {
         tt.set(2, 3, 4, s);
 
         // ASSERT
-        //System.err.println(tt2.toString());
         assertThat(tt.get_id(2,3,4)).isEqualTo(202);
         assertThat(tt.get_hour(2,3,4)).isEqualTo(0);
         assertThat(tt.get_id(2,4,4)).isEqualTo(202);

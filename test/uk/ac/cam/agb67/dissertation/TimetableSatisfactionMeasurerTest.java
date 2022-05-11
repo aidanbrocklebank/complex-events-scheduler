@@ -13,50 +13,14 @@ public class TimetableSatisfactionMeasurerTest {
     public void object_can_be_created() {
         // ARRANGE
         TimetableSatisfactionMeasurer tsm;
+
         // ACT
         tsm = new TimetableSatisfactionMeasurer();
+
         // ASSERT
         System.out.println(tsm.hashCode());
         assertThat(true);
     }
-
-    /*
-    @Test
-    public void temp_unoptimised_score_test() {
-        // ARRANGE
-        Coordinator co = new Coordinator();
-        SchedulingProblem details = MainTest.test_details_A();
-        TimetableVerifier ttv = new TimetableVerifier();
-
-        // ACT
-        Timetable tt = co.generate(details);
-
-        // ASSERT
-        assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
-
-        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
-        int pref_score = tsm.timetable_preference_satisfaction(tt, details);
-        if (Main.DEBUG) System.out.println("First Score: " + pref_score + "\n");
-    }
-
-    @Test
-    public void temp_optimised_score_test() {
-        // ARRANGE
-        Coordinator opt = new Coordinator(false, true);
-        SchedulingProblem details = MainTest.test_details_A();
-        TimetableVerifier ttv = new TimetableVerifier();
-
-        // ACT
-        Timetable ott = opt.generate(details);
-
-        // ASSERT
-        assertThat(ttv.timetable_is_valid(ott, details)).isEqualTo(true);
-
-        TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(Main.DEBUG);
-        int new_pref_score = tsm.timetable_preference_satisfaction(ott, details);
-        if (Main.DEBUG) System.out.println("Optimised Score: " + new_pref_score);
-    }
-    */
 
     @Test
     public void calculates_correct_gap_pref_score() {
@@ -104,7 +68,6 @@ public class TimetableSatisfactionMeasurerTest {
         // ARRANGE
         SchedulingProblem details = MainTest.test_details_C();
         Timetable tt = MainTest.test_timetable_C();
-        //System.err.println(tt.toString());
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer(true);
 
         // ACT

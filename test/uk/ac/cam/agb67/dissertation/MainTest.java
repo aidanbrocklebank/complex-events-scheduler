@@ -145,9 +145,7 @@ public class MainTest {
         details.KeyInd_Details = keyls;
 
         List<PredeterminedSession> pdsls = new ArrayList<>();
-        //pdsls.add(new PredeterminedSession(6, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
 
-        //ls.add(pdsls.get(0));
         details.Session_Details = ls;
         details.PDS_Details = pdsls;
 
@@ -179,8 +177,6 @@ public class MainTest {
         details.KeyInd_Details = keyls;
 
         List<PredeterminedSession> pdsls = new ArrayList<>();
-        //pdsls.add(new PredeterminedSession(6, "Session A*", 2, Arrays.asList(3), 0, 0, 0));
-        //ls.add(pdsls.get(0));
 
         details.Session_Details = ls;
         details.PDS_Details = pdsls;
@@ -344,11 +340,11 @@ public class MainTest {
         try {
             Main.main(new String[]{"FakeName.xml", "1", "false"});
         } catch (Exception e) {
+
             // ASSERT
             assertThat(false).isTrue();
         }
 
-        // ASSERT
         assertThat(true).isTrue();
     }
 

@@ -18,8 +18,10 @@ public class TimetableVerifierTest {
     public void object_can_be_created(){
         // ARRANGE
         TimetableVerifier ttv;
+
         // ACT
         ttv = new TimetableVerifier();
+
         // ASSERT
         System.out.println(ttv.hashCode());
         assertThat(true);
@@ -105,7 +107,7 @@ public class TimetableVerifierTest {
         tt.set(2,5,1, 3, 2);
         assertThat(ttv.timetabled_sessions_are_contiguous(tt, ls)).isEqualTo(false);
 
-        System.out.println(tt.toString());
+        if (Main.DEBUG) System.out.println(tt.toString());
     }
 
     @Test
@@ -217,7 +219,7 @@ public class TimetableVerifierTest {
 
         tt.set(0,0,0, details.Session_Details.get(6));
 
-        System.out.println(tt.toString());
+        if (Main.DEBUG) System.out.println(tt.toString());
 
         // ASSERT
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(true);
@@ -240,7 +242,7 @@ public class TimetableVerifierTest {
 
         tt.set(0,2,0, details.Session_Details.get(6));
 
-        System.out.println(tt.toString());
+        if (Main.DEBUG) System.out.println(tt.toString());
 
         // ASSERT
         assertThat(ttv.timetable_is_valid(tt, details)).isEqualTo(false);

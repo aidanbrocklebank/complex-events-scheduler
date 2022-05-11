@@ -17,8 +17,10 @@ public class CoordinatorTwoTest {
         // ARRANGE
         CoordinatorTwo co;
         SchedulingProblem det = MainTest.test_details_A();
+
         // ACT
         co = new CoordinatorTwo();
+
         // ASSERT
         System.out.println(co.hashCode());
         assertThat(true);
@@ -49,7 +51,6 @@ public class CoordinatorTwoTest {
         // ACT
         Timetable tt = co.generate(details);
         boolean correct = ttv.timetable_is_valid(tt, details);
-        //correct = correct & ttv.sessions_are_scheduled_in_large_enough_rooms(tt, details.Session_Details, details.Room_Occupancy_Limits);
 
         // ASSERT
         assertThat(correct).isEqualTo(true);
@@ -134,7 +135,7 @@ public class CoordinatorTwoTest {
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
-        System.out.println("Overall Score: " + pref_score);
+        if (Main.DEBUG) System.out.println("Overall Score: " + pref_score);
     }
 
     @Test
@@ -153,7 +154,7 @@ public class CoordinatorTwoTest {
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
-        System.out.println("Overall Score: " + pref_score);
+        if (Main.DEBUG) System.out.println("Overall Score: " + pref_score);
     }
 
     @Test
@@ -173,12 +174,11 @@ public class CoordinatorTwoTest {
 
         TimetableSatisfactionMeasurer tsm = new TimetableSatisfactionMeasurer();
         int pref_score = tsm.timetable_preference_satisfaction(tt, details);
-        System.out.println("Overall Score: " + pref_score);
+        if (Main.DEBUG) System.out.println("Overall Score: " + pref_score);
     }
 
     @Test
     public void algorithm_generates_coherent_schedule_edge_case_1() {
-
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_E();
@@ -210,7 +210,6 @@ public class CoordinatorTwoTest {
 
     @Test
     public void algorithm_generates_coherent_schedule_edge_case_3() {
-
         // ARRANGE
         CoordinatorTwo co = new CoordinatorTwo();
         SchedulingProblem details = MainTest.test_details_G();

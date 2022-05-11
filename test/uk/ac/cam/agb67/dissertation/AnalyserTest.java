@@ -73,7 +73,6 @@ public class AnalyserTest {
 
         for (int i=0; i<100; i++) {
             // ACT
-
             int random = Analyser.generate_number(max, min);
 
             // ASSERT
@@ -228,7 +227,6 @@ public class AnalyserTest {
         long[][] TIME = new long[5][len];
 
         SchedulingAlgorithm algorithm = new CoordinatorTwo(false);
-
         InterfaceXML ui = new InterfaceXML();
         SchedulingProblem details = ui.XML_to_Problem("samples/Incorrect_Input.xml");
 

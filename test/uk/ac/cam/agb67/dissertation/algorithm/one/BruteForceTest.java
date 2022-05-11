@@ -32,8 +32,6 @@ public class BruteForceTest {
                 details.Session_Details);
         Timetable tt = new Timetable(details.Maximum_Days, details.Hours_Per_Day, details.Maximum_Rooms);
 
-
-
         // ACT
         tt.set(2, 2, 2, 1, 0);
         tt = bf.insert_sessions(tt, Collections.emptyList());

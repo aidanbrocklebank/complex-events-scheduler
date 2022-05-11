@@ -14,8 +14,10 @@ public class GreedyMethodTest {
         // ARRANGE
         GreedyMethod gm;
         SchedulingProblem det = MainTest.test_details_A();
+
         // ACT
         gm = new GreedyMethod(det.Maximum_Days, det.Hours_Per_Day, det.Maximum_Rooms, det.KeyInd_Details, det.Room_Occupancy_Limits, det.Session_Details);
+
         // ASSERT
         System.out.println(gm.hashCode());
         assertThat(true);

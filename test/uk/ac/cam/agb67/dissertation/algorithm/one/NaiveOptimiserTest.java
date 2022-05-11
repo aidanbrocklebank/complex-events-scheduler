@@ -12,8 +12,10 @@ public class NaiveOptimiserTest {
         // ARRANGE
         NaiveOptimiser no;
         SchedulingProblem det = MainTest.test_details_A();
+
         // ACT
         no = new NaiveOptimiser();
+
         // ASSERT
         System.out.println(no.hashCode());
         assertThat(true);
